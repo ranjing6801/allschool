@@ -6,10 +6,10 @@ let htmlDom = document.getElementsByTagName('html')[0];
 
 // 设置html的font-size
 
-htmlDom.style.fontSize = htmlWidth / 10 + 'px';
+htmlDom.style.fontSize = htmlWidth / 7.5 + 'px';
 
 // 动态修改font-size
 window.addEventListener('resize',() => {
 	let htmlWidth = document.documentElement.clientWidth || document.body.clientWidth
-	htmlDom.style.fontSize = htmlWidth / 10 + 'px';
+	htmlDom.style.fontSize = htmlWidth / 7.5 + 'px';
 });

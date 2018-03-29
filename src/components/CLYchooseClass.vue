@@ -30,40 +30,50 @@ export default {
     name:'clychooseClass',
     data(){
         return {
-            num:'',
-            classList:[],
-            dis:true,
-            isCompleteClass: false, //  是否完成了班级认证 
-            AtteCompleteClass:[], // 完成认证
+            num:'',     // 数量
+            classList:[], // 所有班级列表
+            dis:true,   // 按钮样式
+            isCompleteClass: true, //  是否完成了班级认证 
+            // AtteCompleteClass:[], // 完成认证
             teamName:'',  // 认证班级的名称
+        }
+    },
+    computed:{
+        AtteCompleteClass(){
+            return this.$store.state.getItems
         }
     },
     methods:{
         getMore(){
              // console.log("获取更多")  // 跳转到 选择班级组件
              // console.log(this.classList)
-            this.$router.push({ path:'/getClass',query:{list:this.classList,num:this.num}})
+            this.$router.push({ path:'/getClass',query:{list:this.classList,num:this.num,name:this.classList.name}});
         },
+
         getDetail(){ //  认证完成之后点击展示 绑定的班级详细信息 
-            
+            alert("获取详细信息!")
         },
         classRefer(){  // 班级确认
             // 这里判断是否所有的班级都认证了,如果都认证了,按钮的状态为可点击,否则是不可点击状态
+           
+
         }
     },
     mounted(){
-        document.title = "认证班级"
+        document.title = "认证班级";
         // console.log(this.$route)
-        this.num = this.$route.query.num
-        this.classList = this.$route.query.classList
-        console.log ("this.classList=",this.classList) 
-        console.log ("this.num=",this.num) 
+        this.num = this.$route.query.num;
+        this.classList = this.$route.query.classList;
+        // console.log ("this.classList=",this.classList) 
+        // console.log ("this.num=",this.num) 
 
 
         // 认证成功 跳转回来 
-        console.log(this.$route)
-        this.AtteCompleteClass = this.$route.params
+        console.log("跳转回来=",this.$route)
+        console.log("跳转回来this.$route.params=",this.$route.params)
+        // this.AtteCompleteClass = this.$route.params
         this.isCompleteClass = true
+        console.log("跳转回来之后的classList=",this.classList)
     }
 }
 </script>
