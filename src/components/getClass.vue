@@ -3,8 +3,8 @@
     <ul>
       <li class="checkList" v-for='option in options' :key="option.index">
         <div class="checkbox-group ">
-          <input type="radio" :id="option.name" name="classChoose" :value="option.name" v-model="team" 
-                @change="change" />
+          <input type="radio" :id="option.name" name="classChoose" :value="option.name" 
+                     v-model="team"  @change="change" />
           <label :for="option.name"></label>
         </div>
         <div class="right">
@@ -28,7 +28,6 @@
     <ul>
       <li class="creatClass">
           <div id="Clcreateclass">
-              <!-- <input type="radio" id="create" name="classChoose" v-model="create"  @change="change" > -->
               <input type="radio" name="classChoose" id="create" v-model="team">
               <label for="create"></label>
           </div>
@@ -85,7 +84,7 @@ export default {
         },
         getClassPromise(){ //  确认   
             /*
-                1.第一种情况: 如果该班级没有被其他的班主任认证    点击确认跳转到 前面 查询 
+                1.第一种情况: 如果该班级没有被其他的班主任认证    点击确认跳转到 前面 班主任列表查询页
                 2.第二种情况:如果在认证某一个班级的时候,他已经被其他老师认证过了,会提示弹窗
                 3.第三种情况，就是 班级认证完了，创建班级 
             */
@@ -103,9 +102,12 @@ export default {
                         console.log("data=",data)
                         this.$router.push({name:'CLYchooseClass',params:data})    
                     }
+
                     if(res[0].id == 4){   // 第二种情况:如果在认证某一个班级的时候,他已经被其他老师认证过了,会提示弹窗
                          this.isReCertificationShow = true
                     }
+
+
                     if(res[0].id == 7){ // 第三种情况，就是 班级认证完了，创建班级
                         alert("开始创建班级")
                         this.$router.push({name:'CreateClass'})
@@ -116,8 +118,7 @@ export default {
                 })
         },
         change(){ // 单选框change事件
-         // 这里有个坑, 创建班级的单选按钮 无法获取值,导致按钮不可点击
-         console.log(this.team)
+          console.log(this.team)
             if(this.team){
                 this.dis = false
                 document.querySelector("#referClass").style.background="rgba(0,0,0,0.6)"
@@ -130,16 +131,17 @@ export default {
     mounted(){
         document.title = '选择班级'
         // 进入到这个组件  请求数据
+        // console.log('options:',this.options);
         this.options = this.$route.query.list
-        console.log('options:',this.options);
          this.num = this.$route.query.num
-
-         console.log(this.$route)
-         console.log(this.$route.query.list)
-         console.log( typeof  this.options)
+         // console.log(this.$route.)
+         console.log(this.options);
     },
 }
+
 </script>
+
+
 <style lang="scss" scoped>
 @import  '../assets/css/variables.scss';
 @import  '../assets/css/getClass.css';
