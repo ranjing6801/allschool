@@ -17,7 +17,7 @@
 			<span class="rightPhone">请填写正确的手机号码</span>
 		</p>
 		
-		<mt-field  type="tel" placeholder="请输入小黑板账号 / 手机号"  v-model="phone" v-on:input="focus" id="input">
+		<mt-field @keyup.native="tel" type="tel" placeholder="请输入小黑板账号 / 手机号"  v-model="phone" v-on:input="focus" id="input" :attr="{ maxlength: 11 }">
         </mt-field>
 		<mt-button  class="refer" :disabled="dis" size="large" @click="telPromise" >手机号码提交</mt-button>
     </div>
@@ -43,9 +43,9 @@ import api from '../api/api'
 			}
 		},
 		watch:{ // 监听phone
-                phone(newValue,oldValue){
-                    this.phone = newValue > oldValue ? newValue.replace(/\s/g,'').replace(/(\d{3})(\d{0,4})(\d{0,4})/,'$1 $2 $3'):this.phone.trim()
-                }
+                // phone(newValue,oldValue){
+                //     this.phone = newValue > oldValue ? newValue.replace(/\s/g,'').replace(/(\d{3})(\d{0,4})(\d{0,4})/,'$1 $2 $3'):this.phone.trim()
+                // }
     	},
 		methods:{
 			// x 
@@ -53,11 +53,13 @@ import api from '../api/api'
 				
 			},
 			focus(){
-				if(this.phone){
-					// console.log(this.phone)
+				if(this.phone.length>10){
+					console.log(this.phone);
 					this.dis = false
 					document.querySelector('.refer').style.background = "rgba(0,0,0,0.6)"
 					document.querySelector('.mint-cell').style.borderBottom = "2px solid #666"
+				}else{
+
 				}
 			},
 			telPromise(){  // 获取验证码
@@ -85,6 +87,10 @@ import api from '../api/api'
 					   this.isRightNumber = true
 					   document.querySelector('.mint-cell').style.borderBottom = "2px solid red"
 				   })
+			},
+			tel(){
+				//禁止输入非数字
+				this.phone = this.phone.replace(/[^\d]/g,'');
 			}
 		},
 	    mounted(){

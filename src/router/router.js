@@ -16,7 +16,6 @@ import CreateClass from '../components/CreateClass'
 Vue.use(VueRouter)
 
 const router = new VueRouter({
-    mode:'history',
     routes:[
         {
             path:'/menu',
