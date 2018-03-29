@@ -1,0 +1,137 @@
+#getClass{
+    // background: #ccc;
+    // height: 100%;
+    // width: 100%;
+    
+    .checkList{
+        background: rgba(0,0,0,0.1);
+        height: 100px;
+        line-height: 100px;
+        margin-bottom: 5px;
+        // border:1px solid red;
+        .left{
+            width: 10%;
+            padding-left: 5%;
+            height: 100px;
+            background: #eee;
+            float: left;
+            // text-align: left;
+            input{
+                opacity: 0;
+                dislay:none;
+            }
+            input[type=radio]+label {
+                line-height: 1;
+                position: relative;
+                top:-50px;
+                display: flex;
+                cursor: pointer;
+                align-items: center;
+                margin:2px;
+                // font-size: 18px;
+                width: 18px;
+                height: 18px;
+                background:#fff;
+                font-weight: bold;
+            }
+            input[type=radio]+label:after {
+                display: inline-block;
+                width: 18px;
+                height: 18px;
+                text-align: center;
+                // background: orangered;
+                content: '\2022';
+                opacity:0;
+                font-size: 14px;
+                color: lime;
+                border: 1px solid #ccc;
+                border-radius: 50%;
+            }
+            input[type=radio]:checked + label:after{
+                display: inline-block;
+                content:'\2713';
+                width:10px;
+                height:10px;
+                background: red;
+                color: green;
+                border-radius: 50%;
+                font-size:18px;
+                // text-align: center;
+                border-color: #31b968;
+            }
+        }
+        .right{
+            float: left;
+            height: 100px;
+            .logo{
+                float: left;
+                width: 30px;
+                height: 30px;
+                background: lime;
+                border-radius: 25%;
+                margin-left: 20px;
+                margin-top: 40px;
+            }
+            .title{
+                float: left;
+                margin-left: 20px;
+                .className{
+                    font-size: 18px;  
+                    height: 20px;
+                    margin-top: -10px;
+                    .num{
+                        color:#666;
+                        font-size: 16px;
+                    }
+               }
+               span{
+                   font-size:14px;
+               }
+            }
+            .createClass{
+                font-size: 18px; 
+                margin-left: 20px;
+            }
+
+            
+        }
+    }
+
+
+
+
+
+    #referClass{
+        width: 80%;
+        margin-left: 10%;
+        position: fixed;
+        bottom: 120px;
+        border-radius: 25px;
+        background:rgba(0,0,0,.1);
+        color:orangered;
+    }
+    .modalShow{
+        width:100%;
+        height: 100%;
+        background: rgba(0,0,0,.5);
+        position: fixed;
+        top:0;
+        left:0;
+        right:0;
+        bottom: 0;
+        margin: auto;
+        .modal{
+            width:90%;
+            height: 45%;
+            margin-left: 5%;
+            margin-right: 5%;
+            position: absolute;
+            top:0;
+            left:0;
+            right:0;
+            bottom: 0;
+            margin: auto;
+            background: #fff;
+        }
+    }
+}

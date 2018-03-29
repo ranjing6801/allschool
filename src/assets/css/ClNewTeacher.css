@@ -1,0 +1,93 @@
+#CLNewTeacher .classContent {
+  width: 100%;
+  height: 100%;
+  padding: 30px;
+  font-size: 16px;
+  box-sizing: border-box; }
+  #CLNewTeacher .classContent .title {
+    padding-left: 30px;
+    margin-bottom: 10px; }
+  #CLNewTeacher .classContent .classList {
+    list-style: none;
+    margin-bottom: 20px;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    float: left;
+    margin-top: 10px; }
+    #CLNewTeacher .classContent .classList .left {
+      width: 44%;
+      float: left;
+      padding-left: 40px; }
+      #CLNewTeacher .classContent .classList .left img {
+        width: 65%;
+        height: 100%;
+        display: block;
+        margin-top: 5px;
+        margin-right: 10%;
+        padding-right: 50px;
+        border-right: 1px solid #ddd; }
+      #CLNewTeacher .classContent .classList .left p {
+        font-size: 16px;
+        font-weight: 600;
+        margin-top: 10px;
+        padding-left: 10px; }
+      #CLNewTeacher .classContent .classList .left .bot {
+        margin-bottom: 10px; }
+    #CLNewTeacher .classContent .classList .right {
+      float: left;
+      width: 40%;
+      margin-top: 10px;
+      margin-left: 10px;
+      color: #ccc; }
+      #CLNewTeacher .classContent .classList .right img {
+        width: 50%;
+        height: 75%;
+        padding-left: 8%;
+        display: block;
+        margin-left: 20%; }
+      #CLNewTeacher .classContent .classList .right .save {
+        font-size: 14px;
+        margin-top: 10px;
+        text-align: center; }
+      #CLNewTeacher .classContent .classList .right .saveSecond {
+        font-size: 12px;
+        text-align: center; }
+      #CLNewTeacher .classContent .classList .right .last {
+        text-align: center;
+        font-size: 12px; }
+#CLNewTeacher .referOk {
+  width: 80%;
+  text-align: center;
+  margin-left: 10%;
+  margin-top: 100px;
+  border-radius: 25px;
+  background: rgba(0, 0, 0, 0.5);
+  color: orangered;
+  position: fixed;
+  bottom: 120px; }
+#CLNewTeacher .modalShow {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto; }
+  #CLNewTeacher .modalShow .modal {
+    width: 90%;
+    height: 45%;
+    margin-left: 5%;
+    margin-right: 5%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    background: #fff; }
+
+/*# sourceMappingURL=ClNewTeacher.css.map */
