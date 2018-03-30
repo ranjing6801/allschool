@@ -18,8 +18,8 @@
 		</p>
 		
 		<mt-field @keyup.native="tel" type="tel" placeholder="请输入小黑板账号 / 手机号"  v-model="phone" v-on:input="focus" id="input" :attr="{ maxlength: 13 }">
-        </mt-field>
-		<mt-button  class="refer" :disabled="dis" size="large" @click="telPromise" >手机号码提交</mt-button>
+    </mt-field>
+		<button :class="!btn?'active':''" class="refer"  :disabled="btn" @click="telPromise" >手机号码提交</button>
     </div>
 </div>
 </template>
@@ -28,6 +28,7 @@
 import imgSrc from  '../../static/images/logo.jpg'
 import VolidateCode from './VolidateCode'
 import axios from 'axios'
+import $ from 'jquery'
 import api from '../api/api'
 	export default {
 		name:'myMenu',
@@ -37,7 +38,7 @@ import api from '../api/api'
 				imgSrc:imgSrc,
 				tip:true,
 				phone:'',
-				dis:false,
+				btn:true,
 				isRightNumber:false,
 				count:null
 			}
@@ -53,39 +54,44 @@ import api from '../api/api'
 				
 			},
 			focus(){
-				if(this.phone.length >= 13){
-					console.log(this.phone);
-					this.dis = false
-					document.querySelector('.refer').style.background = "rgba(0,0,0,0.6)"
-					document.querySelector('.mint-cell').style.borderBottom = "2px solid #666"
-				}else{
 
+        if(this.phone.length > 0){
+          $('.mint-cell').addClass('hot');
+        }else{
+          $('.mint-cell').removeClass('hot');
+        }
+				if(this.phone.length == 13){
+					this.btn = false;
+				}else{
+					this.btn = true;
+          this.isRightNumber = false;
+          $('.mint-cell').removeClass('red');
 				}
 			},
 			telPromise(){  // 获取验证码
+        console.log('btn..');
 				// 请求数据之前 要判断手机号是否合法( 不合法提示 请输入正确的手机号码)
 				api.myGet("users",{id:'2'})
 				   .then(res => {
 					   console.log(res[0].id)			   
 						if(res[0].id == 1){   // 提示 该手机号已经加入其他学校
-							console.log(document.querySelector(".rightPhone"))
-							this.isRightNumber = true
+							console.log(document.querySelector(".rightPhone"));
+							this.isRightNumber = true;
 							document.querySelector(".rightPhone").innerHTML = "该手机号已经加入其他学校"
+						}else{ 
+                //跳转 到验证码界面
+							  //this.$router.push({name:'VolidateCode',query:{title:this.title,phone:this.phone}})
+              this.isRightNumber = true;
+              $('.mint-cell').addClass('red');
+              // document.querySelector('.mint-cell').style.borderBottom = "2px solid #CE0000";
 						}
-
-						else{ //跳转 到验证码界面
-							
-							  this.$router.push({name:'VolidateCode',query:{title:this.title,phone:this.phone}})
-						}
-
-					 
-						
 				   })
 				   .catch(err => {
 					   // 手机号码验证错误
 					   consoel.log(err)
-					   this.isRightNumber = true
-					   document.querySelector('.mint-cell').style.borderBottom = "2px solid red"
+					   this.isRightNumber = true;
+             $('.mint-cell').addClass('red');
+					   // document.querySelector('.mint-cell').style.borderBottom = "2px solid #CE0000"
 				   })
 			},
 			tel(){
@@ -95,15 +101,14 @@ import api from '../api/api'
 		},
 	    mounted(){
 			document.title = "输入手机号"
-			
 		}
-	   
 	}
-
-
 </script>
 
 <style scoped>
+button{
+  outline: none;
+}
 .head {
   background: #eee;
   padding-top: 20px;
@@ -142,7 +147,7 @@ import api from '../api/api'
 
 .content p {
   font-size: 14px;
-  color: #ccc;
+  color: #333;
   margin-bottom: 30px;
 }
 
@@ -156,6 +161,12 @@ import api from '../api/api'
   letter-spacing: 1px;
   text-indent: 10px;
   border-bottom: 2px solid rgba(150, 150, 150, 0.2);
+}
+.content .hot{
+  border-bottom: 2px solid #333;
+}
+.content .red{
+  border-bottom: 2px solid #CE0000;
 }
 
 .content .mint-cell input {
@@ -175,10 +186,19 @@ import api from '../api/api'
 }
 
 .content .refer {
+  width: 364px;
+  height: 40px;
+  font-size: 16px;
   margin-top: 60px;
   border-radius: 25px;
-  background: rgba(0, 0, 0, 0.1);
-  color: orangered;
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #ccc;
+}
+.content .active{
+  border: 1px solid #333;
+  background: #333;
+  color: #fff;
 }
 
 .content #referCode {
@@ -229,7 +249,7 @@ import api from '../api/api'
 
 .content .telError .rightPhone {
   font-size: 12px;
-  color: #ccc;
+  color: #333;
 }
 
 .modalShow {
