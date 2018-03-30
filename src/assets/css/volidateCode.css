@@ -3,21 +3,26 @@
   padding-top: 20px;
   padding-bottom: 20px;
   padding-left: 20px;
-  height: 80px; }
-  .head .left img {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%; }
-  .head .right {
-    position: absolute;
-    top: 35px;
-    left: 0px;
-    height: 80px;
-    font-size: 16px;
-    margin-left: 125px;
-    margin-right: 20px;
-    font-weight: 600;
-    color: #1f1e22; }
+  height: 80px;
+}
+
+.head .left img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.head .right {
+  position: absolute;
+  top: 35px;
+  left: 0px;
+  height: 80px;
+  font-size: 16px;
+  margin-left: 125px;
+  margin-right: 20px;
+  font-weight: 600;
+  color: #1f1e22;
+}
 
 .content {
   height: 40px;
@@ -25,73 +30,100 @@
   padding-left: 25px;
   padding-right: 25px;
   box-sizing: border-box;
-  position: relative; }
-  .content p {
-    font-size: 14px;
-    color: #ccc;
-    margin-bottom: 30px; }
-  .content .mint-cell {
-    height: 35px;
-    width: 100%;
-    font-size: 16px;
-    outline: none;
-    border: none;
-    border-radius: 0;
-    letter-spacing: 1px;
-    text-indent: 10px;
-    border-bottom: 2px solid rgba(150, 150, 150, 0.2); }
-    .content .mint-cell input {
-      line-height: 12; }
-  .content input::-webkit-input-placeholder {
-    color: #ccc; }
-  .content .volidateNum {
-    position: absolute;
-    top: 70px;
-    right: 25px;
-    font-size: 12px;
-    color: #ccc; }
-  .content .refer {
-    margin-top: 60px;
-    border-radius: 25px;
-    background: rgba(0, 0, 0, 0.1);
-    color: orangered; }
-  .content #referCode {
-    margin-top: 60px;
-    border-radius: 25px;
-    background: rgba(0, 0, 0, 0.1);
-    color: orangered; }
-  .content #referName {
-    margin-top: 60px;
-    border-radius: 25px;
-    background: rgba(0, 0, 0, 0.1);
-    color: orangered; }
-  .content .listencode {
-    font-size: 13px;
-    color: #ccc;
-    text-align: right; }
-    .content .listencode .getListen {
-      position: relative;
-      color: rgba(0, 0, 0, 0.6);
-      font-size: 13px;
-      font-weight: bold; }
-  .content .telError {
-    position: absolute;
-    z-index: 10;
-    top: 105px;
-    left: 25px; }
-    .content .telError .telPhone {
-      display: inline-block;
-      font-size: 16px;
-      width: 14px;
-      height: 14px;
-      line-height: 14px;
-      text-align: center;
-      border-radius: 50%;
-      color: #fff;
-      background: rgba(0, 0, 0, 0.5); }
-    .content .telError .rightPhone {
-      font-size: 12px;
-      color: #666; }
+  position: relative;
+}
+
+.content p {
+  font-size: 14px;
+  color: #ccc;
+  margin-bottom: 30px;
+}
+
+.content .mint-cell {
+  height: 35px;
+  width: 100%;
+  font-size: 16px;
+  outline: none;
+  border: none;
+  border-radius: 0;
+  letter-spacing: 1px;
+  text-indent: 10px;
+  border-bottom: 2px solid rgba(150, 150, 150, 0.2);
+}
+
+.content .mint-cell input {
+  line-height: 12;
+}
+
+.content input::-webkit-input-placeholder {
+  color: #ccc;
+}
+
+.content .volidateNum {
+  position: absolute;
+  top: 70px;
+  right: 25px;
+  font-size: 12px;
+  color: #ccc;
+}
+
+.content .refer {
+  margin-top: 60px;
+  border-radius: 25px;
+  background: rgba(0, 0, 0, 0.1);
+  color: orangered;
+}
+
+.content #referCode {
+  margin-top: 60px;
+  border-radius: 25px;
+  background: rgba(0, 0, 0, 0.1);
+  color: orangered;
+}
+
+.content #referName {
+  margin-top: 60px;
+  border-radius: 25px;
+  background: rgba(0, 0, 0, 0.1);
+  color: orangered;
+}
+
+.content .listencode {
+  font-size: 13px;
+  color: #ccc;
+  text-align: right;
+}
+
+.content .listencode .getListen {
+  position: relative;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.content .telError {
+  position: absolute;
+  z-index: 10;
+  top: 105px;
+  left: 25px;
+}
+
+.content .telError .telPhone {
+  display: inline-block;
+  font-size: 16px;
+  width: 14px;
+  height: 14px;
+  line-height: 14px;
+  text-align: center;
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.content .telError .rightPhone {
+  font-size: 12px;
+  color: #666;
+}
 
 .modalShow {
   width: 100%;
@@ -102,19 +134,22 @@
   left: 0;
   right: 0;
   bottom: 0;
-  margin: auto; }
-  .modalShow .modal {
-    width: 90%;
-    height: 50%;
-    margin-left: 5%;
-    margin-right: 5%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    background: #fff; }
+  margin: auto;
+}
+
+.modalShow .modal {
+  width: 90%;
+  height: 50%;
+  margin-left: 5%;
+  margin-right: 5%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  background: #fff;
+}
 
 .codeFail {
   width: 100%;
@@ -125,18 +160,22 @@
   left: 0;
   right: 0;
   bottom: 0;
-  margin: auto; }
-  .codeFail .fail {
-    width: 80%;
-    height: 40%;
-    margin-left: 10%;
-    margin-right: 10%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    background: #fff; }
+  margin: auto;
+}
+
+.codeFail .fail {
+  width: 80%;
+  height: 40%;
+  margin-left: 10%;
+  margin-right: 10%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  background: #fff;
+}
+
 
 /*# sourceMappingURL=volidateCode.css.map */

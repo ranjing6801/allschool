@@ -38,9 +38,52 @@ export default {
 }
 </script>
 
-<style scoped lang="scss" scoped>
-@import  '../assets/css/variables.scss';      
-@import  '../assets/css/PwdModal.css';
+<style  scoped>
+/*@import  '../assets/css/variables.scss';      
+@import  '../assets/css/PwdModal.css';*/
+
+#pwdModal {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+#pwdModal .title {
+  font-size: 16px;
+  padding-top: 20px;
+  padding-left: 20px;
+}
+
+#pwdModal .accountName {
+  color: #aaa;
+  margin-top: 20px;
+  padding-left: 40px;
+  line-height: 2;
+}
+
+#pwdModal .accountPwd {
+  color: #aaa;
+  margin-top: 10px;
+  padding-left: 40px;
+  line-height: 2;
+  margin-bottom: 30px;
+}
+
+#pwdModal .btn {
+  font-size: 20px;
+  line-height: 40px;
+  text-align: center;
+  color: #fff;
+  width: 70%;
+  height: 40px;
+  margin-left: 15%;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 20px;
+  margin-top: 40px;
+}
+
+
+
 </style>
 
 

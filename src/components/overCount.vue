@@ -78,8 +78,66 @@ export default {
 
 }
 </script>
-<style lang="scss" scoped>
-@import  '../assets/css/variables.scss';      
-@import  '../assets/css/overCount.css';
+<style scoped>
+/*@import  '../assets/css/variables.scss';      
+@import  '../assets/css/overCount.css';*/
+
+
+#overCount .head {
+  background: #eee;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  height: 80px;
+}
+
+#overCount .head .left img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+#overCount .head .right {
+  position: absolute;
+  top: 35px;
+  left: 0px;
+  height: 80px;
+  font-size: 16px;
+  margin-left: 125px;
+  margin-right: 20px;
+  font-weight: 600;
+  color: #1f1e22;
+}
+
+#overCount .head .right #helpMessage {
+  font-size: 12px;
+  color: #666;
+  font-weight: normal;
+  margin-top: 10px;
+}
+
+#overCount #contetnList {
+  font-size: 16px;
+  margin: 10px;
+  padding: 20px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+#overCount .btn {
+  font-size: 20px;
+  line-height: 40px;
+  text-align: center;
+  color: #fff;
+  width: 70%;
+  height: 40px;
+  margin-left: 15%;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 20px;
+  margin-top: 35px;
+}
+
+
 
 </style>

@@ -45,9 +45,58 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-@import  '../assets/css/variables.scss';
-@import  '../assets/css/CreateClassOkModal.css';
+<style scoped>
+/*@import  '../assets/css/variables.scss';
+@import  '../assets/css/CreateClassOkModal.css';*/
+
+
+#CreateClassOkModal .title {
+  font-size: 18px;
+  padding-top: 20px;
+  padding-left: 20px;
+}
+
+#CreateClassOkModal .content {
+  font-size: 20px;
+  margin-top: 40px;
+  padding-left: 30px;
+  padding-right: 20px;
+  text-align: center;
+  line-height: 2;
+}
+
+#CreateClassOkModal .saveTip {
+  font-size: 16px;
+  padding-left: 30px;
+  padding-right: 20px;
+  text-align: center;
+}
+
+#CreateClassOkModal .saveBtn {
+  width: 100%;
+  margin-left: 10%;
+}
+
+#CreateClassOkModal .saveBtn .btn {
+  float: left;
+  height: 40px;
+  font-size: 16px;
+  text-align: center;
+  margin-left: 20px;
+  color: #fff;
+  margin-top: 50px;
+  line-height: 40px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border-radius: 25px;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+#CreateClassOkModal .saveBtn .btnLeft {
+  margin-right: 40px;
+}
+
+
 </style>
 
 

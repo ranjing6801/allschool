@@ -54,9 +54,102 @@ export default {
 }
 </script>
 
-<style lang="scss">
-    @import  '../assets/css/variables.scss';      
-    @import  '../assets/css/NewAuthenticationOk.css';
+<style scoped>
+/*    @import  '../assets/css/variables.scss';      
+    @import  '../assets/css/NewAuthenticationOk.css';*/
+
+#newauthentication {
+  width: 100%;
+  height: 100%;
+  line-height: 100%;
+  box-sizing: border-box;
+}
+
+#newauthentication .content {
+  width: 100%;
+  height: 100%;
+  padding-top: 50%;
+  font-size: 20px;
+  text-align: center;
+  letter-spacing: 2px;
+  font-family: "微软雅黑";
+}
+
+#newauthentication .content .tips {
+  font-size: 14px;
+  letter-spacing: 1px;
+  color: #ccc;
+}
+
+#newauthentication .content .password {
+  font-size: 14px;
+  letter-spacing: 1px;
+  color: #ccc;
+}
+
+#newauthentication .content .password .check {
+  font-weight: bold;
+  color: #666;
+}
+
+#newauthentication .footer {
+  margin-top: 50%;
+}
+
+#newauthentication .footer .footerTip {
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  margin-bottom: -5px;
+  text-align: center;
+  color: #666;
+}
+
+#newauthentication .footer .btn {
+  font-size: 20px;
+  line-height: 40px;
+  text-align: center;
+  color: #fff;
+  width: 80%;
+  height: 40px;
+  margin-left: 10%;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 20px;
+  margin-top: 0px;
+}
+
+#newauthentication .pwdModal {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+#newauthentication .pwdModal .modalContent {
+  width: 80%;
+  height: 40%;
+  margin-left: 10%;
+  margin-right: 10%;
+  position: absolute;
+  top: -10%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  background: #fff;
+  overflow: hidden;
+}
+
+
+/*# sourceMappingURL=NewAuthenticationOk.css.map */
+
+
+
 </style>
 
 

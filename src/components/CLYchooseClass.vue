@@ -39,15 +39,17 @@ export default {
         }
     },
     computed:{
-        AtteCompleteClass(){
-            return this.$store.state.getItems
+        AtteCompleteClass(){ 
+             
+             return this.$store.state.getItems;   
+
         }
     },
     methods:{
         getMore(){
              // console.log("获取更多")  // 跳转到 选择班级组件
-             // console.log(this.classList)
-            this.$router.push({ path:'/getClass',query:{list:this.classList,num:this.num,name:this.classList.name}});
+             console.log(this.classList)
+            this.$router.push({ path:'/getClass',query:{list:this.classList,num:this.num}});
         },
 
         getDetail(){ //  认证完成之后点击展示 绑定的班级详细信息 
@@ -61,7 +63,8 @@ export default {
     },
     mounted(){
         document.title = "认证班级";
-        // console.log(this.$route)
+
+        console.log(this.$route)
         this.num = this.$route.query.num;
         this.classList = this.$route.query.classList;
         // console.log ("this.classList=",this.classList) 
@@ -77,9 +80,96 @@ export default {
     }
 }
 </script>
-<style lang="scss" scoped>
-@import  '../assets/css/variables.scss';
-@import  '../assets/css/CLYchooseClass.css';
+<style scoped>
+/*@import  '../assets/css/variables.scss';
+@import  '../assets/css/CLYchooseClass.css';*/
+
+#clychooseClass .leadTitle {
+  font-size: 16px;
+  font-weight: 500;
+  background: rgba(0, 0, 0, 0.2);
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+}
+
+#clychooseClass .classList {
+  position: relative;
+  font-size: 16px;
+  height: 80px;
+  line-height: 80px;
+  padding-left: 40px;
+  padding-right: 60px;
+  margin-bottom: 10px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+#clychooseClass .classList .className {
+  font-weight: bold;
+}
+
+#clychooseClass .classList .more {
+  font-size: 20px;
+  position: absolute;
+  right: 50px;
+}
+
+#clychooseClass #referName {
+  width: 80%;
+  margin-left: 10%;
+  position: fixed;
+  bottom: 80px;
+  border-radius: 25px;
+  background: rgba(0, 0, 0, 0.5);
+  color: orangered;
+}
+
+#clychooseClass #AttestationComple {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+#clychooseClass #AttestationComple #leadTitle {
+  font-size: 16px;
+  font-weight: 500;
+  background: rgba(0, 0, 0, 0.2);
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+}
+
+#clychooseClass #AttestationComple .classList {
+  position: relative;
+  font-size: 16px;
+  height: 80px;
+  line-height: 80px;
+  padding-left: 40px;
+  padding-right: 60px;
+  margin-bottom: 10px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+#clychooseClass #AttestationComple .classList .className {
+  font-weight: bold;
+}
+
+#clychooseClass #AttestationComple .classList .more {
+  font-size: 20px;
+  position: absolute;
+  right: 50px;
+}
+
+#clychooseClass #AttestationComple #AttestationComple {
+  width: 80%;
+  margin-left: 10%;
+  position: fixed;
+  bottom: 80px;
+  border-radius: 25px;
+  background: rgba(0, 0, 0, 0.5);
+  color: orangered;
+}
+
+
+
 </style>
 
 

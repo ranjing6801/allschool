@@ -134,7 +134,7 @@ export default {
         // console.log('options:',this.options);
         this.options = this.$route.query.list
          this.num = this.$route.query.num
-         // console.log(this.$route.)
+         console.log(this.$route.query)
          console.log(this.options);
     },
 }
@@ -142,8 +142,245 @@ export default {
 </script>
 
 
-<style lang="scss" scoped>
-@import  '../assets/css/variables.scss';
-@import  '../assets/css/getClass.css';
+<style scoped>
+/*@import  '../assets/css/variables.scss';
+@import  '../assets/css/getClass.css';*/
+
+#getClass .checkList {
+  background: rgba(0, 0, 0, 0.1);
+  height: 100px;
+  line-height: 100px;
+  margin-bottom: 10px;
+  list-style: none;
+  width: 100%;
+  position: relative;
+}
+
+
+/* 选择班级修饰input[type=radio]*/
+
+#getClass .checkList .checkbox-group {
+  width: 50px;
+  height: 100px;
+}
+
+.checkbox-group input {
+  display: none;
+  opacity: 0;
+}
+
+.checkbox-group input[type=radio]+label {
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  display: block;
+  line-height: 100px;
+  text-align: center;
+  width: 50px;
+  height: 100px;
+  background: red;
+}
+
+.checkbox-group input[type=radio]+label:before {
+  line-height: 20px;
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  content: '';
+  color: #fff;
+  border: 1px solid #dce4e6;
+  background-color: #f3f6f8;
+  border-radius: 50%;
+}
+
+.checkbox-group input[type=radio]:checked+label:before {
+  content: '\2713';
+  color: #fff;
+  background-color: #31b968;
+  border-radius: 50%;
+  font-size: 16px;
+  text-align: center;
+  border-color: #31b968;
+}
+
+
+/* 创建班级修饰input[type=radio]*/
+
+#getClass .checkList #Clcreateclass {
+  width: 60px;
+  height: 70px;
+}
+
+#Clcreateclass input {
+  display: none;
+  opacity: 0;
+}
+
+#Clcreateclass input[type=radio]+label {
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  display: block;
+  line-height: 70px;
+  text-align: center;
+  width: 50px;
+  height: 70px;
+  background: red;
+}
+
+#Clcreateclass input[type=radio]+label:before {
+  line-height: 20px;
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  content: '';
+  color: #fff;
+  border: 1px solid #dce4e6;
+  background-color: #f3f6f8;
+  border-radius: 50%;
+}
+
+#Clcreateclass input[type=radio]:checked+label:before {
+  content: '\2713';
+  color: #fff;
+  background-color: #31b968;
+  border-radius: 50%;
+  font-size: 16px;
+  text-align: center;
+  border-color: #31b968;
+}
+
+
+/* 创建班级修饰input[type=radio]*/
+
+#getClass .checkList .right {
+  position: absolute;
+  top: 0px;
+  right: 0;
+  height: 100px;
+  background: #ccc;
+  width: calc(100% - 50px);
+  margin-left: 50px;
+}
+
+#getClass .checkList .right .logo {
+  width: 50px;
+  height: 100px;
+  background: lime;
+}
+
+#getClass .checkList .right .title {
+  font-size: 18px;
+  height: 100px;
+  width: calc(100% - 50px);
+  position: absolute;
+  top: 0px;
+  left: 60px;
+}
+
+#getClass .checkList .right .title .className {
+  font-size: 18px;
+  height: 50px;
+  line-height: 75px;
+}
+
+#getClass .checkList .right .title .className .classTitle {
+  font-size: 16px;
+}
+
+#getClass .checkList .right .title .className .num {
+  color: #666;
+  font-size: 16px;
+}
+
+#getClass .checkList .right .title .classNumber {
+  font-size: 14px;
+  color: #fff;
+  height: 50px;
+  line-height: 25px;
+}
+
+#getClass .checkList .right .title span {
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+#getClass .checkList .right .createClass {
+  font-size: 18px;
+  margin-left: 20px;
+}
+
+#getClass .creatClass {
+  width: 100%;
+  position: relative;
+}
+
+#getClass .creatClass .create {
+  height: 70px;
+  width: calc(100% - 50px);
+  background: #ccc;
+  position: absolute;
+  top: 0;
+  left: 50px;
+  padding-left: 20px;
+  line-height: 70px;
+  font-size: 18px;
+}
+
+
+#getClass .checkList .rightClass {
+  position: absolute;
+  top: 0;
+  left: 50px;
+  font-size: 18px;
+  padding-left: 20px;
+  line-height: 60px;
+  background: #666;
+  width: calc(100% - 50px);
+}
+
+#getClass #referClass {
+  width: 80%;
+  margin-left: 10%;
+  position: fixed;
+  bottom: 120px;
+  border-radius: 25px;
+  background: rgba(0, 0, 0, 0.1);
+  color: orangered;
+}
+
+#getClass .modalShow {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+#getClass .modalShow .modal {
+  width: 90%;
+  height: 45%;
+  margin-left: 5%;
+  margin-right: 5%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  background: #fff;
+}
+
+
+
+
 </style>
 
