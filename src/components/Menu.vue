@@ -12,15 +12,28 @@
     <!--  content  -->
     <div class="content">
     	<p class="tip" v-show="tip">无小黑板账号请输入手机号</p>
-		<p class="telError"  v-show="isRightNumber">
-			<span class="telPhone" @click="rightNumberTip" v-show="isRightNumber"> × </span>
-			<span class="rightPhone">请填写正确的手机号码</span>
-		</p>
+		  <p class="telError"  v-show="isRightNumber">
+  			<span class="telPhone" @click="rightNumberTip" v-show="isRightNumber"> × </span>
+  			<span class="rightPhone">请填写正确的手机号码</span>
+  		</p>
 		
-		<mt-field @keyup.native="tel" type="tel" placeholder="请输入小黑板账号 / 手机号"  v-model="phone" v-on:input="focus" id="input" :attr="{ maxlength: 13 }">
-    </mt-field>
-		<button :class="!btn?'active':''" class="refer"  :disabled="btn" @click="telPromise" >手机号码提交</button>
+  		<mt-field @keyup.native="tel" type="tel" placeholder="请输入小黑板账号 / 手机号"  v-model="phone" v-on:input="focus" id="input" :attr="{ maxlength: 13 }">
+      </mt-field>
+  		<button :class="!btn?'active':''" class="refer"  :disabled="btn" @click="telPromise" >手机号码提交</button>
     </div>
+    
+    <!--  验证码错误弹窗 -->
+    <div class="codeFail" v-if="isCodeFailShow" @click="codeFailKnow" >
+            <div class="fail">
+                <div id="codeFailModal" >
+                  <p class="title">验证码发送失败</p>
+                  <p class="content">验证码发送失败, 请稍后重试</p>
+                  <div class="btn" @click="codeFailKnow">我知道啦</div>
+                </div>
+            </div>
+        </div>
+    
+  
 </div>
 </template>
 
@@ -40,7 +53,8 @@ import api from '../api/api'
 				phone:'',
 				btn:true,
 				isRightNumber:false,
-				count:null
+				count:null,
+        isCodeFailShow:true
 			}
 		},
 		watch:{ // 监听phone
@@ -75,12 +89,13 @@ import api from '../api/api'
 				   .then(res => {
 					   console.log(res[0].id)			   
 						if(res[0].id == 1){   // 提示 该手机号已经加入其他学校
+              // this.isRightNumber = true;
+              this.isCodeFailShow = true
 							console.log(document.querySelector(".rightPhone"));
-							this.isRightNumber = true;
 							document.querySelector(".rightPhone").innerHTML = "该手机号已经加入其他学校"
 						}else{ 
                 //跳转 到验证码界面
-							  //this.$router.push({name:'VolidateCode',query:{title:this.title,phone:this.phone}})
+							this.$router.push({name:'VolidateCode',query:{title:this.title,phone:this.phone}})
               this.isRightNumber = true;
               $('.mint-cell').addClass('red');
               // document.querySelector('.mint-cell').style.borderBottom = "2px solid #CE0000";
@@ -88,7 +103,8 @@ import api from '../api/api'
 				   })
 				   .catch(err => {
 					   // 手机号码验证错误
-					   consoel.log(err)
+					   console.log(err)
+
 					   this.isRightNumber = true;
              $('.mint-cell').addClass('red');
 					   // document.querySelector('.mint-cell').style.borderBottom = "2px solid #CE0000"
@@ -97,7 +113,10 @@ import api from '../api/api'
 			tel(){
 				//禁止输入非数字
 				this.phone = this.phone.replace(/[^\d]/g,'');
-			}
+			},
+      codeFailKnow(){
+        this.isCodeFailShow = false
+      }
 		},
 	    mounted(){
 			document.title = "输入手机号"
@@ -115,6 +134,7 @@ button{
   padding-bottom: 20px;
   padding-left: 20px;
   height: 80px;
+  
 }
 
 .head .left img {
@@ -136,7 +156,6 @@ button{
 }
 
 .content {
-  height: 40px;
   width: 100%;
   margin-top: 30px;
   padding-left: 25px;
@@ -186,7 +205,7 @@ button{
 }
 
 .content .refer {
-  width: 364px;
+  width: 100%;
   height: 40px;
   font-size: 16px;
   margin-top: 60px;
@@ -303,4 +322,71 @@ button{
   margin: auto;
   background: #fff;
 }
+
+
+
+/* 验证码错误弹窗*/
+.codeFail {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+.codeFail .fail {
+  width: 80%;
+  height: 40%;
+  margin-left: 10%;
+  margin-right: 10%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  background: #fff;
+}
+
+
+
+.codeFail .fail #codeFailModal {
+  height: 100%;
+  width: 100%;
+}
+
+.codeFail .fail #codeFailModal .title {
+  font-size: 16px;
+  padding-top: 20px;
+  padding-left: 20px;
+  font-weight: bold;
+}
+
+.codeFail .fail #codeFailModal .content {
+  font-size: 18px;
+  margin-top: 50px;
+  padding-left: 30px;
+  padding-right: 20px;
+  line-height: 2;
+  text-align: center;
+}
+
+.codeFail .fail #codeFailModal .btn {
+  font-size: 16px;
+  line-height: 40px;
+  text-align: center;
+  color: #fff;
+  width: 50%;
+  height: 40px;
+  margin-left: 25%;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 20px;
+  margin-top: 80px;
+}
+
 </style>
