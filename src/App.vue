@@ -18,10 +18,48 @@ export default {
 </script>
 
 <style>
-*{
-    margin: 0;
-    padding: 0;
+/* css reset */
+
+body, dl, dd, h1, h2, h3, p, form{
+    margin:0;
+    font-weight: normal;
 }
+ol,ul{
+    margin:0; padding:0;
+}
+li{
+    list-style: none;
+}
+img{
+    border: none;
+}
+a{
+    text-decoration: none;
+}
+i,b,em,strong { 
+    font-style:normal; 
+    font-weight: normal;
+}
+select,input,button{
+    outline: none;
+}
+textarea{
+    resize:none;
+}
+table{
+    border-collapse: collapse;
+}
+body,html{
+    width: 100%;
+    height: 100%;
+    /*font-family:'Microsoft YaHei','Arial';*/
+    overflow-x: hidden;
+}
+*{
+    /*font-family: 'Microsoft YaHei';*/
+}
+/* css reset end */
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

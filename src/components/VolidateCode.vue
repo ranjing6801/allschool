@@ -41,6 +41,7 @@
 <script>
 import imgSrc from  '../../static/images/logo.jpg'
 import axios from 'axios'
+import $ from 'jquery'
 import api from '../api/api'
 import modal from './modal'
 import codeFail from './codeFail'
@@ -182,33 +183,36 @@ export default {
 
 
 .head {
+  width: 100%;
+  height: 130px;
+  display: flex;
   background: #eee;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  padding-left: 20px;
-  height: 80px;
+  justify-content: center;
+  align-items: center;
+  
 }
-
+.head .left{
+  width: 80px;
+  height: 80px;
+  margin-right: 20px
+}
 .head .left img {
   width: 80px;
   height: 80px;
   border-radius: 50%;
+  display: block;
 }
 
 .head .right {
-  position: absolute;
-  top: 35px;
-  left: 0px;
-  height: 80px;
+  height: 60px;
+  width: 250px;
   font-size: 16px;
-  margin-left: 125px;
-  margin-right: 20px;
+  padding-top: 20px;
   font-weight: 600;
   color: #1f1e22;
 }
 
 .content {
-  height: 40px;
   margin-top: 30px;
   padding-left: 25px;
   padding-right: 25px;
@@ -218,7 +222,7 @@ export default {
 
 .content p {
   font-size: 14px;
-  color: #ccc;
+  color: #333;
   margin-bottom: 30px;
 }
 
@@ -247,7 +251,7 @@ export default {
   top: 70px;
   right: 25px;
   font-size: 12px;
-  color: #ccc;
+  color: #333;
 }
 
 .content .refer {
