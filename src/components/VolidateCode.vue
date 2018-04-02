@@ -22,17 +22,10 @@
                 <span class="telPhone" @click="clearCode" v-if="isShowCode"> × </span>
                 <span class="rightPhone"></span>
             </p>
-            <span class="volidateNum"  v-show="listenTimer">{{ value }} s</span>
+ <!--            <span class="volidateNum"  v-show="listenTimer">{{ value }} s</span> -->
             <span class="volidateNum"  v-show="isTimer">{{ time }} s</span>
             <button :class="!dis ? 'active': '' " :disabled="dis" class="referCode"   @click="codePromise" >验证码提交</button>
         </div>
-
-        <!-- 语音验证码-->
-        <!-- <div class="modalShow" v-if="isMolda">
-            <div class="modal">
-                <modal :codeTitle="codeTitle" @listenModalHide="modalHidden"></modal>
-            </div>
-        </div> -->
 
         <div class="codeFail" v-if="isCodeFailShow" >
           <div class="fail">
@@ -41,12 +34,10 @@
                   <p class="content"> 
                       我们将以电话的形式告知您验证码,你可能会接收到010、0051、024、029等开头的来电，请放心接听
                   </p>
-                  <!-- <button class="clear">取消</button> -->
                   <button class="btn" @click="know">我知道啦</button>
               </div>
           </div>
         </div>
-
 
             <!--  验证码发送失败弹窗  -->
         <div class="codeFail" v-if="isCodeFail" @click="codeFailHidden">
@@ -63,7 +54,6 @@ import imgSrc from  '../../static/images/logo.jpg'
 import axios from 'axios'
 import $ from 'jquery'
 import api from '../api/api'
-// import modal from './modal'
 import codeFail from './codeFail'
 import overCount from './overCount'
 import userName from './userName'
@@ -81,13 +71,10 @@ export default {
                 YZM:false,
                 number:null,
                 time:null,
-                value:null,  // 语音验证码定时器
                 reNum:false,
                 isTimer:false,
                 count:0,
-                listenTimer:false,   // 语音验证码定时器
                 listenCode:false,
-                // isMolda:false,
                 isShowCode:false,
                 isCodeFail:false,
                 codeOverTime:'验证码发送次数已达上限',
@@ -96,12 +83,6 @@ export default {
                 getCodeNum:0,   // 记录获取验证码次数, 到达10次 就进入反馈界面
                 isCodeFailShow:false,
 
-        }
-    },
-    props:{
-        codeTitle:{
-            type:String,
-            default:''
         }
     },
     methods:{
@@ -174,28 +155,9 @@ export default {
                 }
             },1000)
         },
-        ListenTimer(){
-            console.log('开启另外一个定时器')
-            console.log("this.reNum=",this.reNum)
-            clearInterval(listen)   //调用定时器之前先清除定时器
-            this.listenTimer = true
-            this.value = 60
-            var listen = setInterval (() => {
-                this.value -= 10
-                if(this.value <= 0){
-                    clearInterval(listen)  // 清除定时器
-                    this.listenTimer = false
-                    this.reNum = true
-                }
-            },1000)
-        },
         know(){
             this.isCodeFailShow = false;
             this.reNum = false
-            this.isTimer = false    //将上一个定时器隐藏起来
-            this.time = 0
-            console.log("this.reNum=",this.reNum)
-            this.ListenTimer()
         },
         codePromise(){ // 验证码提交
             api.myGet("users",{id:'2',reCredNum:this.reCredNum}) 
@@ -219,7 +181,7 @@ export default {
 
                     if(res[0].id == 3){  // 验证码发送失败
                         this.isCodeFail = true
-                        
+                              
                     }
                })  
                .catch(err => {
