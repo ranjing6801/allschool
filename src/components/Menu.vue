@@ -100,16 +100,23 @@ import api from '../api/api'
 						if(res[0].id == 1){   // 提示 该手机号已经加入其他学校
                               this.isRightNumber = true;
                               $('.rightPhone').html('该手机号已经加入其他学校');
+
 						}else if(res[0].id==2){ // 手机号码验证错误
                               this.isRightNumber = true;
                               $('.mint-cell').addClass('red');
                               $('.rightPhone').html('请填写正确的手机号码');
+
                         }else if(res[0].id==3){
                           // 验证码发送失败
+
                           this.isCodeFailShow = true;
+
                         }else{
-                          //跳转 到验证码界面
+                          //手机号码验证成功  跳转 到验证码界面
+
+                          sessionStorage.setItem("phone",this.phone)   // 将电话号码存储在 本地 
                           this.$router.push({name:'VolidateCode',query:{title:this.title,phone:this.phone}});
+                          
                         }
 				   })
 				   .catch(err => {
