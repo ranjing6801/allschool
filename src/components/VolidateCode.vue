@@ -10,7 +10,7 @@
         </div>
         <div class="content">
             <p class="tip" v-if="YZM">短信验证码已发送至 {{ number | value }} </p>
-           <mt-field :attr="{ maxlength: 6 }"  placeholder="请输入验证码" type="tel" v-model="reCredNum" 
+           <mt-field :attr="{ maxlength: 4 }"  placeholder="请输入验证码" type="tel" v-model="reCredNum" 
                                 @keyup.native="codeNumber" v-on:input="reCredNumFocus">
              
            </mt-field>
@@ -26,7 +26,7 @@
             <button :class="!dis ? 'active': '' " :disabled="dis" class="referCode"   @click="codePromise" >验证码提交</button>
         </div>
 
-        <!-- 语音验证码  @listenModalHide="modalHidden" -->
+        <!-- 语音验证码-->
         <div class="modalShow" v-if="isMolda"  @click="modalHidden">
             <div class="modal">
                 <modal :codeTitle="codeTitle" @listenModalHide="modalHidden"></modal>
@@ -75,7 +75,9 @@ export default {
                 isCodeFail:false,
                 codeOverTime:'验证码发送次数已达上限',
                 helpMessage:'您填写的信息可以帮助我们及时更正哦',
-                dis:true
+                dis:true,
+                getCodeNum:0,   // 记录获取验证码次数, 到达10次 就进入反馈界面
+
         }
     },
     props:{
@@ -108,13 +110,14 @@ export default {
                 $('.mint-cell').removeClass('hot');
             }
 
-            if(this.reCredNum.length == 6){
+            if(this.reCredNum.length == 4){  
                 this.dis = false
                 this.reNum = false
             }
             else{
                 this.dis = true
                 this.reNum = true;
+                this.isShowCode = false // 验证码输入错误的时候 回删一位 验证码错误提示消失
                 $('.mint-cell').removeClass('red');
             }
         },
@@ -133,24 +136,24 @@ export default {
         regetNum(){ // 重新获取短信验证码
             this.reNum = false
             api.myGet("users",{id:'1'})
-				   .then(res => {
-					   console.log(res[0].id)
-                        this.ShowNumber()
-                        this.count++
-                        if(this.count > 2){
-                            console.log('请求超过2次,请稍后')
-                            this.listenCode = true
-                        }
-                        if(this.count > 5){ // 每天最多可以获取5次验证码
-                            console.log("验证码发送次数已达上限")
-                            this.$router.push({path:'/overCount',query:{title:this.$route.query.title,helpMessage:this.helpMessage}})
-                        }
-				   })
-				   .catch(err => {
-					   // 手机号码验证错误
-					   consoel.log(err)
-					   document.querySelector('.mint-cell').style.borderBottom = "2px solid red"
-				   })
+    				   .then(res => {
+    					   console.log(res[0].id)
+                    this.ShowNumber()
+                    this.count++
+                    if(this.count > 1){
+                        console.log('请求超过2次,请稍后')  
+                        this.listenCode = true
+                    }
+                    if(this.count > 10){ // 每天最多可以获取5次验证码
+                        console.log("验证码发送次数已达上限")
+                        this.$router.push({path:'/overCount',query:{title:this.$route.query.title,helpMessage:this.helpMessage}})
+                    }
+    				   })
+    				   .catch(err => {
+      					   // 手机号码验证错误
+      					   consoel.log(err)
+      					   document.querySelector('.mint-cell').style.borderBottom = "2px solid red"
+    				   })
         },
         ShowNumber(){  // 显示倒计时
           clearInterval(timer)   // 调用定时器之前先清除定时器
@@ -166,17 +169,25 @@ export default {
             },1000)
         },
         codePromise(){ // 验证码提交
-            api.myGet("users",{id:'1',reCredNum:this.reCredNum}) 
+             
+            api.myGet("users",{id:'2',reCredNum:this.reCredNum}) 
                .then(res => {
-                   console.log(res[0].id)
-                   if(res[0].id == 1){  // 跳转到 userName
-                       this.$router.push({path:'/userName',query:{title:this.$route.query.title}})
-                   }
+                   // console.log(res[0].id)
+                    if(res[0].id == 1){  // 跳转到 userName
+                        this.$router.push({path:'/userName',query:{title:this.$route.query.title}})
+                    }
 
-                   if(res[0].id == 2){  // 验证码错误
+                    if(res[0].id == 2){  // 验证码错误
+                      $('.mint-cell').addClass('red')
                         this.isShowCode = true
-						document.querySelector(".rightPhone").innerHTML = "验证码错误"
-                   }
+                        this.getCodeNum ++ ;
+                        console.log(this.getCodeNum)
+                        if(this.getCodeNum > 10){   // 记录验证码输入错误的次数, 到达10次 就进入反馈界面
+                            alert("获取验证码超过10次")
+                            this.$router.push({path:"/overCount"});
+                        } 
+						            document.querySelector(".rightPhone").innerHTML = "验证码错误"
+                    }
 
                     if(res[0].id == 3){  // 验证码发送失败
                         this.isCodeFail = true
@@ -193,9 +204,15 @@ export default {
         // console.log(this.$route)
         this.YZM = true
         document.title = "输入验证码"
-        this.reNum = true   // 进入验证码界面就获取验证码.并且显示重新获取验证码提示
         this.title = this.$route.query.title
         this.number = this.$route.query.phone
+
+        if(sessionStorage.getItem('phone')){
+            this.ShowNumber();
+        }else{
+          this.reNum = true   // 进入验证码界面就获取验证码.并且显示重新获取验证码提示
+        }
+        sessionStorage.removeItem('phone')  // 防止刷新页面后出现倒计时, 刷新页面应该出现重新获取验证码
     }
 }
 </script>
@@ -300,7 +317,7 @@ export default {
   border-bottom: 2px solid #333;
 }
 .content .red{
-  border-bottom: 2px solid #CE0000;
+  border-bottom: 2px solid red;
 }
 .content .active{
   border: 1px solid #333;

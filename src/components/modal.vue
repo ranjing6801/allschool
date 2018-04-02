@@ -2,8 +2,10 @@
     <!-- 获取语音验证码 -->
   <div id="modal" @click="know">
       <h5 class="title">{{ codeTitle }}</h5>
-      <p class="content"> 我们会在短时间内拨打您的电话请注意接听语音验证码</p>
-      <button class="clear">取消</button>
+      <p class="content"> 
+          我们将以电话的形式告知您验证码,你可能会接收到010、0051、024、029等开头的来电，请放心接听
+      </p>
+      <!-- <button class="clear">取消</button> -->
       <button class="btn" @click="know">我知道啦</button>
   </div>
 </template>
