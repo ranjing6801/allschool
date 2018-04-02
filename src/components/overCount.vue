@@ -1,43 +1,36 @@
 <template>
    <div id="overCount">
 <!--  请求验证码次数超时  -->
-       <div class="head">
+    <div class="head">
         <div class="left">
             <img :src="imgSrc">
         </div>
         <div class="right">
-            <h5>{{ title }}</h5>
-            <p id="helpMessage">{{ helpMessage}}</p>
+            {{ title }}
+            <p id="helpMessage">请填写反馈信息帮助我们及时解决哦</p>
         </div>
     </div> 
-    <div id="contentList" style="{font-size:16px;margin:15px;list-style-type:circle;}">
+    <div id="contentList">
         <ul class="list">
-            <li class="userName">你的姓名
-                 <p><input type="text" v-model="user" ></p>    
-                
-            </li>
-            <li>您是否是班主任?
-                <p>
-                    <!-- <label for="yes">是</label>
-                    <input type="radio" name='leader' id="yes">
-                    <label for="no">否</label> 
-                    <input type="radio"  name='leader' id="no">  -->
-                    <mt-radio 
-                    v-model="value"
-                    :options="['是','否']">
-                </mt-radio>
-                </p>
+            <li class="userName">
+                <div class="libox1">
+                  <p>您的姓名</p>
+                  <input @change="txt" class="username" type="text" v-model="user"> 
+                </div>
             </li>
             <li>
-                反馈详情
-                <p>
-                    <textarea rows="8" cols="40" class="rebackContent" v-model="reback">
-                        
-                    </textarea>
-                </p>
+              <div class="libox">
+                 <p>您是班主任吗?</p>
+                  <input @click="getRadio1" type="radio" value="yes" name='leader' id="yes"><span class="yes">是</span>
+                  <input @click="getRadio2" type="radio" value="no"  name='leader' id="no"><span class="no">否</span>
+              </div>
+            </li>
+            <li>
+                <p>反馈详情</p>
+                <textarea rows="8" cols="46" class="rebackContent" v-model="reback"></textarea>
             </li>
         </ul>
-        <div class="btn" @click="getContent">提交</div>
+        <div :class="user&&rad&&reback?'active':''" class="btn" @click="getContent">提交</div>
     </div>
 
    </div>
@@ -56,26 +49,33 @@ export default {
             title:'',
             helpMessage:'',
             user:'',
-            reback:'校园架构中教师姓名不存在',
-            value:''
+            reback:'验证码发送次数已达上限',
+            value:'',
+            isbtn:false,
+            rad:'',
         }
     },
     methods:{
         getContent(){
             this.$router.push({path:'/AuthenticationOk',query:{}})
+        },
+        txt() {
+          console.log('this.user:',this.user);
+          console.log('this.rad:',this.rad);
+          console.log('this.reback:',this.reback);
+        },
+        getRadio1() {
+          this.rad = 'yes';
+        },
+        getRadio2() {
+          this.rad = 'no'
         }
     },
     mounted(){
         document.title = "反馈信息"
-        console.log(this.$route)
         this.title = this.$route.query.title
-        this.helpMessage = this.$route.query.helpMessage
         this.user = this.$route.query.username  
     }
-
-
-
-
 }
 </script>
 <style scoped>
@@ -84,58 +84,116 @@ export default {
 
 
 #overCount .head {
+  width: 100%;
+  height: 130px;
+  display: flex;
   background: #eee;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  padding-left: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+#overCount .head .left{
+  width: 80px;
   height: 80px;
+  margin-right: 20px
 }
 
 #overCount .head .left img {
   width: 80px;
   height: 80px;
   border-radius: 50%;
+  display: block;
 }
 
 #overCount .head .right {
-  position: absolute;
-  top: 35px;
-  left: 0px;
-  height: 80px;
+  height: 60px;
+  width: 250px;
   font-size: 16px;
-  margin-left: 125px;
-  margin-right: 20px;
+  padding-top: 20px;
   font-weight: 600;
   color: #1f1e22;
 }
 
-#overCount .head .right #helpMessage {
+#helpMessage {
   font-size: 12px;
   color: #666;
-  font-weight: normal;
   margin-top: 10px;
 }
 
-#overCount #contetnList {
+#contentList {
   font-size: 16px;
-  margin: 10px;
-  padding: 20px;
-  font-size: 16px;
+  margin: 10px 10px 10px 10px;
+  padding: 10px 20px 20px 38px;
   box-sizing: border-box;
 }
 
-#overCount .btn {
-  font-size: 20px;
-  line-height: 40px;
+.list li{
+  list-style: disc;
+  margin-bottom: 18px;
+}
+.list li p{
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.list li .userName{
+  height: 60px;
+}
+.list .userName p{
+  margin-bottom: 0px;
+}
+.list li .libox{
+  height: 80px;
+}
+.libox span{
+  font-size: 16px;
+  color: #333;
+}
+.yes{
+  margin-left: 6px;
+  margin-right: 32px;
+}
+.no{
+  margin-left: 6px;
+}
+input{
+  outline: none;
+  border: 1px solid transparent;
+}
+.username{
+  width: 98%;
+  height: 38px;
+  font-size: 16px;
+  line-height: 38px;
+  color: #333;
+  border-bottom: 1px solid #666;
+}
+
+.btn {
+  font-size: 17px;
+  line-height: 36px;
   text-align: center;
-  color: #fff;
-  width: 70%;
-  height: 40px;
-  margin-left: 15%;
+  color: #666;
+  width: 98%;
+  height: 36px;
+  margin: 0 auto;
   text-align: center;
-  background: rgba(0, 0, 0, 0.5);
+  background: #fff;
+  border: 1px solid #ccc;
   border-radius: 20px;
-  margin-top: 35px;
+}
+.active{
+  color: #fff;
+  border: 1px solid #ccc;
+  background: #ccc;
+}
+
+.rebackContent{
+  outline: none;
+  font-size: 14px;
+  color: #666;
+  border: 1px solid #ccc;
+  padding: 6px 0 0 6px;
 }
 
 
