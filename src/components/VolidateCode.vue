@@ -18,12 +18,11 @@
             <p v-if="listenCode" class="listencode">收不到验证码?
                 <span  v-if="listenCode" class="getListen" @click="getListenCode">接听语音验证码</span>
             </p>
-            <p class="telError"  v-show="isShowCode">
-                <span class="telPhone" @click="clearCode" v-show="isShowCode"> × </span>
+            <p class="telError"  v-if="isShowCode">
+                <span class="telPhone" @click="clearCode" v-if="isShowCode"> × </span>
                 <span class="rightPhone"></span>
             </p>
-            <span class="volidateNum"  v-show="isTimer">{{ time }} s</span>
-            <span class="volidateNum"  v-show="isNumber">{{ NumberTime }} s</span>
+            <span class="volidateNum"  v-if="isTimer">{{ time }} s</span>
             <button :class="!dis ? 'active': '' " :disabled="dis" class="referCode"   @click="codePromise" >验证码提交</button>
         </div>
 
@@ -63,7 +62,7 @@ import imgSrc from  '../../static/images/logo.jpg'
 import axios from 'axios'
 import $ from 'jquery'
 import api from '../api/api'
-import modal from './modal'
+// import modal from './modal'
 import codeFail from './codeFail'
 import overCount from './overCount'
 import userName from './userName'
@@ -71,7 +70,7 @@ import userName from './userName'
 export default {
     name:'volidateCode',
     components:{
-        modal,codeFail,overCount,userName
+        codeFail,overCount,userName
     },
     data(){
         return {
@@ -84,17 +83,15 @@ export default {
                 reNum:false,
                 isTimer:false,
                 count:0,
-                NumberTime:null,
-                isNumber:false,
                 listenCode:false,
-                isMolda:false,
+                // isMolda:false,
                 isShowCode:false,
                 isCodeFail:false,
                 codeOverTime:'验证码发送次数已达上限',
                 helpMessage:'您填写的信息可以帮助我们及时更正哦',
                 dis:true,
                 getCodeNum:0,   // 记录获取验证码次数, 到达10次 就进入反馈界面
-                isCodeFailShow:true,
+                isCodeFailShow:false,
 
         }
     },
@@ -115,9 +112,6 @@ export default {
         reCredNumFocus(){    // 验证码输入框 焦点事件
             if(this.reCredNum.length > 0){
                 $('.mint-cell').addClass('hot');
-                
-                // document.querySelector('#referCode').style.background = "rgba(0,0,0,0.6)"
-                // document.querySelector('.mint-cell').style.borderBottom = "2px solid #666"
             }
             else{
                 $('.mint-cell').removeClass('hot');
@@ -139,16 +133,10 @@ export default {
           this.reCredNum = this.reCredNum.replace(/[^\d]/g,'');
         },
         getListenCode(){  // 获取语音验证码
-            this.isMolda = true;
+            this.isCodeFailShow = true;
         },
-        // modalHidden(){  // 隐藏语音验证码弹窗
-        //   console.log("隐藏语音验证码弹窗1111")
-        //     this.isMolda = false;
-        //     this.reNum = false
-        //     this.ShowNumber()
-        // },
         know(){
-            this.isMolda = false;
+            this.isCodeFailShow = false;
             this.reNum = false
             this.ShowNumber()
         },
@@ -176,14 +164,11 @@ export default {
         },
         ShowNumber(){  // 显示倒计时
            clearInterval(timer)   //调用定时器之前先清除定时器
-           // console.log("this.time = ",this.time)
             this.isTimer = true
             this.time = 60
             var timer = setInterval (() => {
                 this.time -= 10
-                console.log("164=",this.time)
                 if(this.time <= 0){
-                    console.log("166=",this.time)
                     clearInterval(timer)  // 清除定时器
                     this.isTimer = false
                     this.reNum = true
