@@ -315,7 +315,7 @@ button{
   background: #fff;
 }
 
-.codeFail {
+/*.codeFail {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
@@ -339,7 +339,7 @@ button{
   bottom: 0;
   margin: auto;
   background: #fff;
-}
+}*/
 
 
 

@@ -9,9 +9,9 @@
             </div>
         </div>
         <div class="content">
-            <p class="tip" v-if="YZM">短信验证码已发送至 {{ number | value }} </p>
+            <p class="tip" v-if="YZM">短信验证码已发送成功</p>
            <mt-field :attr="{ maxlength: 4 }"  placeholder="请输入验证码" type="tel" v-model="reCredNum" 
-                                @keyup.native="codeNumber" v-on:input="reCredNumFocus">
+                    @keyup.native="codeNumber" v-on:input="reCredNumFocus">
              
            </mt-field>
             <span class="volidateNum" @click="regetNum" v-if="reNum">重新获取验证码</span>
@@ -22,16 +22,31 @@
                 <span class="telPhone" @click="clearCode" v-show="isShowCode"> × </span>
                 <span class="rightPhone"></span>
             </p>
-            <span class="volidateNum"  v-if="isTimer">{{ time }} s</span>
+            <span class="volidateNum"  v-show="isTimer">{{ time }} s</span>
+            <span class="volidateNum"  v-show="isNumber">{{ NumberTime }} s</span>
             <button :class="!dis ? 'active': '' " :disabled="dis" class="referCode"   @click="codePromise" >验证码提交</button>
         </div>
 
         <!-- 语音验证码-->
-        <div class="modalShow" v-if="isMolda"  @click="modalHidden">
+        <!-- <div class="modalShow" v-if="isMolda">
             <div class="modal">
                 <modal :codeTitle="codeTitle" @listenModalHide="modalHidden"></modal>
             </div>
+        </div> -->
+
+        <div class="codeFail" v-if="isCodeFailShow" >
+          <div class="fail">
+              <div id="modal">
+                  <h5 class="title">语音验证码</h5>
+                  <p class="content"> 
+                      我们将以电话的形式告知您验证码,你可能会接收到010、0051、024、029等开头的来电，请放心接听
+                  </p>
+                  <!-- <button class="clear">取消</button> -->
+                  <button class="btn" @click="know">我知道啦</button>
+              </div>
+          </div>
         </div>
+
 
             <!--  验证码发送失败弹窗  -->
         <div class="codeFail" v-if="isCodeFail" @click="codeFailHidden">
@@ -69,6 +84,8 @@ export default {
                 reNum:false,
                 isTimer:false,
                 count:0,
+                NumberTime:null,
+                isNumber:false,
                 listenCode:false,
                 isMolda:false,
                 isShowCode:false,
@@ -77,18 +94,14 @@ export default {
                 helpMessage:'您填写的信息可以帮助我们及时更正哦',
                 dis:true,
                 getCodeNum:0,   // 记录获取验证码次数, 到达10次 就进入反馈界面
+                isCodeFailShow:true,
 
         }
     },
     props:{
         codeTitle:{
             type:String,
-            default:'接收语音验证码'
-        }
-    },
-    filters:{ // 过滤
-        value(val){
-            return  val.slice(0,4) +'-' + val.slice(4,9) + '-' + val.slice(9,15)
+            default:''
         }
     },
     methods:{
@@ -121,17 +134,23 @@ export default {
                 $('.mint-cell').removeClass('red');
             }
         },
-        codeNumber(){
-                //禁止输入非数字
+        codeNumber(){//禁止输入非数字
+        
           this.reCredNum = this.reCredNum.replace(/[^\d]/g,'');
         },
         getListenCode(){  // 获取语音验证码
             this.isMolda = true;
         },
-        modalHidden(){  // 隐藏语音验证码弹窗
+        // modalHidden(){  // 隐藏语音验证码弹窗
+        //   console.log("隐藏语音验证码弹窗1111")
+        //     this.isMolda = false;
+        //     this.reNum = false
+        //     this.ShowNumber()
+        // },
+        know(){
             this.isMolda = false;
-            this.ShowNumber()
             this.reNum = false
+            this.ShowNumber()
         },
         regetNum(){ // 重新获取短信验证码
             this.reNum = false
@@ -140,7 +159,7 @@ export default {
     					   console.log(res[0].id)
                     this.ShowNumber()
                     this.count++
-                    if(this.count > 1){
+                    if(this.count > 0){
                         console.log('请求超过2次,请稍后')  
                         this.listenCode = true
                     }
@@ -151,25 +170,27 @@ export default {
     				   })
     				   .catch(err => {
       					   // 手机号码验证错误
-      					   consoel.log(err)
+      					   console.log(err)
       					   document.querySelector('.mint-cell').style.borderBottom = "2px solid red"
     				   })
         },
         ShowNumber(){  // 显示倒计时
-          clearInterval(timer)   // 调用定时器之前先清除定时器
+           clearInterval(timer)   //调用定时器之前先清除定时器
+           // console.log("this.time = ",this.time)
             this.isTimer = true
             this.time = 60
             var timer = setInterval (() => {
                 this.time -= 10
+                console.log("164=",this.time)
                 if(this.time <= 0){
-                    this.isTimer = false
+                    console.log("166=",this.time)
                     clearInterval(timer)  // 清除定时器
+                    this.isTimer = false
                     this.reNum = true
                 }
             },1000)
         },
         codePromise(){ // 验证码提交
-             
             api.myGet("users",{id:'2',reCredNum:this.reCredNum}) 
                .then(res => {
                    // console.log(res[0].id)
@@ -387,7 +408,7 @@ export default {
 
 .modalShow .modal {
   width: 80%;
-  height: 40%;
+  height: 20%;
   margin-left: 10%;
   margin-right: 10%;
   position: absolute;
@@ -412,10 +433,10 @@ export default {
 }
 
 .codeFail .fail {
-  width: 80%;
-  height: 40%;
-  margin-left: 10%;
-  margin-right: 10%;
+  width: 90%;
+  height: 50%;
+  margin-left: 5%;
+  margin-right: 5%;
   position: absolute;
   top: 0;
   left: 0;
@@ -423,6 +444,42 @@ export default {
   bottom: 0;
   margin: auto;
   background: #fff;
+}
+
+
+.codeFail .fail #modal .title {
+  font-size: 16px;
+  padding-left: 20px;
+}
+
+.codeFail .fail #modal .content {
+  font-size: 16px;
+  padding-right: 25px;
+  line-height: 2;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.codeFail .fail #modal .clear{
+    border: none;
+    font-size: 16px;
+    background: #fff;
+    height: 40px;
+    width: 80px;
+    margin-left: 30px;
+    margin-right: 40px;
+}
+.codeFail .fail #modal .btn {
+    font-size: 16px;
+    text-align: center;
+    color: #fff;
+    width: 80%;
+    margin-left: 10%;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+    border: none;
+    margin-top: 80px;
 }
 
 </style>

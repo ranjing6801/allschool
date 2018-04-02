@@ -9,6 +9,7 @@
       <button class="btn" @click="know">我知道啦</button>
   </div>
 </template>
+
 <script>
 export default {
     name:'modal',
@@ -29,7 +30,7 @@ export default {
     },
     methods:{
         know(){
-            this.$emit("listenModalHide")
+            this.$emit("listenModalHide",true)
         }
     }
 }

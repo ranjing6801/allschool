@@ -17,7 +17,7 @@ export default {
   },
   methods:{
       codeFailKnow(){
-          this.$emit("codeFailChange")
+          this.$emit("codeFailChange",true)
       }
   }
 }
