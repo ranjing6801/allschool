@@ -27,7 +27,7 @@
             </li>
             <li>
                 <p>反馈详情</p>
-                <textarea maxlength="200" rows="8" cols="46" class="rebackContent" v-model="reback"></textarea>
+                <textarea maxlength="200" rows="8" cols="40" class="rebackContent" v-model="reback"></textarea>
             </li>
         </ul>
         <div :class="user&&rad&&reback?'active':''" class="btn" @click="getContent">提交</div>
@@ -49,7 +49,7 @@ export default {
             title:'',
             helpMessage:'',
             user:'',
-            reback:'验证码发送次数已达上限',
+            reback:'',
             value:'',
             isbtn:false,
             rad:'',
@@ -80,6 +80,7 @@ export default {
         this.title = this.$route.query.title;
         this.user = this.$route.query.username;
         this.helpMessage = this.$route.query.helpMessage;
+        this.reback = this.$route.query.txt;
     }
 }
 </script>
@@ -199,6 +200,7 @@ input{
   color: #666;
   border: 1px solid #ccc;
   padding: 6px 0 0 6px;
+  width: 98%;
 }
 
 

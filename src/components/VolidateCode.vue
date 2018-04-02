@@ -12,7 +12,6 @@
             <p class="tip" v-if="YZM">短信验证码已发送成功</p>
            <mt-field :attr="{ maxlength: 4 }"  placeholder="请输入验证码" type="tel" v-model="reCredNum" 
                     @keyup.native="codeNumber" v-on:input="reCredNumFocus">
-             
            </mt-field>
             <span class="volidateNum" @click="regetNum" v-show="reNum">重新获取验证码</span>
             <p v-if="listenCode" class="listencode">收不到验证码?
@@ -20,7 +19,7 @@
             </p>
             <p class="telError"  v-if="isShowCode">
                 <span class="telPhone" @click="clearCode" v-if="isShowCode"> × </span>
-                <span class="rightPhone"></span>
+                <span class="rightPhone">验证码错误</span>
             </p>
  <!--            <span class="volidateNum"  v-show="listenTimer">{{ value }} s</span> -->
             <span class="volidateNum"  v-show="isTimer">{{ time }} s</span>
@@ -66,7 +65,7 @@ export default {
     data(){
         return {
                 imgSrc:imgSrc,
-                title:null,
+                title:'',
                 reCredNum:'',
                 YZM:false,
                 number:null,
@@ -79,6 +78,7 @@ export default {
                 isCodeFail:false,
                 codeOverTime:'验证码发送次数已达上限',
                 helpMessage:'您填写的信息可以帮助我们及时更正哦',
+                txt:'验证码累计错误已达上线',
                 dis:true,
                 getCodeNum:0,   // 记录获取验证码次数, 到达10次 就进入反馈界面
                 isCodeFailShow:false,
@@ -113,7 +113,6 @@ export default {
             }
         },
         codeNumber(){//禁止输入非数字
-        
           this.reCredNum = this.reCredNum.replace(/[^\d]/g,'');
         },
         getListenCode(){  // 获取语音验证码
@@ -124,7 +123,6 @@ export default {
             this.reNum = false
             api.myGet("users",{id:'1'})
     				   .then(res => {
-    					   console.log(res[0].id)
                     this.ShowNumber()
                     this.count++
                     if(this.count > 0){
@@ -133,7 +131,7 @@ export default {
                     }
                     if(this.count > 4){ // 每天最多可以获取5次验证码
                         console.log("验证码发送次数已达上限")
-                        this.$router.push({path:'/overCount',query:{title:this.$route.query.title,helpMessage:this.helpMessage}})
+                        this.$router.push({path:'/overCount',query:{title:this.codeOverTime,helpMessage:this.helpMessage}})
                     }
     				   })
     				   .catch(err => {
@@ -160,7 +158,7 @@ export default {
             this.reNum = false
         },
         codePromise(){ // 验证码提交
-            api.myGet("users",{id:'2',reCredNum:this.reCredNum}) 
+            api.myGet("users",{id:'1',reCredNum:this.reCredNum}) 
                .then(res => {
                    // console.log(res[0].id)
                     if(res[0].id == 1){  // 跳转到 userName
@@ -171,12 +169,12 @@ export default {
                       $('.mint-cell').addClass('red')
                         this.isShowCode = true
                         this.getCodeNum ++ ;
-                        console.log(this.getCodeNum)
+                        $(".rightPhone").html('验证码错误');
+                        console.log('验证码输入错误次数:',this.getCodeNum)
                         if(this.getCodeNum > 9){   // 记录验证码输入错误的次数, 到达10次 就进入反馈界面
-                            console.log("获取验证码超过10次");
-                            this.$router.push({path:"/overCount"});
+                            console.log("验证码输入错误超过10次");
+                            this.$router.push({path:"/overCount",query:{title:this.txt,helpMessage:this.helpMessage}});
                         } 
-						            document.querySelector(".rightPhone").innerHTML = "验证码错误"
                     }
 
                     if(res[0].id == 3){  // 验证码发送失败
