@@ -5,14 +5,15 @@
                 <img :src="imgSrc">
             </div>
             <div class="right">
-                {{ title }}
+                {{ title }} 
             </div>
         </div>
         <div class="content">
-            <p class="tip" v-if="YZM">短信验证码已发送成功</p>
-           <mt-field :attr="{ maxlength: 4 }"  placeholder="请输入验证码" type="tel" v-model="reCredNum" 
-                    @keyup.native="codeNumber" v-on:input="reCredNumFocus">
-           </mt-field>
+            <p class="tip" v-if="YZM">短信验证码已发送至 {{ number | value }} </p>
+            <p class="tip" v-if="ListenYzm">语音验证码已发送成功</p>
+           <input  maxlength= "4" class="VolidateCode"  placeholder="请输入验证码" type="tel" v-model="reCredNum" 
+                    @keyup.native="codeNumber" v-on:input="reCredNumFocus" >
+
             <span class="volidateNum" @click="regetNum" v-show="reNum">重新获取验证码</span>
             <p v-if="listenCode" class="listencode">收不到验证码?
                 <span  v-if="listenCode" class="getListen" @click="getListenCode">接听语音验证码</span>
@@ -68,6 +69,7 @@ export default {
                 title:'',
                 reCredNum:'',
                 YZM:false,
+                ListenYzm:false,  // 语音验证码
                 number:null,
                 time:null,
                 reNum:false,
@@ -85,31 +87,36 @@ export default {
 
         }
     },
+    filters:{ // 过滤
+        value(val){
+            return  val.slice(0,4) +'- ' + val.slice(4,9) + '- ' + val.slice(9,15);
+        }
+    },
     methods:{
         codeFailHidden(){ // 验证码发送失败弹窗
-            this.isCodeFail = false
+            this.isCodeFail = false;
         },
         clearCode(){   //  x  清楚错误验证码
-            this.reCredNum = ''
-            this.isShowCode = false
+            this.reCredNum = '';
+            this.isShowCode = false;
         },
         reCredNumFocus(){    // 验证码输入框 焦点事件
             if(this.reCredNum.length > 0){
-                $('.mint-cell').addClass('hot');
+                $('.VolidateCode').addClass('hot');
             }
             else{
-                $('.mint-cell').removeClass('hot');
+                $('.VolidateCode').removeClass('hot');
             }
 
             if(this.reCredNum.length == 4){  
-                this.dis = false
-                this.reNum = false
+                this.dis = false;
+                this.reNum = false;
             }
             else{
-                this.dis = true
+                this.dis = true;
                 this.reNum = true;
                 this.isShowCode = false // 验证码输入错误的时候 回删一位 验证码错误提示消失
-                $('.mint-cell').removeClass('red');
+                $('.VolidateCode').removeClass('red');
             }
         },
         codeNumber(){//禁止输入非数字
@@ -120,45 +127,49 @@ export default {
         },
         
         regetNum(){ // 重新获取短信验证码
-            this.reNum = false
+            this.reNum = false;
             api.myGet("users",{id:'1'})
     				   .then(res => {
-                    this.ShowNumber()
-                    this.count++
+                    this.ShowNumber();
+                    this.count++;
                     if(this.count > 0){
                         console.log('this.count:',this.count);
-                        this.listenCode = true
+                        this.listenCode = true;
                     }
                     if(this.count > 4){ // 每天最多可以获取5次验证码
-                        console.log("验证码发送次数已达上限")
-                        this.$router.push({path:'/overCount',query:{title:this.codeOverTime,helpMessage:this.helpMessage}})
+                        console.log("验证码发送次数已达上限");
+                        this.$router.push({path:'/overCount',query:{title:this.codeOverTime,helpMessage:this.helpMessage}});
                     }
     				   })
     				   .catch(err => {
       					   // 手机号码验证错误
-      					   console.log(err)
-      					   document.querySelector('.mint-cell').style.borderBottom = "2px solid red"
+      					   console.log(err);
+      					   document.querySelector('.VolidateCode').style.borderBottom = "2px solid red";
     				   })
         },
         ShowNumber(){  // 显示倒计时
            clearInterval(timer)   //调用定时器之前先清除定时器
-            this.isTimer = true
-            this.time = 60
+            this.isTimer = true;
+            this.time = 60;
             var timer = setInterval (() => {
-                this.time -= 10
+                this.time -= 10;
                 if(this.time <= 0){
-                    clearInterval(timer)  // 清除定时器
-                    this.isTimer = false
-                    this.reNum = true
+                    clearInterval(timer);  // 清除定时器
+                    this.isTimer = false;
+                    this.reNum = true;
                 }
             },1000)
         },
-        know(){
+        know(){  // 请求语音验证码
             this.isCodeFailShow = false;
-            this.reNum = false
+            this.reNum = false;
+
+            // 语音验证码请求数据返回成功  
+            this.ListenYzm = true;
+            this.YZM = false;
         },
         codePromise(){ // 验证码提交
-            api.myGet("users",{id:'1',reCredNum:this.reCredNum}) 
+            api.myGet("users",{id:'2',reCredNum:this.reCredNum}) 
                .then(res => {
                    // console.log(res[0].id)
                     if(res[0].id == 1){  // 跳转到 userName
@@ -166,7 +177,7 @@ export default {
                     }
 
                     if(res[0].id == 2){  // 验证码错误
-                      $('.mint-cell').addClass('red')
+                      $('.VolidateCode').addClass('red')
                         this.isShowCode = true
                         this.getCodeNum ++ ;
                         $(".rightPhone").html('验证码错误');
@@ -186,7 +197,6 @@ export default {
 
                })
         }
-
     },
     mounted(){
         // console.log(this.$route)
@@ -253,35 +263,26 @@ export default {
   margin-bottom: 30px;
 }
 
-.content .mint-cell {
-  height: 35px;
-  width: 100%;
-  font-size: 16px;
-  outline: none;
-  border: none;
-  border-radius: 0;
-  letter-spacing: 1px;
-  text-indent: 10px;
-  border-bottom: 2px solid rgba(150, 150, 150, 0.2);
-}
-
-.content .mint-cell input {
-  line-height: 12;
-}
-
 .content input::-webkit-input-placeholder {
   color: #ccc;
 }
 
 .content .volidateNum {
   position: absolute;
-  top: 70px;
+  top: 80px;
   right: 25px;
   font-size: 12px;
   color: #333;
 }
 
-
+.VolidateCode{
+    outline: none;
+    border: none;
+    font-size: 16px;
+    height: 30px;
+    width: 100%;
+    border-bottom:2px solid rgba(0,0,0,0.2);
+}
 .content .refer {
   border-radius: 25px;
   background: rgba(0, 0, 0, 0.1);
@@ -335,7 +336,7 @@ export default {
 .content .telError {
   position: absolute;
   z-index: 10;
-  top: 105px;
+  top: 108px;
   left: 25px;
 }
 

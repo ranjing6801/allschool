@@ -80,7 +80,7 @@ export default {
         this.title = this.$route.query.title;
         this.user = this.$route.query.username;
         this.helpMessage = this.$route.query.helpMessage;
-        this.reback = this.$route.query.txt;
+        this.reback = this.$route.query.title;
     }
 }
 </script>

@@ -188,18 +188,6 @@ input{
   margin-bottom: 30px;
 }
 
-.contentUser .mint-cell {
-  height: 35px;
-  width: 100%;
-  font-size: 16px;
-  outline: none;
-  border: none;
-  border-radius: 0;
-  letter-spacing: 1px;
-  text-indent: 10px;
-  border-bottom: 2px solid rgba(150, 150, 150, 0.2);
-}
-
 .contentUser input::-webkit-input-placeholder {
   color: #ccc;
 }
