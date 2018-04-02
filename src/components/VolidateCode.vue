@@ -147,10 +147,10 @@ export default {
                     this.ShowNumber()
                     this.count++
                     if(this.count > 0){
-                        console.log('请求超过2次,请稍后')  
+                        console.log('this.count:',this.count);
                         this.listenCode = true
                     }
-                    if(this.count > 10){ // 每天最多可以获取5次验证码
+                    if(this.count > 4){ // 每天最多可以获取5次验证码
                         console.log("验证码发送次数已达上限")
                         this.$router.push({path:'/overCount',query:{title:this.$route.query.title,helpMessage:this.helpMessage}})
                     }
@@ -210,8 +210,8 @@ export default {
                         this.isShowCode = true
                         this.getCodeNum ++ ;
                         console.log(this.getCodeNum)
-                        if(this.getCodeNum > 10){   // 记录验证码输入错误的次数, 到达10次 就进入反馈界面
-                            alert("获取验证码超过10次")
+                        if(this.getCodeNum > 9){   // 记录验证码输入错误的次数, 到达10次 就进入反馈界面
+                            console.log("获取验证码超过10次");
                             this.$router.push({path:"/overCount"});
                         } 
 						            document.querySelector(".rightPhone").innerHTML = "验证码错误"
