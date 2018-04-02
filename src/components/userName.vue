@@ -9,10 +9,10 @@
             {{ title }}
         </div>
     </div>
-        <div class="contentUser">
-            <input maxlength="20" placeholder="请输入您的姓名" type="text" v-model="userName" v-on:input="userNameFocus">
-            <button class="refer" id="referName" :disabled="dis" @click="NamePromise" >提交</button>
-        </div>
+    <div class="contentUser">
+        <input maxlength="20" placeholder="请输入您的姓名" type="text" v-model="userName" v-on:input="userNameFocus">
+        <button class="refer" id="referName" :disabled="dis" @click="NamePromise" >提交</button>
+    </div>
 </div>
 </template>
 <script>
