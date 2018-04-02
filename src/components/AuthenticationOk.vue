@@ -1,8 +1,8 @@
 <template>
     <!-- 老用户输入姓名认证成功   -->
     <div id="authentication">  
+      <div v-if="isIOS" class="ios">
         <div class="content" slot="header">
-
             <p class="title">反馈成功</p>
             <p>我们将尽快处理,请耐心等候</p>
         </div>
@@ -10,6 +10,20 @@
             <p class="footerTip">您可以使用「小黑板」,体验高效的家校管理</p>
             <div class="btn" @click="openSmallDesk">打开小黑板</div>
         </div>
+      </div>
+      <div v-if="isAND" class="android">
+        <div class="content2">
+            <p class="title">反馈成功</p>
+            <p>我们将尽快处理,请耐心等候</p>
+        </div>
+        <div class="footer2">
+            <p class="footerTip">您可以使用「小黑板」,体验高效的家校管理</p>
+            <div class="btn" @click="openSmallDesk">打开小黑板</div>
+        </div>
+        <div class="img">
+            <img src="/static/images/and.jpg" alt="">
+        </div>
+      </div>
     </div>
 </template>
 
@@ -18,7 +32,8 @@ export default {
     name:'authentication',
     data(){
         return{
-
+          isIOS: true,
+          isAND: false
         }
     },
     methods:{
@@ -27,8 +42,24 @@ export default {
             alert("打开小黑板")
         }
     },
-    created(){
+    created() {
         document.title = "反馈成功"
+    },
+    mounted() {
+      //判断手机类型
+      var ua = navigator.userAgent.toLowerCase();
+
+      if(/android/.test(ua)){
+          console.log('android...');
+          this.isAND = true;
+          this.isIOS = false;
+        }
+
+      if(/iphone|ipad|ipod/.test(ua)){
+          console.log('ios...');
+          this.isIOS = true;
+          this.isAND = false;
+        }
     }
 }
 </script>
@@ -52,11 +83,28 @@ export default {
   font-size: 20px;
   text-align: center;
   letter-spacing: 2px;
-  font-family: "微软雅黑";
+}
+.content2{
+  width: 100%;
+  height: 100%;
+  padding-top: 10%;
+  font-size: 20px;
+  text-align: center;
+  letter-spacing: 2px;
 }
 
 #authentication .footer {
   margin-top: 50%;
+}
+.footer2{
+  margin-top: 2%;
+  margin-bottom: 4%;
+}
+.footer2 .footerTip{
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  text-align: center;
+  color: #666;
 }
 
 #authentication .footer .footerTip {
@@ -67,7 +115,7 @@ export default {
   color: #666;
 }
 
-#authentication .footer .btn {
+.btn {
   font-size: 20px;
   line-height: 40px;
   text-align: center;
@@ -80,7 +128,9 @@ export default {
   border-radius: 20px;
   margin-top: 0px;
 }
-
+.img{
+  text-align: center;
+}
 
 
 
