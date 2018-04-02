@@ -3,7 +3,7 @@
   <div id="codeFailModal">
       <p class="title">验证码发送失败</p>
       <p class="content">验证码发送失败, 请稍后重试</p>
-      <div class="btn" @click="codeFailKnow">我知道啦</div>
+      <button class="btn" @click="codeFailKnow">我知道啦</button>
   </div>
 </template>
 
@@ -59,6 +59,7 @@ export default {
   background: rgba(0, 0, 0, 0.5);
   border-radius: 20px;
   margin-top: 80px;
+  border:none;
 }
 
 

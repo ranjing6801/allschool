@@ -10,7 +10,10 @@
         </div>
         <div class="content">
             <p class="tip" v-if="YZM">短信验证码已发送至 {{ number | value }} </p>
-           <mt-field  placeholder="请输入验证码" type="tel" v-model="reCredNum" v-on:input="reCredNumFocus"></mt-field>
+           <mt-field :attr="{ maxlength: 6 }"  placeholder="请输入验证码" type="tel" v-model="reCredNum" 
+                                @keyup.native="codeNumber" v-on:input="reCredNumFocus">
+             
+           </mt-field>
             <span class="volidateNum" @click="regetNum" v-if="reNum">重新获取验证码</span>
             <p v-if="listenCode" class="listencode">收不到验证码?
                 <span  v-if="listenCode" class="getListen" @click="getListenCode">接听语音验证码</span>
@@ -20,14 +23,16 @@
                 <span class="rightPhone"></span>
             </p>
             <span class="volidateNum"  v-if="isTimer">{{ time }} s</span>
-            <mt-button id="referCode" size="large" @click="codePromise" >验证码提交</mt-button>
+            <button :class="!dis ? 'active': '' " :disabled="dis" class="referCode"   @click="codePromise" >验证码提交</button>
         </div>
+
         <!-- 语音验证码  @listenModalHide="modalHidden" -->
         <div class="modalShow" v-if="isMolda"  @click="modalHidden">
             <div class="modal">
                 <modal :codeTitle="codeTitle" @listenModalHide="modalHidden"></modal>
             </div>
         </div>
+
             <!--  验证码发送失败弹窗  -->
         <div class="codeFail" v-if="isCodeFail" @click="codeFailHidden">
             <div class="fail">
@@ -69,7 +74,8 @@ export default {
                 isShowCode:false,
                 isCodeFail:false,
                 codeOverTime:'验证码发送次数已达上限',
-                helpMessage:'您填写的信息可以帮助我们及时更正哦'
+                helpMessage:'您填写的信息可以帮助我们及时更正哦',
+                dis:true
         }
     },
     props:{
@@ -91,15 +97,30 @@ export default {
             this.reCredNum = ''
             this.isShowCode = false
         },
-        reCredNumFocus(){
-            if(this.reCredNum){
+        reCredNumFocus(){    // 验证码输入框 焦点事件
+            if(this.reCredNum.length > 0){
+                $('.mint-cell').addClass('hot');
+                
+                // document.querySelector('#referCode').style.background = "rgba(0,0,0,0.6)"
+                // document.querySelector('.mint-cell').style.borderBottom = "2px solid #666"
+            }
+            else{
+                $('.mint-cell').removeClass('hot');
+            }
+
+            if(this.reCredNum.length == 6){
                 this.dis = false
                 this.reNum = false
-                document.querySelector('#referCode').style.background = "rgba(0,0,0,0.6)"
-                document.querySelector('.mint-cell').style.borderBottom = "2px solid #666"
-            }else{
-                this.reNum = true
             }
+            else{
+                this.dis = true
+                this.reNum = true;
+                $('.mint-cell').removeClass('red');
+            }
+        },
+        codeNumber(){
+                //禁止输入非数字
+          this.reCredNum = this.reCredNum.replace(/[^\d]/g,'');
         },
         getListenCode(){  // 获取语音验证码
             this.isMolda = true;
@@ -116,11 +137,11 @@ export default {
 					   console.log(res[0].id)
                         this.ShowNumber()
                         this.count++
-                        if(this.count > 1){
+                        if(this.count > 2){
                             console.log('请求超过2次,请稍后')
                             this.listenCode = true
                         }
-                        if(this.count > 2){
+                        if(this.count > 5){ // 每天最多可以获取5次验证码
                             console.log("验证码发送次数已达上限")
                             this.$router.push({path:'/overCount',query:{title:this.$route.query.title,helpMessage:this.helpMessage}})
                         }
@@ -132,6 +153,7 @@ export default {
 				   })
         },
         ShowNumber(){  // 显示倒计时
+          clearInterval(timer)   // 调用定时器之前先清除定时器
             this.isTimer = true
             this.time = 60
             var timer = setInterval (() => {
@@ -171,7 +193,7 @@ export default {
         // console.log(this.$route)
         this.YZM = true
         document.title = "输入验证码"
-        this.ShowNumber()
+        this.reNum = true   // 进入验证码界面就获取验证码.并且显示重新获取验证码提示
         this.title = this.$route.query.title
         this.number = this.$route.query.phone
     }
@@ -254,6 +276,7 @@ export default {
   color: #333;
 }
 
+
 .content .refer {
   margin-top: 60px;
   border-radius: 25px;
@@ -261,12 +284,30 @@ export default {
   color: orangered;
 }
 
-.content #referCode {
-  margin-top: 60px;
-  border-radius: 25px;
-  background: rgba(0, 0, 0, 0.1);
-  color: orangered;
+.content .referCode {
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+    margin-top: 60px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    background: #fff;
+    color: #ccc;
 }
+
+/* 输入框动态样式*/
+.content .hot{  
+  border-bottom: 2px solid #333;
+}
+.content .red{
+  border-bottom: 2px solid #CE0000;
+}
+.content .active{
+  border: 1px solid #333;
+  background: #000;
+  color: #fff;
+}
+
 
 .content #referName {
   margin-top: 60px;
@@ -274,6 +315,9 @@ export default {
   background: rgba(0, 0, 0, 0.1);
   color: orangered;
 }
+
+
+
 
 .content .listencode {
   font-size: 13px;
@@ -325,10 +369,10 @@ export default {
 }
 
 .modalShow .modal {
-  width: 90%;
-  height: 50%;
-  margin-left: 5%;
-  margin-right: 5%;
+  width: 80%;
+  height: 40%;
+  margin-left: 10%;
+  margin-right: 10%;
   position: absolute;
   top: 0;
   left: 0;
