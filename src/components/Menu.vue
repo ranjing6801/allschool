@@ -1,6 +1,6 @@
 <template>
 <div id="myMenu">
-	<!--  head 部分 -->
+  <!--  head 部分 -->
     <div class="head">
         <div class="left">
             <img :src="imgSrc">
@@ -11,15 +11,15 @@
     </div>
     <!--  content  -->
     <div class="content">
-    	<p class="tip" v-show="tip">无小黑板账号请输入手机号</p>
-		  <p class="telError"  v-show="isRightNumber">
-  			<span class="telPhone" @click="rightNumberTip" v-show="isRightNumber"> × </span>
-  			<span class="rightPhone">请填写正确的手机号码</span>
-  		</p>
-		
-  		<mt-field @keyup.native="tel" type="tel" placeholder="请输入小黑板账号 / 手机号"  v-model="phone" v-on:input="focus" id="input" :attr="{ maxlength: 13 }">
+      <p class="tip" v-show="tip">无小黑板账号请输入手机号</p>
+      <p class="telError"  v-show="isRightNumber">
+        <span class="telPhone" @click="rightNumberTip" v-show="isRightNumber"> × </span>
+        <span class="rightPhone">请填写正确的手机号码</span>
+      </p>
+    
+      <mt-field @keyup.native="tel" type="tel" placeholder="请输入小黑板账号 / 手机号"  v-model="phone" v-on:input="focus" id="input" :attr="{ maxlength: 13 }">
       </mt-field>
-  		<button :class="!btn?'active':''" class="refer"  :disabled="btn" @click="telPromise" >手机号码提交</button>
+      <button :class="!btn?'active':''" class="refer"  :disabled="btn" @click="telPromise" >手机号码提交</button>
     </div>
     
     <!--  验证码错误弹窗 -->
@@ -54,78 +54,77 @@ import api from '../api/api'
 				btn:true,
 				isRightNumber:false,
 				count:null,
-        isCodeFailShow:false
+                isCodeFailShow:false
 			}
 		},
 		watch:{ // 监听phone
-      phone(newValue,oldValue){
-           this.phone = newValue > oldValue ? newValue.replace(/\s/g,'').replace(/(\d{3})(\d{0,4})(\d{0,4})/,'$1 $2 $3'):this.phone.trim()
-       }
-    },
+            phone(newValue,oldValue){
+                   this.phone = newValue > oldValue ? newValue.replace(/\s/g,'').replace(/(\d{3})(\d{0,4})(\d{0,4})/,'$1 $2 $3'):this.phone.trim()
+            }
+        },
 		methods:{
 			// x 
 			rightNumberTip(){
 				
 			},
 			focus(){
-        //监听input输入框
-        if(this.phone.length > 0){
-          $('.mint-cell').addClass('hot');
-        }else{
-          $('.mint-cell').removeClass('hot');
-        }
-				if(this.phone.length == 13){
-					this.btn = false;
-				}else{
-					this.btn = true;
-          this.isRightNumber = false;
-          $('.mint-cell').removeClass('red');
+                //监听input输入框
+                if(this.phone.length > 0){
+                  $('.mint-cell').addClass('hot');
+                }else{
+                  $('.mint-cell').removeClass('hot');
+                }
+                if(this.phone.length == 13){
+                  this.btn = false;
+                }else{
+                  this.btn = true;
+                  this.isRightNumber = false;
+                  $('.mint-cell').removeClass('red');
 				}
 			},
 			telPromise(){  // 获取验证码
-          console.log('点击按钮了..');
-				  //请求数据之前 要判断手机号是否合法
-          let myphone = this.phone.split(' ').join('');
-          if(!(/^1[3|4|5|7|8][0-9]\d{4,8}$/.test(myphone))) {
-            this.isRightNumber = true;
-            console.log('myphone:',myphone);
-            $('.mint-cell').addClass('red');
-            $('.rightPhone').html('请填写正确的手机号码');
-            return;
-          }
+              console.log('点击按钮了..');
+    				  //请求数据之前 要判断手机号是否合法
+                let myphone = this.phone.split(' ').join('');
+                if(!(/^1[3|4|5|7|8][0-9]\d{4,8}$/.test(myphone))) {
+                    this.isRightNumber = true;
+                    console.log('myphone:',myphone);
+                    $('.mint-cell').addClass('red');
+                    $('.rightPhone').html('请填写正确的手机号码');
+                    return;
+                }
         
-
-				 api.myGet("users",{id:'4'})
+				api.myGet("users",{id:'4'})
 				   .then(res => {
 					  console.log(res[0].id)			   
 						if(res[0].id == 1){   // 提示 该手机号已经加入其他学校
-              this.isRightNumber = true;
-              $('.rightPhone').html('该手机号已经加入其他学校');
+                              this.isRightNumber = true;
+                              $('.rightPhone').html('该手机号已经加入其他学校');
 						}else if(res[0].id==2){ // 手机号码验证错误
-              this.isRightNumber = true;
-              $('.mint-cell').addClass('red');
-              $('.rightPhone').html('请填写正确的手机号码');
-            }else if(res[0].id==3){
-              // 验证码发送失败
-              this.isCodeFailShow = true;
-            }else{
-              //跳转 到验证码界面
-              this.$router.push({name:'VolidateCode',query:{title:this.title,phone:this.phone}});
-            }
+                              this.isRightNumber = true;
+                              $('.mint-cell').addClass('red');
+                              $('.rightPhone').html('请填写正确的手机号码');
+                        }else if(res[0].id==3){
+                          // 验证码发送失败
+                          this.isCodeFailShow = true;
+                        }else{
+                          //跳转 到验证码界面
+                          this.$router.push({name:'VolidateCode',query:{title:this.title,phone:this.phone}});
+                        }
 				   })
 				   .catch(err => {
 					   // 手机号码验证错误
 					   //this.isRightNumber = true;
-             //$('.mint-cell').addClass('red');
+                        //$('.mint-cell').addClass('red');
 				   })
 			},
 			tel(){
 				//禁止输入非数字
 				this.phone = this.phone.replace(/[^\d]/g,'');
 			},
-      codeFailKnow(){
-        this.isCodeFailShow = false;
-      }
+            codeFailKnow(){
+                this.isCodeFailShow = false;
+            } 
 		},
 	    mounted(){
 			document.title = "输入手机号";

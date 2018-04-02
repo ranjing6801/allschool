@@ -3,7 +3,8 @@
   <div id="modal" @click="know">
       <h5 class="title">{{ codeTitle }}</h5>
       <p class="content"> 我们会在短时间内拨打您的电话请注意接听语音验证码</p>
-      <div class="btn" @click="know">我知道啦</div>
+      <button class="clear">取消</button>
+      <button class="btn" @click="know">我知道啦</button>
   </div>
 </template>
 <script>
@@ -38,31 +39,39 @@ export default {
 
 #modal .title {
   font-size: 18px;
-  padding-top: 20px;
   padding-left: 20px;
 }
 
 #modal .content {
   font-size: 18px;
   margin-top: 40px;
-  padding-left: 30px;
-  padding-right: 20px;
+  padding-left: 40px;
+  padding-right: 25px;
   line-height: 2;
   text-align: center;
 }
 
+#modal .clear{
+    border: none;
+    font-size: 16px;
+    background: #fff;
+    height: 40px;
+    width: 80px;
+    margin-left: 30px;
+    margin-right: 40px;
+}
 #modal .btn {
-  font-size: 20px;
+  font-size: 16px;
   line-height: 40px;
   text-align: center;
   color: #fff;
-  width: 60%;
-  height: 50px;
-  margin-left: 20%;
+  width: 40%;
+  height: 40px;
   text-align: center;
   background: rgba(0, 0, 0, 0.5);
   border-radius: 20px;
   margin-top: 50px;
+  border:none;
 }
 
 
