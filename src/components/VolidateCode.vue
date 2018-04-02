@@ -14,7 +14,7 @@
                     @keyup.native="codeNumber" v-on:input="reCredNumFocus">
              
            </mt-field>
-            <span class="volidateNum" @click="regetNum" v-if="reNum">重新获取验证码</span>
+            <span class="volidateNum" @click="regetNum" v-show="reNum">重新获取验证码</span>
             <p v-if="listenCode" class="listencode">收不到验证码?
                 <span  v-if="listenCode" class="getListen" @click="getListenCode">接听语音验证码</span>
             </p>
@@ -22,7 +22,8 @@
                 <span class="telPhone" @click="clearCode" v-if="isShowCode"> × </span>
                 <span class="rightPhone"></span>
             </p>
-            <span class="volidateNum"  v-if="isTimer">{{ time }} s</span>
+            <span class="volidateNum"  v-show="listenTimer">{{ value }} s</span>
+            <span class="volidateNum"  v-show="isTimer">{{ time }} s</span>
             <button :class="!dis ? 'active': '' " :disabled="dis" class="referCode"   @click="codePromise" >验证码提交</button>
         </div>
 
@@ -80,9 +81,11 @@ export default {
                 YZM:false,
                 number:null,
                 time:null,
+                value:null,  // 语音验证码定时器
                 reNum:false,
                 isTimer:false,
                 count:0,
+                listenTimer:false,   // 语音验证码定时器
                 listenCode:false,
                 // isMolda:false,
                 isShowCode:false,
@@ -135,11 +138,7 @@ export default {
         getListenCode(){  // 获取语音验证码
             this.isCodeFailShow = true;
         },
-        know(){
-            this.isCodeFailShow = false;
-            this.reNum = false
-            this.ShowNumber()
-        },
+        
         regetNum(){ // 重新获取短信验证码
             this.reNum = false
             api.myGet("users",{id:'1'})
@@ -174,6 +173,29 @@ export default {
                     this.reNum = true
                 }
             },1000)
+        },
+        ListenTimer(){
+            console.log('开启另外一个定时器')
+            console.log("this.reNum=",this.reNum)
+            clearInterval(listen)   //调用定时器之前先清除定时器
+            this.listenTimer = true
+            this.value = 60
+            var listen = setInterval (() => {
+                this.value -= 10
+                if(this.value <= 0){
+                    clearInterval(listen)  // 清除定时器
+                    this.listenTimer = false
+                    this.reNum = true
+                }
+            },1000)
+        },
+        know(){
+            this.isCodeFailShow = false;
+            this.reNum = false
+            this.isTimer = false    //将上一个定时器隐藏起来
+            this.time = 0
+            console.log("this.reNum=",this.reNum)
+            this.ListenTimer()
         },
         codePromise(){ // 验证码提交
             api.myGet("users",{id:'2',reCredNum:this.reCredNum}) 
