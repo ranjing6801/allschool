@@ -116,7 +116,7 @@ import api from '../api/api'
 
                           sessionStorage.setItem("phone",this.phone)   // 将电话号码存储在 本地 
                           this.$router.push({name:'VolidateCode',query:{title:this.title,phone:this.phone}});
-                          
+
                         }
 				   })
 				   .catch(err => {
