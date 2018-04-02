@@ -28,7 +28,7 @@ export default {
         }
     },
     created(){
-        document.title = "认证成功"
+        document.title = "反馈成功"
     }
 }
 </script>

@@ -8,16 +8,17 @@
         <div class="right">
             {{ title }}
         </div>
+    </div>
         <div class="contentUser">
-            <mt-field  placeholder="请输入您的姓名" type="text" v-model="userName" v-on:input="userNameFocus"></mt-field>
-            <mt-button id="referName" :disabled="dis" size="large" @click="NamePromise" >姓名提交</mt-button>
+            <input maxlength="20" placeholder="请输入您的姓名" type="text" v-model="userName" v-on:input="userNameFocus">
+            <button class="refer" id="referName" :disabled="dis" @click="NamePromise" >提交</button>
         </div>
-    </div> 
 </div>
 </template>
 <script>
 import imgSrc from  '../../static/images/logo.jpg'
 import axios from 'axios'
+import $ from 'jquery'
 import api from '../api/api'
 import overCount from './overCount'
 import AuthenticationOk from './AuthenticationOk'
@@ -32,9 +33,9 @@ export default {
         return {
             title:null,
             imgSrc:imgSrc,
-            userName:null,
+            userName:'',
             dis:false,
-            errTitle:'您填写的姓名不存在',
+            errTitle:'您填写的教师姓名不存在',
             helpMessage:'您的反馈信息可以帮助我们及时更正哦',
             num:1,
             classList:[
@@ -46,22 +47,24 @@ export default {
     },
     methods:{
         userNameFocus(){  // 聚焦
-            if(this.userName){
-                this.dis = false
-                document.querySelector('#referName').style.background = "rgba(0,0,0,0.6)"
-                document.querySelector('.mint-cell').style.borderBottom = "2px solid #666"
-            }
+            if(this.userName.length > 0){
+                  $('.refer').addClass('active');
+                  this.dis = false;
+                }else{
+                  $('.refer').removeClass('active');
+                  this.dis = true;
+                }
         },
         NamePromise(){ // 姓名验证 
             // var url = '/h5/index/';
-            api.myGet("users",{id:'6'})
+            api.myGet("users",{id:1})
                .then( res => {
                 //    console.log(res)
                 //    console.log(res[0].id)
 
             // 姓名不存在的用户
                    if(res[0].id == 1){  // 姓名不存在
-                        alert("姓名不存在")
+                        //alert("姓名不存在")
                         this.title = this.errTitle   // 跳转之前 将title值覆盖
                         this.$router.push({path:'/overCount',query:{username:this.userName,title:this.title,helpMessage:this.helpMessage}})
                    }
@@ -108,7 +111,7 @@ export default {
     },
     mounted(){
         // console.log(this.$route)
-        document.title = "输入姓名"
+        document.title = "填写姓名"
         this.title = this.$route.query.title
     }
 }
@@ -118,37 +121,65 @@ export default {
 @import  '../assets/css/userName.css';*/
 
 .head {
+  width: 100%;
+  height: 130px;
+  display: flex;
   background: #eee;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  padding-left: 20px;
-  height: 80px;
+  justify-content: center;
+  align-items: center;
+  
 }
-
+.head .left{
+  width: 80px;
+  height: 80px;
+  margin-right: 20px
+}
 .head .left img {
   width: 80px;
   height: 80px;
   border-radius: 50%;
+  display: block;
 }
 
 .head .right {
-  position: absolute;
-  top: 35px;
-  left: 0px;
-  height: 80px;
+  height: 60px;
+  width: 250px;
   font-size: 16px;
-  margin-left: 125px;
-  margin-right: 20px;
+  padding-top: 20px;
   font-weight: 600;
   color: #1f1e22;
 }
 
 .contentUser {
-  height: 40px;
-  margin-top: 70px;
-  padding-right: 25px;
+  margin: 10px 10px 10px 10px;
+  padding: 20px 20px 20px 20px;
   box-sizing: border-box;
   position: relative;
+}
+input{
+  outline: none;
+  border: none;
+}
+.contentUser input{
+  width: 98%;
+  height: 38px;
+  font-size: 16px;
+  line-height: 38px;
+  color: #333;
+  border-bottom: 1px solid #666;
+}
+.contentUser button{
+  font-size: 17px;
+  line-height: 36px;
+  text-align: center;
+  color: #666;
+  width: 98%;
+  height: 36px;
+  margin: 0 auto;
+  text-align: center;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 20px;
 }
 
 .contentUser p {
@@ -181,13 +212,6 @@ export default {
   color: #ccc;
 }
 
-.contentUser .refer {
-  margin-top: 60px;
-  border-radius: 25px;
-  background: rgba(0, 0, 0, 0.1);
-  color: orangered;
-}
-
 .contentUser #referCode {
   margin-top: 60px;
   border-radius: 25px;
@@ -195,11 +219,20 @@ export default {
   color: orangered;
 }
 
-.contentUser #referName {
+.contentUser .refer {
+  width: 100%;
+  height: 40px;
+  font-size: 16px;
   margin-top: 60px;
   border-radius: 25px;
-  background: rgba(0, 0, 0, 0.1);
-  color: orangered;
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #ccc;
+}
+.contentUser .active{
+  border: 1px solid #333;
+  background: #333;
+  color: #fff;
 }
 
 .contentUser .listencode {

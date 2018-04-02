@@ -7,7 +7,7 @@
         </div>
         <div class="right">
             {{ title }}
-            <p id="helpMessage">请填写反馈信息帮助我们及时解决哦</p>
+            <p id="helpMessage">{{helpMessage}}</p>
         </div>
     </div> 
     <div id="contentList">
@@ -15,7 +15,7 @@
             <li class="userName">
                 <div class="libox1">
                   <p>您的姓名</p>
-                  <input @change="txt" class="username" type="text" v-model="user"> 
+                  <input maxlength="20" @change="txt" class="username" type="text" v-model="user"> 
                 </div>
             </li>
             <li>
@@ -27,7 +27,7 @@
             </li>
             <li>
                 <p>反馈详情</p>
-                <textarea rows="8" cols="46" class="rebackContent" v-model="reback"></textarea>
+                <textarea maxlength="200" rows="8" cols="46" class="rebackContent" v-model="reback"></textarea>
             </li>
         </ul>
         <div :class="user&&rad&&reback?'active':''" class="btn" @click="getContent">提交</div>
@@ -57,7 +57,11 @@ export default {
     },
     methods:{
         getContent(){
+          if(this.user&&this.rad&&this.reback){
             this.$router.push({path:'/AuthenticationOk',query:{}})
+          }else{
+            console.log('请输入完整的信息...');
+          }
         },
         txt() {
           console.log('this.user:',this.user);
@@ -68,13 +72,14 @@ export default {
           this.rad = 'yes';
         },
         getRadio2() {
-          this.rad = 'no'
+          this.rad = 'no';
         }
     },
     mounted(){
-        document.title = "反馈信息"
-        this.title = this.$route.query.title
-        this.user = this.$route.query.username  
+        document.title = "反馈信息";
+        this.title = this.$route.query.title;
+        this.user = this.$route.query.username;
+        this.helpMessage = this.$route.query.helpMessage;
     }
 }
 </script>
@@ -158,7 +163,7 @@ export default {
 }
 input{
   outline: none;
-  border: 1px solid transparent;
+  border: none;
 }
 .username{
   width: 98%;

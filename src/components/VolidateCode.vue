@@ -327,14 +327,10 @@ export default {
 
 
 .content #referName {
-  margin-top: 60px;
   border-radius: 25px;
   background: rgba(0, 0, 0, 0.1);
   color: orangered;
 }
-
-
-
 
 .content .listencode {
   font-size: 13px;
