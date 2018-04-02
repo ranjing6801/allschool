@@ -258,7 +258,7 @@ export default {
 }
 
 .content {
-  margin-top: 30px;
+  margin-top: 40px;
   padding-left: 25px;
   padding-right: 25px;
   box-sizing: border-box;
@@ -301,7 +301,6 @@ export default {
 
 
 .content .refer {
-  margin-top: 60px;
   border-radius: 25px;
   background: rgba(0, 0, 0, 0.1);
   color: orangered;
@@ -415,7 +414,7 @@ export default {
 
 .codeFail .fail {
   width: 90%;
-  height: 50%;
+  height: 40%;
   margin-left: 5%;
   margin-right: 5%;
   position: absolute;
@@ -436,9 +435,7 @@ export default {
 .codeFail .fail #modal .content {
   font-size: 16px;
   padding-right: 25px;
-  line-height: 2;
   text-align: center;
-  margin-top: 40px;
 }
 
 .codeFail .fail #modal .clear{
@@ -452,15 +449,15 @@ export default {
 }
 .codeFail .fail #modal .btn {
     font-size: 16px;
+    display: block;
     text-align: center;
     color: #fff;
     width: 80%;
-    margin-left: 10%;
     height: 40px;
+    margin: 60px auto 0;
     background: rgba(0, 0, 0, 0.5);
     border-radius: 20px;
     border: none;
-    margin-top: 80px;
 }
 
 </style>
