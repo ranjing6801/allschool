@@ -15,7 +15,7 @@ export default {
         
     },
     mounted(){
-        document.title = '请重新扫描二维码'
+        document.title = '请重新扫描二维码2'
     }
 }
 </script>
