@@ -14,7 +14,8 @@
            <input  maxlength= "4" class="VolidateCode"  placeholder="请输入验证码" type="tel" v-model="reCredNum" 
                     @keyup.native="codeNumber" v-on:input="reCredNumFocus" >
 
-            <span class="volidateNum" @click="regetNum" v-show="reNum">重新获取验证码</span>
+            <span class="volidateNum" @click="regetNum" v-if="reNum">重新获取验证码</span>
+
             <p v-if="listenCode" class="listencode">收不到验证码?
                 <span  v-if="listenCode" class="getListen" @click="getListenCode">接听语音验证码</span>
             </p>
@@ -101,20 +102,21 @@ export default {
             this.isShowCode = false;
         },
         reCredNumFocus(){    // 验证码输入框 焦点事件
+
             if(this.reCredNum.length > 0){
+                this.reNum = false;
                 $('.VolidateCode').addClass('hot');
             }
             else{
                 $('.VolidateCode').removeClass('hot');
             }
 
-            if(this.reCredNum.length == 4){  
+            if(this.reCredNum.length == 4 ){  
                 this.dis = false;
                 this.reNum = false;
             }
             else{
                 this.dis = true;
-                this.reNum = true;
                 this.isShowCode = false // 验证码输入错误的时候 回删一位 验证码错误提示消失
                 $('.VolidateCode').removeClass('red');
             }
@@ -169,7 +171,7 @@ export default {
             this.YZM = false;
         },
         codePromise(){ // 验证码提交
-            api.myGet("users",{id:'2',reCredNum:this.reCredNum}) 
+            api.myGet("users",{id:'1',reCredNum:this.reCredNum}) 
                .then(res => {
                    // console.log(res[0].id)
                     if(res[0].id == 1){  // 跳转到 userName
