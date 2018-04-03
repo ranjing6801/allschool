@@ -57,7 +57,7 @@ export default {
         },
         NamePromise(){ // 姓名验证 
             // var url = '/h5/index/';
-            api.myGet("users",{id:2})
+            api.myGet("users",{id:7})
                .then( res => {
                 //    console.log(res)
                 //    console.log(res[0].id)

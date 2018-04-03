@@ -13,7 +13,7 @@
     <div class="content">
       <p class="tip" v-show="tip">无小黑板账号请输入手机号</p>
       <p class="telError"  v-show="isRightNumber">
-        <span class="telPhone" @click="rightNumberTip" v-show="isRightNumber"> × </span>
+        <span class="telPhone" @click="rightNumberTip" v-show="isRightNumber">！</span>
         <span class="rightPhone">请填写正确的手机号码</span>
       </p>
     
@@ -84,7 +84,7 @@ import api from '../api/api'
 			},
 			telPromise(){  // 获取验证码
               console.log('点击按钮了..');
-    				  //请求数据之前 要判断手机号是否合法
+    	//请求数据之前 要判断手机号是否合法
                 let myphone = this.phone.split(' ').join('');
                 if(!(/^1[3|4|5|7|8][0-9]\d{4,8}$/.test(myphone))) {
                     this.isRightNumber = true;
@@ -94,7 +94,7 @@ import api from '../api/api'
                     return;
                 }
         
-				api.myGet("users",{id:'4'})
+				api.myGet("users",{id:3})
 				   .then(res => {
 					  console.log(res[0].id)			   
 						if(res[0].id == 1){   // 提示 该手机号已经加入其他学校
@@ -108,13 +108,12 @@ import api from '../api/api'
 
                         }else if(res[0].id==3){
                           // 验证码发送失败
-
                           this.isCodeFailShow = true;
 
                         }else{
                           //手机号码验证成功  跳转 到验证码界面
 
-                          sessionStorage.setItem("phone",this.phone)   // 将电话号码存储在 本地 
+                          sessionStorage.setItem("phone",this.phone);   // 将电话号码存储在 本地 
                           this.$router.push({name:'VolidateCode',query:{title:this.title,phone:this.phone}});
 
                         }

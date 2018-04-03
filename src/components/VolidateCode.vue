@@ -104,7 +104,7 @@ export default {
         reCredNumFocus(){    // 验证码输入框 焦点事件
 
             if(this.reCredNum.length > 0){
-                this.reNum = false;
+
                 $('.VolidateCode').addClass('hot');
             }
             else{
@@ -113,7 +113,7 @@ export default {
 
             if(this.reCredNum.length == 4 ){  
                 this.dis = false;
-                this.reNum = false;
+
             }
             else{
                 this.dis = true;
@@ -190,10 +190,6 @@ export default {
                         } 
                     }
 
-                    if(res[0].id == 3){  // 验证码发送失败
-                        this.isCodeFail = true
-                              
-                    }
                })  
                .catch(err => {
 
