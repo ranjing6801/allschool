@@ -12,7 +12,7 @@
             <p class="tip" v-if="YZM">短信验证码已发送至 {{ number | value }} </p>
             <p class="tip" v-if="ListenYzm">语音验证码已发送成功</p>
            <input  maxlength= "4" class="VolidateCode"  placeholder="请输入验证码" type="tel" v-model="reCredNum" 
-                    @keyup.native="codeNumber" v-on:input="reCredNumFocus" >
+                    @keyup="codeNumber" v-on:input="reCredNumFocus" />
 
             <span class="volidateNum" @click="regetNum" v-if="reNum">重新获取验证码</span>
 

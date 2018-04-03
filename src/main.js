@@ -6,7 +6,7 @@ import 'mint-ui/lib/style.css'
 
 import axios from 'axios'
 import {store} from './store/store.js'
-import './assets/js/zishiying'
+
 
 
 // 配置默认的根路径

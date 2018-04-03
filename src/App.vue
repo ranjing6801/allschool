@@ -52,33 +52,11 @@ table{
 body,html{
     width: 100%;
     height: 100%;
-    /*font-family:'Microsoft YaHei','Arial';*/
+    background: #2b2b2b;
     overflow-x: hidden;
 }
-*{
-    /*font-family: 'Microsoft YaHei';*/
-}
+
 /* css reset end */
-
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-
-}
-.mint-cell-wrapper{
-    padding: 0;
-    background-size: 100% 0px;
-}
-.mint-field-core{
-    font-size: 18px;
-    margin-bottom: -15px;
-}
-.mintui-field-error{
-    position: relative;
-    top: 10px;
-}
 
 
 </style>

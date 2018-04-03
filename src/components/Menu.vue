@@ -14,14 +14,14 @@
       <p class="tip" v-show="tip">无小黑板账号请输入手机号</p>
       <p class="telError"  v-show="isRightNumber">
         <span class="telPhone" @click="rightNumberTip" v-show="isRightNumber">！</span>
-        <span class="rightPhone">请填写正确的手机号码</span>
+        <span class="rightPhone">请输入正确的手机号码</span>
       </p>
     
       <input @keyup="tel" type="tel" placeholder="请输入小黑板账号 / 手机号"  v-model="phone"
                v-on:input="focus" class="input"  maxlength=13 />
                
       <span class="telePhone" @click="clearTel" v-if="telNum">x</span>
-      <button :class="!btn?'active':''" class="refer"  :disabled="btn" @click="telPromise" >提交</button>
+      <button :class="!btn?'referBtn':''" class="refer"  :disabled="btn" @click="telPromise" >提交</button>
     </div>
     
     <!--  验证码错误弹窗 -->
@@ -73,7 +73,8 @@ import api from '../api/api'
       //  x
       clearTel(){
         this.phone = null;
-        this.telNum = false
+        this.telNum = false;
+        this.btn = true;
 
       },
       focus(){
@@ -87,10 +88,12 @@ import api from '../api/api'
           }
           if(this.phone.length == 13){
             this.btn = false;
+
           }else{
             this.btn = true;
             this.isRightNumber = false;
             $('input').removeClass('red');
+
         }
       },
       telPromise(){  // 获取验证码
@@ -105,7 +108,7 @@ import api from '../api/api'
               return;
           }
   
-          api.myGet("users",{id:4})
+          api.myGet("users",{id:1})
                .then(res => {
                   console.log(res[0].id)         
                   if(res[0].id == 1){   // 提示 该手机号已经加入其他学校
@@ -214,10 +217,10 @@ button{
 }
 
 .input {
+  font-family: PingFangSC-Light;
   margin-top: 0.2667rem;
   width: 100%;
   height: 1.44rem;
-  line-height: 1.44rem;
   font-size: 0.4533rem;
   line-height: 0.4533rem;
   text-indent:  0.1333rem;
@@ -243,14 +246,10 @@ button{
     border-radius: 50%;
 }
 .content .hot{
-  border-bottom: 2px solid #333;
+  border-bottom: 2px solid #AAAAAA;;
 }
 .content .red{
-  border-bottom: 2px solid #CE0000;
-}
-
-.content .mint-cell input {
-  line-height: 12;
+  border-bottom: 2px solid #FF6688;
 }
 
 .content input::-webkit-input-placeholder {
@@ -261,14 +260,14 @@ button{
   line-height: 0.4533rem;
 }
 
-.content .volidateNum {
+/*.content .volidateNum {
   position: absolute;
   top: 70px;
   right: 25px;
   font-size: 12px;
   color: #ccc;
 }
-
+*/
 .content .refer {
   width: 9.2rem;
   height: 1.28rem;
@@ -283,61 +282,33 @@ button{
   margin-top: 1.6rem;
 
 }
-.content .active{
-  border: 1px solid #333;
-  background: #333;
-  color: #fff;
-}
 
-.content #referCode {
-  margin-top: 60px;
-  border-radius: 25px;
-  background: rgba(0, 0, 0, 0.1);
-  color: orangered;
-}
-
-.content #referName {
-  margin-top: 60px;
-  border-radius: 25px;
-  background: rgba(0, 0, 0, 0.1);
-  color: orangered;
-}
-
-.content .listencode {
-  font-size: 13px;
-  color: #ccc;
-  text-align: right;
-}
-
-.content .listencode .getListen {
-  position: relative;
-  color: rgba(0, 0, 0, 0.6);
-  font-size: 13px;
-  font-weight: bold;
+.content .referBtn{
+  background: #F8E71C;
 }
 
 .content .telError {
   position: absolute;
   z-index: 10;
-  top: 105px;
-  left: 25px;
+  top: 1.6rem;
+  left: 0.1333rem;
 }
 
 .content .telError .telPhone {
   display: inline-block;
-  font-size: 16px;
-  width: 14px;
-  height: 14px;
-  line-height: 14px;
+  font-size: 0.2133rem;
+  width: 0.2667rem;
+  height: 0.2667rem;
+  line-height: 0.2667rem;
   text-align: center;
   border-radius: 50%;
-  color: #fff;
-  background: rgba(0, 0, 0, 0.5);
+  color: #000;
+  background: #FF6688;
 }
 
 .content .telError .rightPhone {
-  font-size: 12px;
-  color: #333;
+  font-size: 0.32rem;
+  color: #FF6688;
 }
 
 .modalShow {
