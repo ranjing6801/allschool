@@ -8,6 +8,7 @@ import AuthenticationOk from '../components/AuthenticationOk'
 import NewAuthenticationOk from '../components/NewAuthenticationOk'  
 import CLNewTeacher from '../components/CLNewTeacher'
 import PassOk from '../components/PassOk'
+import ErrorPage from '../components/ErrorPage'
 import CLYchooseClass from '../components/CLYchooseClass'
 import getClass from '../components/getClass'   
 import AttestationComple from '../components/AttestationComple'   
@@ -17,6 +18,10 @@ Vue.use(VueRouter)
 
 const router = new VueRouter({
     routes:[
+        {
+            path:'/',
+            component:Menu
+        },
         {
             path:'/menu',
             name:'menu',
@@ -78,8 +83,8 @@ const router = new VueRouter({
             component:PassOk
         },
         {
-            path:'*',
-            component:Menu
+            path:'/error',
+            component:ErrorPage
         }
     ]
 })

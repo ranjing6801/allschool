@@ -100,6 +100,8 @@ export default {
         clearCode(){   //  x  清楚错误验证码
             this.reCredNum = '';
             this.isShowCode = false;
+            $('.VolidateCode').removeClass('red');
+            $('.VolidateCode').removeClass('hot');
         },
         reCredNumFocus(){    // 验证码输入框 焦点事件
 
@@ -146,7 +148,7 @@ export default {
     				   .catch(err => {
       					   // 手机号码验证错误
       					   console.log(err);
-      					   document.querySelector('.VolidateCode').style.borderBottom = "2px solid red";
+                   $('.VolidateCode').addClass('hot');
     				   })
         },
         ShowNumber(){  // 显示倒计时
@@ -163,15 +165,15 @@ export default {
             },1000)
         },
         know(){  // 请求语音验证码
-            this.isCodeFailShow = false;
-            this.reNum = false;
+            this.isCodeFailShow = false;  //语音短信码弹窗关闭
+            this.reNum = false; //关闭重发验证码提示
 
             // 语音验证码请求数据返回成功  
             this.ListenYzm = true;
             this.YZM = false;
         },
         codePromise(){ // 验证码提交
-            api.myGet("users",{id:'1',reCredNum:this.reCredNum}) 
+            api.myGet("users",{id:'2',reCredNum:this.reCredNum}) 
                .then(res => {
                    // console.log(res[0].id)
                     if(res[0].id == 1){  // 跳转到 userName

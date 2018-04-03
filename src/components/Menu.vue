@@ -96,9 +96,9 @@ import api from '../api/api'
         
 				api.myGet("users",{id:3})
 				   .then(res => {
-					  console.log(res[0].id)			   
 						if(res[0].id == 1){   // 提示 该手机号已经加入其他学校
                               this.isRightNumber = true;
+                              $('.mint-cell').addClass('red');
                               $('.rightPhone').html('该手机号已经加入其他学校');
 
 						}else if(res[0].id==2){ // 手机号码验证错误
