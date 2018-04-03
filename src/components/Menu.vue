@@ -17,9 +17,11 @@
         <span class="rightPhone">请填写正确的手机号码</span>
       </p>
     
-      <mt-field @keyup.native="tel" type="tel" placeholder="请输入小黑板账号 / 手机号"  v-model="phone" v-on:input="focus" id="input" :attr="{ maxlength: 13 }">
-      </mt-field>
-      <button :class="!btn?'active':''" class="refer"  :disabled="btn" @click="telPromise" >手机号码提交</button>
+      <input @keyup="tel" type="tel" placeholder="请输入小黑板账号 / 手机号"  v-model="phone"
+               v-on:input="focus" class="input"  maxlength=13 />
+               
+      <span class="telePhone" @click="clearTel" v-if="telNum">x</span>
+      <button :class="!btn?'active':''" class="refer"  :disabled="btn" @click="telPromise" >提交</button>
     </div>
     
     <!--  验证码错误弹窗 -->
@@ -43,160 +45,202 @@ import VolidateCode from './VolidateCode'
 import axios from 'axios'
 import $ from 'jquery'
 import api from '../api/api'
-	export default {
-		name:'myMenu',
-		data(){
-			return {
-				title:'苏州工业园二十一世纪实验幼儿园',  // 扫码进来后的标题
-				imgSrc:imgSrc,
-				tip:true,
-				phone:'',
-				btn:true,
-				isRightNumber:false,
-				count:null,
-                isCodeFailShow:false
-			}
-		},
-		watch:{ // 监听phone
-            phone(newValue,oldValue){
-                   this.phone = newValue > oldValue ? newValue.replace(/\s/g,'').replace(/(\d{3})(\d{0,4})(\d{0,4})/,'$1 $2 $3'):this.phone.trim()
-            }
-        },
-		methods:{
-			// x 
-			rightNumberTip(){
-				
-			},
-			focus(){
-                //监听input输入框
-                if(this.phone.length > 0){
-                  $('.mint-cell').addClass('hot');
-                }else{
-                  $('.mint-cell').removeClass('hot');
-                }
-                if(this.phone.length == 13){
-                  this.btn = false;
-                }else{
-                  this.btn = true;
-                  this.isRightNumber = false;
-                  $('.mint-cell').removeClass('red');
-				}
-			},
-			telPromise(){  // 获取验证码
-              console.log('点击按钮了..');
-    	//请求数据之前 要判断手机号是否合法
-                let myphone = this.phone.split(' ').join('');
-                if(!(/^1[3|4|5|7|8][0-9]\d{4,8}$/.test(myphone))) {
-                    this.isRightNumber = true;
-                    console.log('myphone:',myphone);
-                    $('.mint-cell').addClass('red');
-                    $('.rightPhone').html('请填写正确的手机号码');
-                    return;
-                }
+  export default {
+    name:'myMenu',
+    data(){
+      return {
+        title:'苏州工业园二十一世纪实验幼儿园',  // 扫码进来后的标题
+        imgSrc:imgSrc,
+        tip:true,
+        phone:'',
+        btn:true,
+        isRightNumber:false,
+        count:null,
+        isCodeFailShow:false,
+        telNum:false,    // 控制手机号码输入框 右边的 x
+      }
+    },
+    watch:{ // 监听phone
+        phone(newValue,oldValue){
+               this.phone = newValue > oldValue ? newValue.replace(/\s/g,'').replace(/(\d{3})(\d{0,4})(\d{0,4})/,'$1 $2 $3'):this.phone
+        }
+    },
+    methods:{
+      // ! 
+      rightNumberTip(){
         
-				api.myGet("users",{id:3})
-				   .then(res => {
-						if(res[0].id == 1){   // 提示 该手机号已经加入其他学校
-                              this.isRightNumber = true;
-                              $('.mint-cell').addClass('red');
-                              $('.rightPhone').html('该手机号已经加入其他学校');
+      },
+      //  x
+      clearTel(){
+        this.phone = null;
+        this.telNum = false
 
-						}else if(res[0].id==2){ // 手机号码验证错误
-                              this.isRightNumber = true;
-                              $('.mint-cell').addClass('red');
-                              $('.rightPhone').html('请填写正确的手机号码');
+      },
+      focus(){
+          //监听input输入框
+          if(this.phone.length > 0){
+            this.telNum = true
+            $('.input').addClass('hot');
+          }else{
+            this.telNum = false
+            $('.input').removeClass('hot');
+          }
+          if(this.phone.length == 13){
+            this.btn = false;
+          }else{
+            this.btn = true;
+            this.isRightNumber = false;
+            $('input').removeClass('red');
+        }
+      },
+      telPromise(){  // 获取验证码
+            console.log('点击按钮了..');
+      //请求数据之前 要判断手机号是否合法
+          let myphone = this.phone.split(' ').join('');
+          if(!(/^1[3|4|5|7|8][0-9]\d{4,8}$/.test(myphone))) {
+              this.isRightNumber = true;
+              console.log('myphone:',myphone);
+              $('.mint-cell').addClass('red');
+              $('.rightPhone').html('请填写正确的手机号码');
+              return;
+          }
+  
+          api.myGet("users",{id:4})
+               .then(res => {
+                  console.log(res[0].id)         
+                  if(res[0].id == 1){   // 提示 该手机号已经加入其他学校
+                        this.isRightNumber = true;
+                        $('.rightPhone').html('该手机号已经加入其他学校');
 
-                        }else if(res[0].id==3){
-                          // 验证码发送失败
-                          this.isCodeFailShow = true;
+                  }else if(res[0].id==2){ // 手机号码验证错误
+                        this.isRightNumber = true;
+                        $('.mint-cell').addClass('red');
+                        $('.rightPhone').html('请填写正确的手机号码');
 
-                        }else{
-                          //手机号码验证成功  跳转 到验证码界面
+                  }else if(res[0].id==3){
+                        // 验证码发送失败
+                        this.isCodeFailShow = true;
 
-                          sessionStorage.setItem("phone",this.phone);   // 将电话号码存储在 本地 
-                          this.$router.push({name:'VolidateCode',query:{title:this.title,phone:this.phone}});
+                  }else{
+                    //手机号码验证成功  跳转 到验证码界面
 
-                        }
-				   })
-				   .catch(err => {
-					   // 手机号码验证错误
-					   //this.isRightNumber = true;
-                        //$('.mint-cell').addClass('red');
-				   })
-			},
-			tel(){
-				//禁止输入非数字
-				this.phone = this.phone.replace(/[^\d]/g,'');
-			},
+                        sessionStorage.setItem("phone",this.phone);   // 将电话号码存储在 本地 
+                        this.$router.push({name:'VolidateCode',query:{title:this.title,phone:this.phone}});
+
+                  }
+         })
+         .catch(err => {
+           // 手机号码验证错误
+           //this.isRightNumber = true;
+                      //$('.mint-cell').addClass('red');
+         })
+      },
+      tel(){
+        //禁止输入非数字
+        this.phone = this.phone.replace(/[^\d]/g,'');
+      },
             codeFailKnow(){
                 this.isCodeFailShow = false;
             } 
-		},
-	    mounted(){
-			document.title = "输入手机号";
-		}
-	}
+    },
+      mounted(){
+      document.title = "输入手机号";
+    }
+  }
 </script>
 
 <style scoped>
 button{
   outline: none;
 }
+#myMenu{
+    
+    
+}
 .head {
-  width: 100%;
-  height: 130px;
+  width:9.2rem;
+  height: 2.6667rem;
+  margin-top:0.5333rem;
+  margin-left:0.4rem;
   display: flex;
-  background: #eee;
-  justify-content: center;
-  align-items: center;
+  background: #363636;
+  /*justify-content: center;
+  align-items: center;*/
   
 }
 .head .left{
-  width: 80px;
-  height: 80px;
-  margin-right: 20px
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-top:0.5333rem ;
+  margin-left: 0.4rem;
+  margin-right:0.2667rem;
 }
 .head .left img {
-  width: 80px;
-  height: 80px;
+  width: 1.6rem;
+  height:1.6rem;
   border-radius: 50%;
   display: block;
+
 }
 
 .head .right {
-  height: 60px;
-  width: 250px;
+  height: 1.44rem;
+  width: 7.8667rem;
   font-size: 16px;
-  padding-top: 20px;
-  font-weight: 600;
-  color: #1f1e22;
+  margin-top: 0.64rem;
+  margin-right: 0.4rem;
+  font-family: PingFangSC-Regular;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+   line-height: 0.6933rem;
 }
 
 .content {
-  width: 100%;
-  margin-top: 30px;
-  padding-left: 25px;
-  padding-right: 25px;
+  width: 9.2rem;
+  margin-top:0.5333rem;
+  margin-left:0.4rem;
   box-sizing: border-box;
   position: relative;
 }
 
 .content p {
-  font-size: 14px;
-  color: #333;
-  margin-bottom: 30px;
+  color: #AAAAAA;
+  font-size: 0.1867rem;
+  font-family: PingFangSC-Light;
+  font-size: 0.3733rem;
+  margin-left: 0.1333rem;
+  margin-top: 0.8rem;
+  letter-spacing: -0.0091rem;
 }
 
-.content .mint-cell {
-  height: 35px;
+.input {
+  margin-top: 0.2667rem;
   width: 100%;
-  font-size: 16px;
+  height: 1.44rem;
+  line-height: 1.44rem;
+  font-size: 0.4533rem;
+  line-height: 0.4533rem;
+  text-indent:  0.1333rem;
   outline: none;
   border: none;
-  border-radius: 0;
-  letter-spacing: 1px;
-  text-indent: 10px;
-  border-bottom: 2px solid rgba(150, 150, 150, 0.2);
+  color: #fff;
+  background: #2b2b2b;
+  border-bottom:  2px solid #555555;;
+}
+
+.telePhone{
+    width: 0.4267rem;
+    height: 0.4267rem;
+    display: inline-block;
+    line-height: 0.3733rem;
+    background: red;
+    text-align: center;
+    position: absolute;
+    top: 1.2533rem;
+    left: 8.3733rem;
+    color: #fff;
+    background: #AAAAAA;
+    border-radius: 50%;
 }
 .content .hot{
   border-bottom: 2px solid #333;
@@ -210,7 +254,11 @@ button{
 }
 
 .content input::-webkit-input-placeholder {
-  color: #eee;
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  color: #555555;
+  letter-spacing: -0.0109rem;
+  line-height: 0.4533rem;
 }
 
 .content .volidateNum {
@@ -222,14 +270,18 @@ button{
 }
 
 .content .refer {
-  width: 100%;
-  height: 40px;
-  font-size: 16px;
-  margin-top: 60px;
-  border-radius: 25px;
-  border: 1px solid #ccc;
-  background: #fff;
-  color: #ccc;
+  width: 9.2rem;
+  height: 1.28rem;
+  font-family: PingFangSC-Regular;
+  font-size: 0.4533rem;
+  color: #000000;
+  border:none;
+  display: block;
+  line-height: 0.4533rem;
+  background: #888888;
+  border-radius: 0.0533rem;
+  margin-top: 1.6rem;
+
 }
 .content .active{
   border: 1px solid #333;
