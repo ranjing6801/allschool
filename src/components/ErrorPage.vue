@@ -15,7 +15,7 @@ export default {
         
     },
     mounted(){
-        document.title = '错误'
+        document.title = '错误1'
     }
 }
 </script>
