@@ -1,127 +1,228 @@
 <template>
     <!-- 新用户输入姓名认证成功   -->
     <div id="newauthentication">  
-        <div class="content">
+      <div v-if="isIOS" class="ios">
+        <div class="content" slot="header">
+            <p class="p-img"><img src="/static/images/v.png" alt=""></p>
             <p class="title">恭喜您成为校园认证用户</p>
-            <p class="tips">现在起您可以免费享用「小黑板」提供的增值服务</p>
-            <p class="password">晓黑板账号密码 <span class="check" @click="checkPwd">点击查看</span> 已通过短信发送给您</p>
+            <p class="title1">现在起您可以免费享受【晓黑板】提供的增值服务</p>
+            <p class="title2">晓黑板账号密码<img src="/static/images/left3.png" alt=">"><span @click="onOff=true">点击查看</span><img src="/static/images/right3.png" alt="<">已通过短信发送给您</p>
         </div>
         <div class="footer">
-            <div class="btn" @click="openSmallDesk">打开小黑板</div>
+            <div class="btn" @click="openSmallDesk">打开晓黑板</div>
         </div>
-        <div class="pwdModal" v-if="pwdModalShow" @click="isChangePwd">
-            <div class="modalContent">
-                <pwdModal :accountTile="accountTile" 
-                          :accountName="accountName"
-                          :accountPwd="accountPwd"  @changePwd="isChangePwd">
-                 </pwdModal>
+      </div>
+      <div v-if="isAND" class="android">
+        <div class="content2">
+            <p class="p-img"><img src="/static/images/v.png" alt=""></p>
+            <p class="title">恭喜您成为校园认证用户</p>
+            <p class="title1">现在起您可以免费享受【晓黑板】提供的增值服务</p>
+            <p class="title2">晓黑板账号密码<img src="/static/images/left3.png" alt=">"><span @click="onOff=true">点击查看</span><img src="/static/images/right3.png" alt="<">已通过短信发送给您</p>
+        </div>
+        <div class="footer2">
+            <div class="btn" @click="openSmallDesk">打开晓黑板</div>
+        </div>
+        <div class="img">
+            <p><span class="line1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>找对方法，下载更快捷<span class="line2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+            <img src="/static/images/android.png" alt="">
+        </div>
+      </div>
+
+      <!-- 查看密码 -->
+      <div class="codeFail" v-if="onOff" @click="closeBox" >
+        <div class="pushfail">
+            <div id="codeFailModal" >
+              <p class="title">晓黑板账号密码</p>
+              <p class="content-p">账号: {{account}}</p>
+              <p class="content-p">密码: {{password}} (默认手机号后6位)</p>
+              <div class="btn" @click="closeBox">我知道啦</div>
             </div>
         </div>
+      </div>
     </div>
 </template>
 <script>
 import pwdModal from './pwdModal'
 export default {
     name:'newauthentication',
-    components:{
-        pwdModal
-    },
     data(){
         return{
-            pwdModalShow:false,
-            accountTile:'晓黑板账号密码',
-            accountName:18616253090,
-            accountPwd:253090
+          isIOS: true,
+          isAND: false,
+          onOff: false,
+          account: '13661552121',
+          password: '552121'
         }
     },
     methods:{
-        openSmallDesk(){
-            // 打开小黑板
-            alert('打开小黑板')
+        openSmallDesk() {
+            // 打开晓黑板
+            alert('打开晓黑板');
         },
-        checkPwd(){
-            // 打开弹窗 modal弹窗 请求数据 向modal弹窗传参数
-            this.pwdModalShow = true
-        },
-        isChangePwd(){
-            
-            this.pwdModalShow = false
+        closeBox() {
+          this.onOff = false;
         }
     },
     created(){
         document.title = "认证成功"
+    },
+    mounted() {
+      //判断手机类型
+      var ua = navigator.userAgent.toLowerCase();
+
+      if(/android/.test(ua)){
+          console.log('android...');
+          this.isAND = true;
+          this.isIOS = false;
+        }
+
+      if(/iphone|ipad|ipod/.test(ua)){
+          console.log('ios...');
+          this.isIOS = true;
+          this.isAND = false;
+        }
     }
 }
 </script>
 
 <style scoped>
-/*    @import  '../assets/css/variables.scss';      
-    @import  '../assets/css/NewAuthenticationOk.css';*/
-
 #newauthentication {
   width: 100%;
   height: 100%;
-  line-height: 100%;
   box-sizing: border-box;
 }
 
-#newauthentication .content {
+.content {
   width: 100%;
   height: 100%;
-  padding-top: 50%;
-  font-size: 20px;
+}
+.content2{
+  width: 100%;
+  height: 100%;
+}
+.btn {
+  width: 9.2rem;
+  height: 1.28rem;
+  font-size: 0.4533rem;
+  line-height: 1.28rem;
+  border-radius: 0.0533rem;
+  margin: 0 auto;
+  color: #000000;
+  background: #F8E71C;
   text-align: center;
-  letter-spacing: 2px;
-  font-family: "微软雅黑";
+  font-family: PingFangSC-Regular;
 }
-
-#newauthentication .content .tips {
-  font-size: 14px;
-  letter-spacing: 1px;
-  color: #ccc;
-}
-
-#newauthentication .content .password {
-  font-size: 14px;
-  letter-spacing: 1px;
-  color: #ccc;
-}
-
-#newauthentication .content .password .check {
-  font-weight: bold;
-  color: #666;
-}
-
-#newauthentication .footer {
-  margin-top: 50%;
-}
-
-#newauthentication .footer .footerTip {
-  font-size: 14px;
-  letter-spacing: 1.5px;
-  margin-bottom: -5px;
+.img{
   text-align: center;
-  color: #666;
+}
+.img p{
+  color: #AAAAAA;
+  font-size: 0.3733rem;
+  line-height: 0.3733rem;
+  margin: 0.8rem 0 0.8rem 0;
+  font-family: PingFangSC-Light;
+}
+.img img{
+  width: 8.5867rem;
+  height: 5.2533rem;
+}
+.p-img{
+  text-align: center;
+}
+.content .p-img img{
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-top: 2.4rem;
+  margin-bottom: 0.4rem;
+}
+.content2 .p-img img{
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-top: 0.8rem;
+  margin-bottom: 0.4rem;
+}
+.title{
+  color: #FFFFFF;
+  font-size: 0.5333rem;
+  line-height: 0.4533rem;
+  margin-bottom: 0.2667rem;
+  text-align: center;
+  font-family: PingFangSC-Light;
+}
+.content .title1{
+  color: #aaa;
+  font-size: 0.3733rem;
+  line-height: 0.3733rem;
+  margin-bottom: 0.2667rem;
+  text-align: center;
+  font-family: PingFangSC-Light;
+}
+.content2 .title1{
+  color: #aaa;
+  font-size: 0.3733rem;
+  line-height: 0.3733rem;
+  margin-bottom: 0.2667rem;
+  text-align: center;
+  font-family: PingFangSC-Light;
+}
+.content .title2{
+  color: #aaa;
+  font-size: 0.3733rem;
+  line-height: 0.3733rem;
+  margin-bottom: 2.4rem;
+  text-align: center;
+  font-family: PingFangSC-Light;
+}
+.content .title2 img{
+  width: 0.4rem;
+  height: 0.24rem;
+  margin-left: 0.1067rem;
+  margin-right: 0.1067rem;
+}
+.content .title2 span{
+  color: #F8E71C;
+  font-size: 0.3733rem;
+  font-family: PingFangSC-Regular;
+}
+.content2 .title2{
+  color: #aaa;
+  font-size: 0.3733rem;
+  line-height: 0.3733rem;
+  margin-bottom: 1.3333rem;
+  text-align: center;
+  font-family: PingFangSC-Light;
+}
+.content2 .title2 img{
+  width: 0.4rem;
+  height: 0.24rem;
+  margin-left: 0.1067rem;
+  margin-right: 0.1067rem;
+}
+.content2 .title2 span{
+  color: #F8E71C;
+  font-size: 0.3733rem;
+  font-family: PingFangSC-Regular;
 }
 
-#newauthentication .footer .btn {
-  font-size: 20px;
-  line-height: 40px;
-  text-align: center;
+.line1,.line2{
+  color: #888;
+  width: 0.8rem;
+  line-height: 0.3733rem;
+  text-decoration: line-through;
+  display: inline-block;
+}
+.line1{
+  margin-right: 0.4rem;
+}
+.line2{
+  margin-left: 0.4rem;
+}
+/* 弹窗 */
+.codeFail {
+  width: 100%;
+  height: 100%;
   color: #fff;
-  width: 80%;
-  height: 40px;
-  margin-left: 10%;
-  text-align: center;
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 20px;
-  margin-top: 0px;
-}
-
-#newauthentication .pwdModal {
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   position: fixed;
   top: 0;
   left: 0;
@@ -130,25 +231,53 @@ export default {
   margin: auto;
 }
 
-#newauthentication .pwdModal .modalContent {
-  width: 80%;
-  height: 40%;
-  margin-left: 10%;
-  margin-right: 10%;
+.codeFail .pushfail {
+  width: 8.9333rem;
+  height: 5.4667rem;
+  margin-left: 0.5333rem;
+  margin-right: 0.5333rem;
+  background: #2B2B2B;
+  border: 0.0533rem solid #BBAB71;
+  border-radius: 0.2667rem;
   position: absolute;
-  top: -10%;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  background: #fff;
-  overflow: hidden;
+  top: 5.1733rem;
+  bottom: 7.84rem;
 }
 
 
-/*# sourceMappingURL=NewAuthenticationOk.css.map */
 
+.codeFail .pushfail #codeFailModal .title {
+  color: #FFFFFF;
+  font-size: 0.5333rem;
+  margin-top: 0.5333rem;
+  line-height: 0.5333rem;
+  margin-bottom: 0.5333rem;
+  text-align: center;
+  font-family: PingFangSC-Light;
+}
 
+.codeFail .pushfail #codeFailModal .content-p {
+  color: #FFFFFF;
+  font-size: 0.4rem;
+  margin-left: 1.6rem;
+  margin-right: 1.5733rem;
+  margin-bottom: 0.14rem;
+  font-family: PingFangSC-Light;
+}
+
+.codeFail .pushfail #codeFailModal .btn {
+  width: 8.1333rem;
+  height:1.28rem;
+  font-size: 0.4533rem;
+  font-family: PingFangSC-Regular;
+  color: #000000;
+  line-height: 1.28rem;
+  background: #F8E71C;
+  border-radius: 0.0533rem;
+  text-align: center;
+  margin-top: 0.78rem;
+  margin-left: 0.4rem;
+}
 
 </style>
 
