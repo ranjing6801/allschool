@@ -260,7 +260,6 @@ export default {
   color: #FFFFFF;
   font-size: 0.4rem;
   margin-left: 1.6rem;
-  margin-right: 1.5733rem;
   margin-bottom: 0.14rem;
   font-family: PingFangSC-Light;
 }

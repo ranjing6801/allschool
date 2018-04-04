@@ -6,19 +6,19 @@
             <img :src="imgSrc">
         </div>
         <div class="right">
-            {{ title }}
+            <span>{{ title }}</span>
         </div>
     </div>
     <!--  content  -->
     <div class="content">
       <p class="tip" v-show="tip">无晓黑板账号请输入手机号</p>
+      <input @keyup="tel" type="tel" placeholder="请输入晓黑板账号 / 手机号"  v-model="phone"
+               v-on:input="focus" class="input"  maxlength=13 />
+
       <p class="telError"  v-show="isRightNumber">
         <span class="telPhone" @click="rightNumberTip" v-show="isRightNumber"><img src="/static/images/warn.png" alt="!"></span>
         <span class="rightPhone">请输入正确的手机号码</span>
       </p>
-    
-      <input @keyup="tel" type="tel" placeholder="请输入小黑板账号 / 手机号"  v-model="phone"
-               v-on:input="focus" class="input"  maxlength=13 />
                
       <span class="telePhone" @click="clearTel" v-if="telNum"></span>
       <button :class="!btn?'referBtn':''" class="refer"  :disabled="btn" @click="telPromise" >提交</button>
@@ -49,7 +49,7 @@ import api from '../api/api'
     name:'myMenu',
     data(){
       return {
-        title:'苏州工业园二十一世纪实验幼儿园',  // 扫码进来后的标题
+        title:'苏州工业园二十一世纪实验幼儿园二期',  // 扫码进来后的标题
         imgSrc:imgSrc,
         tip:true,
         phone:'',
@@ -195,7 +195,6 @@ button{
   font-size: 0.4533rem;
   color: #FFFFFF;
   line-height: 0.6933rem;
-  text-indent: -0.1067rem;
 }
 /*   head end*/
 
@@ -220,15 +219,16 @@ button{
   font-family: PingFangSC-Light;
   margin-top: 0.2667rem;
   width: 8.9333rem;
-  height: 1.44rem;
+  height: 1.4rem;
   font-size: 0.4533rem;
   line-height: 0.4533rem;
-  text-indent:  0.1333rem;
+  text-indent:  0.05rem;
   outline: none;
   border: none;
   color: #fff;
   background: #2b2b2b;
-  border-bottom:  0.0267rem solid #555555;
+  border-bottom: 0.0267rem solid #555555;
+  border-radius: 0;
 }
 
 .telePhone{
@@ -246,17 +246,17 @@ button{
     border-radius: 50%;
 }
 .content .hot{
-  border-bottom: 0.0267rem solid #AAAAAA;;
+  border-bottom: 0.0267rem solid #AAAAAA;
 }
 .content .red{
   border-bottom: 0.0267rem solid #FF6688;
 }
 
 .content input::-webkit-input-placeholder {
-  font-family: PingFangSC-Light;
-  font-size: 0.4533rem;
   color: #555555;
+  font-size: 0.4533rem;
   line-height: 0.4533rem;
+  font-family: PingFangSC-Light;
 }
 
 .content .refer {
@@ -279,24 +279,28 @@ button{
 }
 
 .content .telError {
-  position: absolute;
-  z-index: 10;
-  top: 1.6rem;
+  float: left;
+  margin-top: 0.2667rem;
+  line-height: 0.5333rem;
 }
 
 .content .telPhone {
   display: inline-block;
   width: 0.2667rem;
   height: 0.2667rem;
+  margin: 0 0.0533rem 0 0;
   text-align: center;
   color: #000;
+  border-radius: 50%;
   /*background-size: 0.1333rem;*/
   /*background: url('../../static/images/warn.png') no-repeat center;*/
 }
 .telPhone img{
+  float: left;
   display: block;
   width: 0.2667rem;
   height: 0.2667rem;
+  margin-top: 0.0267rem;
 }
 
 .content .telError .rightPhone {
