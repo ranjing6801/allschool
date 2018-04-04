@@ -13,7 +13,7 @@
     <div class="content">
       <p class="tip" v-show="tip">无小黑板账号请输入手机号</p>
       <p class="telError"  v-show="isRightNumber">
-        <span class="telPhone" @click="rightNumberTip" v-show="isRightNumber">！</span>
+        <span class="telPhone" @click="rightNumberTip" v-show="isRightNumber"></span>
         <span class="rightPhone">请输入正确的手机号码</span>
       </p>
     
@@ -62,7 +62,7 @@ import api from '../api/api'
     },
     watch:{ // 监听phone
         phone(newValue,oldValue){
-               this.phone = newValue > oldValue ? newValue.replace(/\s/g,'').replace(/(\d{3})(\d{0,4})(\d{0,4})/,'$1 $2 $3'):this.phone
+               this.phone = newValue > oldValue ? newValue.replace(/\s/g,'').replace(/(\d{3})(\d{0,4})(\d{0,4})/,'$1 $2 $3'):this.phone.trim()
         }
     },
     methods:{
@@ -72,9 +72,11 @@ import api from '../api/api'
       },
       //  x
       clearTel(){
-        this.phone = null;
+        this.phone = '';
         this.telNum = false;
         this.btn = true;
+        this.isRightNumber = false;
+        $('input').removeClass('red');  //  清空之后 输入框颜色改为正常的
 
       },
       focus(){
@@ -103,7 +105,7 @@ import api from '../api/api'
           if(!(/^1[3|4|5|7|8][0-9]\d{4,8}$/.test(myphone))) {
               this.isRightNumber = true;
               console.log('myphone:',myphone);
-              $('.mint-cell').addClass('red');
+              $('.input').addClass('red');
               $('.rightPhone').html('请填写正确的手机号码');
               return;
           }
@@ -113,11 +115,12 @@ import api from '../api/api'
                   console.log(res[0].id)         
                   if(res[0].id == 1){   // 提示 该手机号已经加入其他学校
                         this.isRightNumber = true;
+                        $('.input').addClass('red');
                         $('.rightPhone').html('该手机号已经加入其他学校');
 
                   }else if(res[0].id==2){ // 手机号码验证错误
                         this.isRightNumber = true;
-                        $('.mint-cell').addClass('red');
+                        $('.input').addClass('red');
                         $('.rightPhone').html('请填写正确的手机号码');
 
                   }else if(res[0].id==3){
@@ -211,7 +214,6 @@ button{
   font-size: 0.3733rem;
   margin-left: 0.1333rem;
   margin-top: 0.8rem;
-  letter-spacing: -0.0091rem;
 }
 
 .input {
@@ -254,7 +256,6 @@ button{
   font-family: PingFangSC-Light;
   font-size: 0.4533rem;
   color: #555555;
-  letter-spacing: -0.0109rem;
   line-height: 0.4533rem;
 }
 
@@ -289,10 +290,10 @@ button{
   font-size: 0.2133rem;
   width: 0.2667rem;
   height: 0.2667rem;
-/*  line-height: 0.2667rem;*/
   text-align: center;
   border-radius: 50%;
   color: #000;
+  background-size: 0.2667rem 0.2667rem;
   background: url(../../static/images/warn.png);
 }
 
@@ -333,7 +334,6 @@ button{
   font-family: PingFangSC-Light;
   font-size: 0.5333rem;
   color: #FFFFFF;
-  letter-spacing: -0.0064rem;
   line-height: 0.5333rem;
   margin-top: 0.5333rem;
 }
@@ -346,7 +346,6 @@ button{
   font-family: PingFangSC-Light;
   font-size: 0.4533rem;
   color: #FFFFFF;
-  letter-spacing: 0.0055rem;
   line-height: 0.6933rem;
 }
 
@@ -356,7 +355,6 @@ button{
   font-size: 0.4533rem;
   font-family: PingFangSC-Regular;
   color: #000000;
-  letter-spacing: -0.41px;
   line-height: 1.28rem;
   background: #F8E71C;
   border-radius: 0.0533rem;

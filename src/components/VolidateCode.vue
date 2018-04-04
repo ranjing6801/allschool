@@ -17,19 +17,22 @@
 
             <span class="volidateNum" @click="regetNum" v-if="reNum">重发短信验证码</span>
 
-            <p v-if="listenCode" class="listencode">收不到验证码?
-                <span  v-if="listenCode" class="getListen" @click="getListenCode">接听语音验证码</span>
+            <p v-show="listenCode" class="listencode">收不到验证码?
+                <span  v-show="listenCode" class="getListen" @click="getListenCode">接听语音验证码</span>
             </p>
+            <!--  div  占位符 -->
+            <div v-show="!listenCode" class="listencode"></div>
+
             <p class="telError"  v-if="isShowCode">
                 <span class="telPhone" @click="clearCode" v-if="isShowCode"></span>
                 <span class="rightPhone">验证码错误</span>
             </p>
             <span class="volidateNum"  v-show="isTimer">{{ time }} s</span>
-            <button :class="!dis ? 'referBtn': '' " :disabled="dis" class="referCode"   @click="codePromise" >验证码提交</button>
+            <button :class="!dis ? 'referBtn': '' " :disabled="dis" class="referCode"   @click="codePromise" >提交</button>
         </div>
         
    <!--  接收 语音验证码  -->
-        <div class="codeFail" v-if="isCodeFailShow" >
+        <div class="ListenCodeFail" v-if="isCodeFailShow" >
           <div class="Listenfail">
               <div id="modal">
                   <p class="titleListen">语音验证码</p>
@@ -142,11 +145,11 @@ export default {
             api.myGet("users",{id:'1'})
     				   .then(res => {
                     this.ShowNumber();
-                    this.count++;
-                    if(this.count > 0){
-                        console.log('this.count:',this.count);
-                        this.listenCode = true;
-                    }
+                    // this.count++;
+                    // if(this.count > 0){
+                    //     console.log('this.count:',this.count);
+                    //     this.listenCode = true;
+                    // }
                     if(this.count > 4){ // 每天最多可以获取5次验证码
                         console.log("验证码发送次数已达上限");
                         this.$router.push({path:'/overCount',query:{title:this.codeOverTime,helpMessage:this.helpMessage}});
@@ -168,6 +171,11 @@ export default {
                     clearInterval(timer);  // 清除定时器
                     this.isTimer = false;
                     this.reNum = true;
+                    this.count++;
+                      console.log('this.count:',this.count);
+                    if(this.count > 1){
+                        this.listenCode = true;
+                    }
                 }
             },1000)
         },
@@ -177,12 +185,19 @@ export default {
             this.reNum = false; 
         },
         know(){  // 请求语音验证码 点击 好的 
-            this.isCodeFailShow = false;  //语音短信码弹窗关闭
-            this.reNum = false; //关闭重发验证码提示
-
-            //   点击 好的  语音验证码请求数据返回成功  
-            this.ListenYzm = true;
-            this.YZM = false;
+            api.myGet("users",{id:'1'}) // 点击 好的  语音验证码请求数据返回成功  
+            .then(res => {
+                this.isCodeFailShow = false;  //语音短信码弹窗关闭
+                this.reNum = false;      //关闭重发验证码提示
+                this.ListenYzm = true;    
+                this.YZM = false;
+                this.listenCode = false;  // 倒计时开始 接收语音验证码 提示文字 隐藏
+                this.ShowNumber();
+            })
+            .catch(err => {
+              console.log(err)
+            })
+            
         },
         codePromise(){ // 验证码提交
             api.myGet("users",{id:3,reCredNum:this.reCredNum}) 
@@ -281,7 +296,6 @@ export default {
   font-size: 0.3733rem;
   margin-left: 0.1333rem;
   margin-top: 0.8rem;
-  letter-spacing: -0.0091rem;
 }
 
 
@@ -289,7 +303,6 @@ export default {
   font-family: PingFangSC-Light;
   font-size: 0.4533rem;
   color: #555555;
-  letter-spacing: -0.0109rem;
 }
 
 .content .volidateNum {
@@ -299,7 +312,6 @@ export default {
   font-family: PingFangSC-Light;
   font-size: 0.32rem;
   color: #AAAAAA;
-  letter-spacing:-0.0039rem;
   line-height: 0.32rem;
   margin-bottom: 0.5867rem;
 
@@ -331,7 +343,7 @@ export default {
     line-height: 0.4533rem;
     background: #888888;
     border-radius: 0.0533rem;
-    margin-top: 1.6rem;
+    margin-top: 0.7467rem;
 }
 .content .referBtn{
   background: #F8E71C;
@@ -340,10 +352,10 @@ export default {
 
 /* 输入框动态样式*/
 .content .hot{  
-  border-bottom: 2px solid #AAAAAA;
+  border-bottom: 0.0533rem solid #AAAAAA;
 }
 .content .red{
-  border-bottom: 2px solid red;
+  border-bottom: 0.0533rem solid #FF6688;
 }
 .content .active{
   border: 1px solid #333;
@@ -353,22 +365,22 @@ export default {
 
 .content .listencode {
   /*width: 4.3733rem;*/
+  height: 0.32rem;
   text-align: right;
   font-family: PingFangSC-Light;
   font-size: 0.32rem;
   color: #AAAAAA;
-  letter-spacing: -0.0039rem;
   line-height: 0.32rem;
   margin-top: 0.5333rem;
   margin-right: 0.6667rem;
+  margin-bottom: 0.7467rem;
 }
 
 .content .listencode .getListen {
   position: relative;
   font-family: PingFangSC-Regular;
   font-size: 0.32rem;
-  color: #000000;
-  letter-spacing: -0.0039rem;
+  /*color: #000000;*/
   line-height: 0.32rem;
 }
 
@@ -386,7 +398,7 @@ export default {
     line-height: 0.3733rem;
     margin-top: 0.2667rem;
     margin-left: -0.4rem;
-    color: ##FF6688 ;
+    color: #FF6688 ;
     background-size: 0.2667rem  0.2667rem;
     background: url('../../static/images/warn.png');
     border-radius: 50%;
@@ -397,7 +409,6 @@ export default {
   color: #FF6688;
   font-family: PingFangSC-Light;
   font-size: 0.32rem;
-  letter-spacing: -0.0039rem;
   line-height: 0.32rem;
 }
 .modalShow {
@@ -426,6 +437,7 @@ export default {
   background: #fff;
 }
 
+/* 验证码 发送失败 弹窗 start */
 .codeFail {
   width: 100%;
   height: 100%;
@@ -459,7 +471,6 @@ export default {
   font-family: PingFangSC-Light;
   font-size: 0.5333rem;
   color: #FFFFFF;
-  letter-spacing: -0.0064rem;
   line-height: 0.5333rem;
   margin-top: 0.5333rem;
 }
@@ -472,7 +483,6 @@ export default {
   font-family: PingFangSC-Light;
   font-size: 0.4533rem;
   color: #FFFFFF;
-  letter-spacing: 0.0055rem;
   line-height: 0.6933rem;
 }
 
@@ -482,7 +492,6 @@ export default {
   font-size: 0.4533rem;
   font-family: PingFangSC-Regular;
   color: #000000;
-  letter-spacing: -0.41px;
   line-height: 1.28rem;
   background: #F8E71C;
   border-radius: 0.0533rem;
@@ -491,24 +500,49 @@ export default {
   margin-left: 0.4rem;
 }
 
+/* 验证码 发送失败 弹窗 end */
 
-.codeFail .Listenfail #modal .titleListen {
+
+.ListenCodeFail {
+  width: 100%;
+  height: 100%;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+.ListenCodeFail .Listenfail {
+  width: 8.9333rem;
+  height: 6.16rem;
+  margin-left: 0.5333rem;
+  margin-right: 0.5333rem;
+  background: #2B2B2B;
+  border: 0.0533rem solid #BBAB71;
+  border-radius: 0.2667rem;
+  position: absolute;
+  top: 5.1733rem;
+  bottom: 7.84rem;
+}
+.ListenCodeFail .Listenfail #modal .titleListen {
   font-family: PingFangSC-Light;
   font-size: 0.5333rem;
   color: #FFFFFF;
-  letter-spacing: -0.0064rem;
   line-height: 0.5333rem;
   text-align: center;
   margin-top: 0.5333rem;
 }
 
-.codeFail .Listenfail #modal .contentListen {
+.ListenCodeFail .Listenfail #modal .contentListen {
   width: 7.6533rem;
   height: 2.08rem;
   font-family: PingFangSC-Light;
   font-size: 0.4533rem;
   color: #FFFFFF;
-  letter-spacing: -0.0109rem;
   line-height: 0.6933rem;
   text-align: center;
   margin-left: 0.64rem;
@@ -516,23 +550,13 @@ export default {
   margin-top: 0.5333rem;
 }
 
-.codeFail .Listenfail #modal .clear{
-    border: none;
-    font-size: 16px;
-    background: #fff;
-    height: 40px;
-    width: 80px;
-    margin-left: 30px;
-    margin-right: 40px;
-}
-.codeFail .Listenfail #modal .Btn {
+.ListenCodeFail .Listenfail #modal .Btn {
     width: 4.0rem;
     height: 1.28rem;
     background: #2B2B2B;
     font-family: PingFangSC-Regular;
     font-size: 0.4533rem;
     color: #F8E71C;
-    letter-spacing:-0.0109rem;
     line-height: 0.4533rem;
     margin-top: 0.6667rem;
     border-radius: 0.0533rem;
@@ -542,7 +566,7 @@ export default {
 .Btn-left{
    margin-left: 0.4rem;
 }
-.codeFail .Listenfail #modal .Btn-rigth{
+.ListenCodeFail .Listenfail #modal .Btn-rigth{
   
   background:#F8E71C;
   color: #000000;
