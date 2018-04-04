@@ -3,7 +3,7 @@
 <!--  请求验证码次数超时  -->
     <div class="head">
         <div class="left">
-            <img :src="imgSrc">
+            <img src="/static/images/err.png">
         </div>
         <div class="right">
             {{ title }}
@@ -21,8 +21,8 @@
             <li>
               <div class="libox">
                  <p>您是班主任吗?</p>
-                  <input @click="getRadio1" type="radio" value="yes" name='leader' id="yes"><span class="yes">是</span>
-                  <input @click="getRadio2" type="radio" value="no"  name='leader' id="no"><span class="no">否</span>
+                  <span @click="cur=1" :class="cur==1?'hot':''" class="yes">是</span>
+                  <span @click="cur=2" :class="cur==2?'hot':''" class="no">否</span>
               </div>
             </li>
             <li>
@@ -36,7 +36,6 @@
    </div>
 </template>
 <script>
-import imgSrc from  '../../static/images/logo.jpg'
 import AuthenticationOk from './AuthenticationOk'
 export default {
     name:'overCount',
@@ -46,13 +45,14 @@ export default {
     data(){
         return {
             imgSrc:imgSrc,
-            title:'',
-            helpMessage:'',
-            user:'',
+            title:'验证码发送次数已达上限',
+            helpMessage:'请填写反馈信息帮助我们及时解决哦',
+            user:'冉靖',
             reback:'',
             value:'',
             isbtn:false,
             rad:'',
+            cur:''
         }
     },
     methods:{
@@ -85,122 +85,141 @@ export default {
 }
 </script>
 <style scoped>
-/*@import  '../assets/css/variables.scss';      
-@import  '../assets/css/overCount.css';*/
-
-
-#overCount .head {
-  width: 100%;
-  height: 130px;
+.head {
+  width:9.2rem;
+  height: 2.6667rem;
+  margin-top:0.5333rem;
+  margin-left:0.4rem;
+  margin-bottom: 0.5333rem;
   display: flex;
-  background: #eee;
-  justify-content: center;
-  align-items: center;
+  background: #363636;
+  /*justify-content: center;
+  align-items: center;*/
+  
 }
-
-#overCount .head .left{
-  width: 80px;
-  height: 80px;
-  margin-right: 20px
+.head .left{
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-top:0.5333rem ;
+  margin-left: 0.4rem;
+  margin-right:0.2667rem;
 }
-
-#overCount .head .left img {
-  width: 80px;
-  height: 80px;
+.head .left img {
+  width: 1.6rem;
+  height:1.6rem;
   border-radius: 50%;
   display: block;
 }
-
-#overCount .head .right {
-  height: 60px;
-  width: 250px;
+.head .right {
+  height: 1.44rem;
+  width: 7.8667rem;
   font-size: 16px;
-  padding-top: 20px;
-  font-weight: 600;
-  color: #1f1e22;
+  margin-top: 0.64rem;
+  margin-right: 0.4rem;
+  font-size: 0.4533rem;
+  line-height: 0.4533rem;
+  color: #FFFFFF;
+  font-family: PingFangSC-Regular;
 }
 
 #helpMessage {
-  font-size: 12px;
-  color: #666;
-  margin-top: 10px;
+  color: #AAAAAA;
+  font-size: 0.3733rem;
+  line-height: 0.3733rem;
+  font-family: PingFangSC-Light;
 }
 
 #contentList {
-  font-size: 16px;
-  margin: 10px 10px 10px 10px;
-  padding: 10px 20px 20px 38px;
+  margin-left: 0.4rem;
   box-sizing: border-box;
 }
 
 .list li{
-  list-style: disc;
-  margin-bottom: 18px;
+  margin-bottom: 0.4rem;
 }
 .list li p{
-  color: #666;
-  font-size: 14px;
-  margin-bottom: 12px;
-}
-.list li .userName{
-  height: 60px;
+  color: #AAAAAA;
+  font-size: 0.3733rem;
+  line-height: 0.3733rem;
+  margin-bottom: 0.2667rem;
+  font-family: PingFangSC-Light;
 }
 .list .userName p{
-  margin-bottom: 0px;
-}
-.list li .libox{
-  height: 80px;
-}
-.libox span{
-  font-size: 16px;
-  color: #333;
+  margin-bottom: 0.2667rem;
 }
 .yes{
-  margin-left: 6px;
-  margin-right: 32px;
+  display: inline-block;
+  width: 4.44rem;
+  height: 1.15rem;
+  color: #fff;
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  line-height: 1.1733rem;
+  border: 0.0267rem solid #FFFFFF;
+  border-radius: 0.0533rem;
+  margin-right: 0.16rem;
+  text-align: center;
 }
 .no{
-  margin-left: 6px;
+  display: inline-block;
+  width: 4.44rem;
+  height: 1.15rem;
+  color: #fff;
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  line-height: 1.1733rem;
+  border: 0.0267rem solid #FFFFFF;
+  border-radius: 0.0533rem;
+  text-align: center;
+}
+.hot{
+  background: #F8E71C;
+  border: 1px solid #F8E71C;
+  border-radius: 0.0533rem;
+  color: #000;
 }
 input{
   outline: none;
   border: none;
 }
 .username{
-  width: 98%;
-  height: 38px;
-  font-size: 16px;
-  line-height: 38px;
-  color: #333;
-  border-bottom: 1px solid #666;
+  width: 9.2rem;
+  height: 1.1733rem;
+  color: #000000;
+  background: #FFFFFF;
+  font-size: 0.4533rem;
+  line-height: 0.4533rem;
+  text-indent: 0.2667rem;
+  border-radius: 0.0533rem;
+  font-family: PingFangSC-Light;
 }
 
 .btn {
-  font-size: 17px;
-  line-height: 36px;
+  width: 9.2rem;
+  height: 1.28rem;
   text-align: center;
-  color: #666;
-  width: 98%;
-  height: 36px;
-  margin: 0 auto;
-  text-align: center;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 20px;
+  line-height: 1.28rem;
+  background: #888;
+  border-radius: 2px;
+  font-family: PingFangSC-Regular;
+  font-size: 0.4533rem;
+  color: #000;
 }
 .active{
-  color: #fff;
-  border: 1px solid #ccc;
-  background: #ccc;
+  background: #F8E71C;
+  border-radius: 0.0533rem;
+  color: #000;
 }
 
 .rebackContent{
   outline: none;
-  font-size: 14px;
-  color: #666;
-  border: 1px solid #ccc;
-  padding: 6px 0 0 6px;
-  width: 98%;
+  width: 8.9333rem;
+  height: 2.4rem;
+  color: #000;
+  font-size: 0.4533rem;
+  border-radius: 0.0533rem;
+  padding: 0.2667rem 0 0 0.2667rem;
+  font-family: PingFangSC-Light;
 }
 
 

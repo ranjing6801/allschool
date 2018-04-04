@@ -4,24 +4,26 @@
         <div class="content" slot="header">
             <p class="p-img"><img src="/static/images/smile.png" alt=""></p>
             <p class="title">反馈成功</p>
-            <p class="title1">我们将尽快处理,请耐心等候</p>
+            <p class="title1">我们将尽快处理，请耐心等候</p>
         </div>
         <div class="footer">
-            <p class="footerTip">您可以先使用【小黑板】，体验高效的家校管理</p>
-            <div class="btn" @click="openSmallDesk">打开小黑板</div>
+            <p class="footerTip">您可以先使用【晓黑板】，体验高效的家校管理</p>
+            <div class="btn" @click="openSmallDesk">打开晓黑板</div>
         </div>
       </div>
       <div v-if="isAND" class="android">
         <div class="content2">
+            <p class="p-img"><img src="/static/images/smile.png" alt=""></p>
             <p class="title">反馈成功</p>
-            <p class="title1">我们将尽快处理,请耐心等候</p>
+            <p class="title1">我们将尽快处理，请耐心等候</p>
         </div>
         <div class="footer2">
-            <p class="footerTip">您可以使用「小黑板」,体验高效的家校管理</p>
-            <div class="btn" @click="openSmallDesk">打开小黑板</div>
+            <p class="footerTip">您可以先使用【晓黑板】，体验高效的家校管理</p>
+            <div class="btn" @click="openSmallDesk">打开晓黑板</div>
         </div>
         <div class="img">
-            <img src="/static/images/and.jpg" alt="">
+            <p><span class="line1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>找对方法，下载更快捷<span class="line2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+            <img src="/static/images/android.png" alt="">
         </div>
       </div>
     </div>
@@ -80,66 +82,92 @@ export default {
   width: 100%;
   height: 100%;
 }
-
-.footer {
-
-}
-.footer .footerTip {
-  font-family: PingFangSC-Light;
+.footerTip {
+  color: #AAAAAA;
   font-size: 0.3733rem;
-  color: #AAAAAA;
   line-height: 0.3733rem;
-  text-align: center;
-}
-.footer2{
-  
-}
-.footer2 .footerTip{
-  color: #AAAAAA;
-  font-size: 0.1867rem;
+  margin-bottom: 0.2667rem;
   text-align: center;
   font-family: PingFangSC-Light;
 }
-
-
-
 .btn {
   width: 9.2rem;
   height: 1.28rem;
+  font-size: 0.4533rem;
   line-height: 1.28rem;
+  border-radius: 0.0533rem;
+  margin: 0 auto;
   color: #000000;
   background: #F8E71C;
-  font-size: 0.4533rem;
-  border-radius: 0.0533rem;
   text-align: center;
   font-family: PingFangSC-Regular;
 }
 .img{
   text-align: center;
 }
+.img p{
+  color: #AAAAAA;
+  font-size: 0.3733rem;
+  line-height: 0.3733rem;
+  margin: 0.8rem 0 0.8rem 0;
+  font-family: PingFangSC-Light;
+}
+.img img{
+  width: 8.5867rem;
+  height: 5.2533rem;
+}
 .p-img{
   text-align: center;
 }
-.p-img img{
+.content .p-img img{
   width: 1.6rem;
   height: 1.6rem;
+  margin-top: 2.4rem;
+  margin-bottom: 0.4rem;
+}
+.content2 .p-img img{
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-top: 0.8rem;
+  margin-bottom: 0.4rem;
 }
 .title{
   color: #FFFFFF;
   font-size: 0.5333rem;
   line-height: 0.4533rem;
+  margin-bottom: 0.2667rem;
   text-align: center;
   font-family: PingFangSC-Light;
 }
-.title1{
-  color: #FFFFFF;
-  font-size: 0.5333rem;
-  line-height: 0.4533rem;
+.content .title1{
+  color: #aaa;
+  font-size: 0.3733rem;
+  line-height: 0.3733rem;
+  margin-bottom: 2.4rem;
   text-align: center;
   font-family: PingFangSC-Light;
 }
-
-
+.content2 .title1{
+  color: #aaa;
+  font-size: 0.3733rem;
+  line-height: 0.3733rem;
+  margin-bottom: 1.3333rem;
+  text-align: center;
+  font-family: PingFangSC-Light;
+}
+.line1,.line2{
+  color: #888;
+  width: 0.8rem;
+  line-height: 0.3733rem;
+  text-decoration: line-through;
+  display: inline-block;
+}
+.line1{
+  margin-right: 0.4rem;
+}
+.line2{
+  margin-left: 0.4rem;
+}
 </style>
 
 
