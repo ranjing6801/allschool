@@ -11,8 +11,8 @@
         <div class="content">
             <p class="tip" v-if="YZM">短信验证码已发送至 {{ number | value }} </p>
             <p class="tip" v-if="ListenYzm">语音验证码已发送成功</p>
-           <input  maxlength= "4" class="VolidateCode"  placeholder="请输入验证码"
-                     type=" tel" v-model="reCredNum" 
+           <input maxlength= "4" class="VolidateCode"  placeholder="请输入验证码"
+                     type="tel" v-model="reCredNum" 
                     @keyup="codeNumber" v-on:input="reCredNumFocus" />
 
             <span class="volidateNum" @click="regetNum" v-if="reNum">重发短信验证码</span>
@@ -21,7 +21,7 @@
                 <span  v-show="listenCode" class="getListen" @click="getListenCode">接听语音验证码</span>
             </p>
             <!--  div  占位符 -->
-            <div v-show="!listenCode" class="listencode"></div>
+            <!-- <div v-show="!listenCode" class="listencode"></div> -->
 
             <p class="telError"  v-if="isShowCode">
                 <span class="telPhone" @click="clearCode" v-if="isShowCode"><img src="/static/images/warn.png" alt="!"></span>
@@ -202,7 +202,7 @@ export default {
             
         },
         codePromise(){ // 验证码提交
-            api.myGet("users",{id:1,reCredNum:this.reCredNum}) 
+            api.myGet("users",{id:2,reCredNum:this.reCredNum}) 
                .then(res => {
                    // console.log(res[0].id)
                     if(res[0].id == 1){  // 跳转到 userName
@@ -329,6 +329,7 @@ export default {
     text-indent:  0.1333rem;
     outline: none;
     border: none;
+    border-radius: 0;
     color: #fff;
     background: #2b2b2b;
     border-bottom:  0.0267rem solid #555555;
@@ -345,7 +346,7 @@ export default {
     line-height: 0.4533rem;
     background: #888888;
     border-radius: 0.0533rem;
-    margin-top: 0.7467rem;
+    margin-top: 1.0133rem;
 }
 .content .referBtn{
   background: #F8E71C;
@@ -387,10 +388,18 @@ export default {
 }
 
 .content .telError {
-  position: absolute;
-  z-index: 10;
-  top: 1.44rem;
-  left: 0.3333rem;
+  float: left;
+  margin-top: 0.2667rem;
+  line-height: 0.5333rem;
+  margin-left: 0.333rem;
+}
+.telError::after{
+  display: block;
+  content: '.';
+  height: 0;
+  visibility: hidden;
+  overflow: hidden;
+  clear: both;
 }
 
 .content .telPhone {
