@@ -11,41 +11,47 @@
         <div class="content">
             <p class="tip" v-if="YZM">短信验证码已发送至 {{ number | value }} </p>
             <p class="tip" v-if="ListenYzm">语音验证码已发送成功</p>
-           <input  maxlength= "4" class="VolidateCode"  placeholder="请输入验证码" type="tel" v-model="reCredNum" 
+           <input  maxlength= "4" class="VolidateCode"  placeholder="请输入验证码"
+                     type=" tel" v-model="reCredNum" 
                     @keyup="codeNumber" v-on:input="reCredNumFocus" />
 
-            <span class="volidateNum" @click="regetNum" v-if="reNum">重新获取验证码</span>
+            <span class="volidateNum" @click="regetNum" v-if="reNum">重发短信验证码</span>
 
             <p v-if="listenCode" class="listencode">收不到验证码?
                 <span  v-if="listenCode" class="getListen" @click="getListenCode">接听语音验证码</span>
             </p>
             <p class="telError"  v-if="isShowCode">
-                <span class="telPhone" @click="clearCode" v-if="isShowCode"> × </span>
+                <span class="telPhone" @click="clearCode" v-if="isShowCode"></span>
                 <span class="rightPhone">验证码错误</span>
             </p>
- <!--            <span class="volidateNum"  v-show="listenTimer">{{ value }} s</span> -->
             <span class="volidateNum"  v-show="isTimer">{{ time }} s</span>
-            <button :class="!dis ? 'active': '' " :disabled="dis" class="referCode"   @click="codePromise" >验证码提交</button>
+            <button :class="!dis ? 'referBtn': '' " :disabled="dis" class="referCode"   @click="codePromise" >验证码提交</button>
         </div>
-
+        
+   <!--  接收 语音验证码  -->
         <div class="codeFail" v-if="isCodeFailShow" >
-          <div class="fail">
+          <div class="Listenfail">
               <div id="modal">
-                  <h5 class="title">语音验证码</h5>
-                  <p class="content"> 
+                  <p class="titleListen">语音验证码</p>
+                  <p class="contentListen"> 
                       我们将以电话的形式告知您验证码,你可能会接收到010、0051、024、029等开头的来电，请放心接听
                   </p>
-                  <button class="btn" @click="know">我知道啦</button>
+                  <button class="Btn Btn-left" @click="clear">取消</button>
+                  <button class="Btn Btn-rigth" @click="know">好的</button>
               </div>
           </div>
         </div>
 
-            <!--  验证码发送失败弹窗  -->
-        <div class="codeFail" v-if="isCodeFail" @click="codeFailHidden">
-            <div class="fail">
-                <codeFail @codeFailChange="codeFailHidden"></codeFail>
+  <!-- 验证码发送失败弹窗  -->
+        <div class="codeFail" v-if="isCodeFail" @click="codeFailHidden" >
+        <div class="fail">
+            <div id="codeFailModal" >
+              <p class="title">验证码发送失败</p>
+              <p class="content-p">验证码发送失败, 请稍后重试</p>
+              <div class="btn" @click="codeFailHidden">我知道啦</div>
             </div>
         </div>
+    </div>
     </div>
 </template>
 
@@ -55,14 +61,14 @@ import imgSrc from  '../../static/images/logo.jpg'
 import axios from 'axios'
 import $ from 'jquery'
 import api from '../api/api'
-import codeFail from './codeFail'
+// import codeFail from './codeFail'
 import overCount from './overCount'
 import userName from './userName'
 
 export default {
     name:'volidateCode',
     components:{
-        codeFail,overCount,userName
+        overCount,userName
     },
     data(){
         return {
@@ -78,31 +84,32 @@ export default {
                 count:0,
                 listenCode:false,
                 isShowCode:false,
-                isCodeFail:false,
+                isCodeFail:false,   // 验证码发送错误
                 codeOverTime:'验证码发送次数已达上限',
                 helpMessage:'您填写的信息可以帮助我们及时更正哦',
                 txt:'验证码累计错误已达上线',
                 dis:true,
                 getCodeNum:0,   // 记录获取验证码次数, 到达10次 就进入反馈界面
-                isCodeFailShow:false,
+                isCodeFailShow:false,  // 语音验证码
 
         }
     },
     filters:{ // 过滤
         value(val){
-            return  val.slice(0,4) +'- ' + val.slice(4,9) + '- ' + val.slice(9,15);
+            return  val.slice(0,4) +' ' + val.slice(4,9) + ' ' + val.slice(9,15);
         }
     },
     methods:{
         codeFailHidden(){ // 验证码发送失败弹窗
             this.isCodeFail = false;
         },
-        clearCode(){   //  x  清楚错误验证码
+        clearCode(){   //  x  清除错误验证码
             this.reCredNum = '';
             this.isShowCode = false;
             $('.VolidateCode').removeClass('red');
             $('.VolidateCode').removeClass('hot');
         },
+        
         reCredNumFocus(){    // 验证码输入框 焦点事件
 
             if(this.reCredNum.length > 0){
@@ -164,16 +171,21 @@ export default {
                 }
             },1000)
         },
-        know(){  // 请求语音验证码
+        clear(){   
+            // 语音验证码  点击取消  弹窗
+            this.isCodeFailShow = false; 
+            this.reNum = false; 
+        },
+        know(){  // 请求语音验证码 点击 好的 
             this.isCodeFailShow = false;  //语音短信码弹窗关闭
             this.reNum = false; //关闭重发验证码提示
 
-            // 语音验证码请求数据返回成功  
+            //   点击 好的  语音验证码请求数据返回成功  
             this.ListenYzm = true;
             this.YZM = false;
         },
         codePromise(){ // 验证码提交
-            api.myGet("users",{id:'2',reCredNum:this.reCredNum}) 
+            api.myGet("users",{id:3,reCredNum:this.reCredNum}) 
                .then(res => {
                    // console.log(res[0].id)
                     if(res[0].id == 1){  // 跳转到 userName
@@ -191,7 +203,10 @@ export default {
                             this.$router.push({path:"/overCount",query:{title:this.txt,helpMessage:this.helpMessage}});
                         } 
                     }
-
+                     if(res[0].id==3){
+                        // 验证码发送失败
+                        this.isCodeFail = true;
+                    }
                })  
                .catch(err => {
 
@@ -201,7 +216,7 @@ export default {
     mounted(){
         // console.log(this.$route)
         this.YZM = true
-        document.title = "输入验证码"
+        document.title = "填写验证码"
         this.title = this.$route.query.title
         this.number = this.$route.query.phone
 
@@ -215,94 +230,118 @@ export default {
 }
 </script>
 <style scoped>
-/*@import  '../assets/css/variables.scss';
-@import  '../assets/css/volidateCode.css';*/
-
 
 .head {
-  width: 100%;
-  height: 130px;
+  width:9.2rem;
+  height: 2.6667rem;
+  margin-top:0.5333rem;
+  margin-left:0.4rem;
   display: flex;
-  background: #eee;
-  justify-content: center;
-  align-items: center;
-  
+  background: #363636;
 }
 .head .left{
-  width: 80px;
-  height: 80px;
-  margin-right: 20px
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-top:0.5333rem ;
+  margin-left: 0.4rem;
+  margin-right:0.2667rem;
 }
 .head .left img {
-  width: 80px;
-  height: 80px;
+  width: 1.6rem;
+  height:1.6rem;
   border-radius: 50%;
   display: block;
+
 }
 
 .head .right {
-  height: 60px;
-  width: 250px;
+  height: 1.44rem;
+  width: 7.8667rem;
   font-size: 16px;
-  padding-top: 20px;
-  font-weight: 600;
-  color: #1f1e22;
+  margin-top: 0.64rem;
+  margin-right: 0.4rem;
+  font-family: PingFangSC-Regular;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+   line-height: 0.6933rem;
 }
+/*   head end*/
+
 
 .content {
-  margin-top: 40px;
-  padding-left: 25px;
-  padding-right: 25px;
+  width: 9.2rem;
+  margin-top:0.5333rem;
+  margin-left:0.4rem;
   box-sizing: border-box;
   position: relative;
 }
-
 .content p {
-  font-size: 14px;
-  color: #333;
-  margin-bottom: 30px;
+  color: #AAAAAA;
+  font-size: 0.1867rem;
+  font-family: PingFangSC-Light;
+  font-size: 0.3733rem;
+  margin-left: 0.1333rem;
+  margin-top: 0.8rem;
+  letter-spacing: -0.0091rem;
 }
 
+
 .content input::-webkit-input-placeholder {
-  color: #ccc;
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  color: #555555;
+  letter-spacing: -0.0109rem;
 }
 
 .content .volidateNum {
   position: absolute;
-  top: 80px;
-  right: 25px;
-  font-size: 12px;
-  color: #333;
+  top: 1.3333rem;
+  right:0.3333rem;
+  font-family: PingFangSC-Light;
+  font-size: 0.32rem;
+  color: #AAAAAA;
+  letter-spacing:-0.0039rem;
+  line-height: 0.32rem;
+  margin-bottom: 0.5867rem;
+
 }
 
 .VolidateCode{
+    font-family: PingFangSC-Light;
+    margin-top: 0.2667rem;
+    width: 8.9333rem;
+    height: 1.44rem;
+    font-size: 0.4533rem;
+    line-height: 0.4533rem;
+    text-indent:  0.1333rem;
     outline: none;
     border: none;
-    font-size: 16px;
-    height: 30px;
-    width: 100%;
-    border-bottom:2px solid rgba(0,0,0,0.2);
-}
-.content .refer {
-  border-radius: 25px;
-  background: rgba(0, 0, 0, 0.1);
-  color: orangered;
+    color: #fff;
+    background: #2b2b2b;
+    border-bottom:  0.0267rem solid #555555;
 }
 
 .content .referCode {
-    width: 100%;
-    height: 40px;
-    font-size: 16px;
-    margin-top: 60px;
-    border-radius: 25px;
-    border: 1px solid #ccc;
-    background: #fff;
-    color: #ccc;
+    width: 9.2rem;
+    height: 1.28rem;
+    font-family: PingFangSC-Regular;
+    font-size: 0.4533rem;
+    color: #000000;
+    border:none;
+    display: block;
+    line-height: 0.4533rem;
+    background: #888888;
+    border-radius: 0.0533rem;
+    margin-top: 1.6rem;
 }
+.content .referBtn{
+  background: #F8E71C;
+}
+
 
 /* 输入框动态样式*/
 .content .hot{  
-  border-bottom: 2px solid #333;
+  border-bottom: 2px solid #AAAAAA;
 }
 .content .red{
   border-bottom: 2px solid red;
@@ -313,50 +352,54 @@ export default {
   color: #fff;
 }
 
-
-.content #referName {
-  border-radius: 25px;
-  background: rgba(0, 0, 0, 0.1);
-  color: orangered;
-}
-
 .content .listencode {
-  font-size: 13px;
-  color: #ccc;
+  /*width: 4.3733rem;*/
   text-align: right;
+  font-family: PingFangSC-Light;
+  font-size: 0.32rem;
+  color: #AAAAAA;
+  letter-spacing: -0.0039rem;
+  line-height: 0.32rem;
+  margin-top: 0.5333rem;
+  margin-right: 0.6667rem;
 }
 
 .content .listencode .getListen {
   position: relative;
-  color: rgba(0, 0, 0, 0.6);
-  font-size: 13px;
-  font-weight: bold;
+  font-family: PingFangSC-Regular;
+  font-size: 0.32rem;
+  color: #000000;
+  letter-spacing: -0.0039rem;
+  line-height: 0.32rem;
 }
 
 .content .telError {
   position: absolute;
   z-index: 10;
-  top: 108px;
-  left: 25px;
+  top: 1.44rem;
+  left: 0.3333rem;
 }
 
 .content .telError .telPhone {
-  display: inline-block;
-  font-size: 16px;
-  width: 14px;
-  height: 14px;
-  line-height: 14px;
-  text-align: center;
-  border-radius: 50%;
-  color: #fff;
-  background: rgba(0, 0, 0, 0.5);
+    width: 0.2667rem;
+    height: 0.2667rem;
+    display: inline-block;
+    line-height: 0.3733rem;
+    margin-top: 0.2667rem;
+    margin-left: -0.4rem;
+    color: ##FF6688 ;
+    background: url('../../static/images/warn.png');
+    border-radius: 50%;
 }
 
 .content .telError .rightPhone {
-  font-size: 12px;
-  color: #666;
+  font-size: 0.32rem;
+  color: #FF6688;
+  font-family: PingFangSC-Light;
+  font-size: 0.32rem;
+  letter-spacing: -0.0039rem;
+  line-height: 0.32rem;
 }
-
 .modalShow {
   width: 100%;
   height: 100%;
@@ -386,7 +429,8 @@ export default {
 .codeFail {
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  background: rgba(0, 0, 0, 0.7);
   position: fixed;
   top: 0;
   left: 0;
@@ -395,33 +439,84 @@ export default {
   margin: auto;
 }
 
-.codeFail .fail {
-  width: 90%;
-  height: 40%;
-  margin-left: 5%;
-  margin-right: 5%;
+.codeFail .Listenfail {
+  width: 8.9333rem;
+  height: 6.16rem;
+  margin-left: 0.5333rem;
+  margin-right: 0.5333rem;
+  background: #2B2B2B;
+  border: 0.0533rem solid #BBAB71;
+  border-radius: 0.2667rem;
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  background: #fff;
+  top: 5.1733rem;
+  bottom: 7.84rem;
 }
 
 
-.codeFail .fail #modal .title {
-  font-size: 16px;
-  padding-left: 20px;
-}
 
-.codeFail .fail #modal .content {
-  font-size: 16px;
-  padding-right: 25px;
+.codeFail .Listenfail #codeFailModal .title {
   text-align: center;
+  font-family: PingFangSC-Light;
+  font-size: 0.5333rem;
+  color: #FFFFFF;
+  letter-spacing: -0.0064rem;
+  line-height: 0.5333rem;
+  margin-top: 0.5333rem;
 }
 
-.codeFail .fail #modal .clear{
+.codeFail .Listenfail #codeFailModal .content-p {
+  margin-top: 0.5333rem;
+  margin-left: 1.6rem;
+  margin-right: 1.5733rem;
+  text-align: center;
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+  letter-spacing: 0.0055rem;
+  line-height: 0.6933rem;
+}
+
+.codeFail .Listenfail #codeFailModal .btn {
+  width: 8.1333rem;
+  height:1.28rem;
+  font-size: 0.4533rem;
+  font-family: PingFangSC-Regular;
+  color: #000000;
+  letter-spacing: -0.41px;
+  line-height: 1.28rem;
+  background: #F8E71C;
+  border-radius: 0.0533rem;
+  text-align: center;
+  margin-top: 0.6667rem;
+  margin-left: 0.4rem;
+}
+
+
+.codeFail .Listenfail #modal .titleListen {
+  font-family: PingFangSC-Light;
+  font-size: 0.5333rem;
+  color: #FFFFFF;
+  letter-spacing: -0.0064rem;
+  line-height: 0.5333rem;
+  text-align: center;
+  margin-top: 0.5333rem;
+}
+
+.codeFail .Listenfail #modal .contentListen {
+  width: 7.6533rem;
+  height: 2.08rem;
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+  letter-spacing: -0.0109rem;
+  line-height: 0.6933rem;
+  text-align: center;
+  margin-left: 0.64rem;
+  margin-right: 0.64rem;
+  margin-top: 0.5333rem;
+}
+
+.codeFail .Listenfail #modal .clear{
     border: none;
     font-size: 16px;
     background: #fff;
@@ -430,17 +525,27 @@ export default {
     margin-left: 30px;
     margin-right: 40px;
 }
-.codeFail .fail #modal .btn {
-    font-size: 16px;
-    display: block;
-    text-align: center;
-    color: #fff;
-    width: 80%;
-    height: 40px;
-    margin: 60px auto 0;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 20px;
+.codeFail .Listenfail #modal .Btn {
+    width: 4.0rem;
+    height: 1.28rem;
+    background: #2B2B2B;
+    font-family: PingFangSC-Regular;
+    font-size: 0.4533rem;
+    color: #F8E71C;
+    letter-spacing:-0.0109rem;
+    line-height: 0.4533rem;
+    margin-top: 0.6667rem;
+    border-radius: 0.0533rem;
     border: none;
+}
+
+.Btn-left{
+   margin-left: 0.4rem;
+}
+.codeFail .Listenfail #modal .Btn-rigth{
+  
+  background:#F8E71C;
+  color: #000000;
 }
 
 </style>
