@@ -147,12 +147,12 @@ export default {
 @import  '../assets/css/getClass.css';*/
 
 #getClass .checkList {
-  background: rgba(0, 0, 0, 0.1);
-  height: 100px;
-  line-height: 100px;
-  margin-bottom: 10px;
-  list-style: none;
-  width: 100%;
+  width: 9.2rem;
+  height: 1.8667rem;
+  background: #363636;
+  border-radius: 0.0533rem;
+  margin-left: 0.4rem;
+  margin-top: 0.5333rem;
   position: relative;
 }
 

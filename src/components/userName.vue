@@ -40,8 +40,8 @@ export default {
             num:1,
             classList:[
                 {name:"一年级1班"},
-                {name:"一年级2班"},
-                {name:"一年级3班"}
+                // {name:"一年级2班"},
+                // {name:"一年级3班"}
             ]
         }
     },
@@ -86,7 +86,7 @@ export default {
 
     //  是班主任       
                    if(res[0].id == 6){  // 姓名存在 是班主任
-                        if(res[0].username == "Leopoldo_Corkery"){  // 1. 无班级,自动创建班级并认证
+                        if(res[0].username == "Leopoldo_Corker y"){  // 1. 无班级,自动创建班级并认证
                             this.$router.push({path:'/CLNewTeacher',query:{}}) 
                         }
                         else{  // 有班级 [ 选择班级认证]  或者  [创建班级认证]
@@ -195,6 +195,7 @@ export default {
   background: #888888;
   border-radius: 0.0533rem;
   line-height: 0.4533rem;
+  border: none;
 }
 .contentUser .active{
   background: #F8E71C;
