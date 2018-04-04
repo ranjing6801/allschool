@@ -1,13 +1,11 @@
 <template>
     <!--  确认保存二维码弹窗 -->
     <div id="saveModal" @click="know">
-        <h5 class="title">{{ saveTitle}}</h5>
-        <p class="content">{{ saveContent }}</p>
-        <p class="saveTip">{{ saveTip }}</p>
-        <div class="saveBtn">
-            <div class="btn btnLeft" @click="know">去保存</div>
-            <div class="btn" @click="saveOk">保存好了</div>
-        </div>
+        <p class="title">确认已保存</p>
+        <p class="sure">请确保您已保存二维码</p>
+        <p class="content">将用于发送给家长,邀请他们进班</p>
+        <button class="Btn Btn-left" @click="know">去保存</button>
+        <button class="Btn Btn-rigth" @click="saveOk">保存好了</button>
     </div>
 </template>
 
@@ -17,20 +15,6 @@ export default {
     data(){
         return {
 
-        }
-    },
-    props:{
-        saveTitle:{
-            type:String,
-            default:''
-        },
-        saveContent:{
-            type:String,
-            default:''
-        },
-        saveTip:{
-            type:String,
-            default:''
         }
     },
     methods:{
@@ -45,55 +29,62 @@ export default {
 </script>
 
 <style scoped>
-/*@import  '../assets/css/variables.scss';
-@import  '../assets/css/saveModal.css';*/
 
+#saveModal {
+  width: 8.9333rem;
+  height: 5.4667rem;
+  background: #2B2B2B;
+  border: 0.0267rem solid #BBAB71;
+  border-radius: 0.2667rem;
+  box-sizing: border-box;
+}
 #saveModal .title {
-  font-size: 18px;
-  padding-top: 20px;
-  padding-left: 20px;
+  font-family: PingFangSC-Light;
+  font-size: 0.5333rem;
+  color: #FFFFFF;
+  line-height: 0.5333rem;
+  margin-top: 0.5333rem;
+  text-align: center;
 }
 
 #saveModal .content {
-  font-size: 20px;
-  margin-top: 40px;
-  padding-left: 30px;
-  padding-right: 20px;
-  text-align: center;
-  line-height: 2;
+  width: 6.64rem;
+  height: 1.3867rem;
+  margin-left: 1.1467rem;
+  margin-right: 1.1467rem;
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+}
+#saveModal .sure {
+    margin-top: 0.5333rem;
+    text-align: center;
+    font-family: PingFangSC-Light;
+    font-size: 0.4533rem;
+    color: #FFFFFF;
+    line-height: 0.6933rem;
 }
 
-#saveModal .saveTip {
-  font-size: 16px;
-  padding-left: 30px;
-  padding-right: 20px;
-  text-align: center;
+#saveModal  .Btn {
+    width: 4.0rem;
+    height: 1.28rem;
+    background: #2B2B2B;
+    font-family: PingFangSC-Regular;
+    font-size: 0.4533rem;
+    color: #F8E71C;
+    line-height: 0.4533rem;
+    border-radius: 0.0533rem;
+    border: none;
 }
 
-#saveModal .saveBtn {
-  width: 100%;
-  margin-left: 10%;
+.Btn-left{
+   margin-left: 0.4rem;
 }
-
-#saveModal .saveBtn .btn {
-  float: left;
-  height: 40px;
-  font-size: 16px;
-  text-align: center;
-  margin-left: 20px;
-  color: #fff;
-  margin-top: 50px;
-  line-height: 40px;
-  padding-left: 15px;
-  padding-right: 15px;
-  border-radius: 25px;
-  background: rgba(0, 0, 0, 0.4);
+#saveModal .Btn-rigth{
+  
+  background:#F8E71C;
+  color: #000000;
 }
-
-#saveModal .saveBtn .btnLeft {
-  margin-right: 40px;
-}
-
 
 </style>
 

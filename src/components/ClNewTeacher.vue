@@ -1,7 +1,7 @@
 <template>
     <div id="CLNewTeacher">
         <div class="classContent">
-            <P>已为您创建以下晓黑板班级:</P>
+            <P class="create">已为您创建以下晓黑板班级:</P>
             <ul >
                 <li class="classList">
                     <div class="left">
@@ -18,13 +18,13 @@
                         <p class="last">邀请他们进班</p>
                     </div>
                 </li>
-                <!-- <li class="classList">
+                <li class="classList">
                     <div class="left">
                         <p >{{clName}} </p>
                         
                             <img :src="secImg">
                         
-                        <p class="bot">{{clNum}}: {{clNumber}} 人</p>
+                        <p class="bot">{{clNum}}: {{clNumber}}</p>
                     </div>
                     <div class="right">
                         <img :src="zhiwenImg" alt="">
@@ -32,14 +32,16 @@
                         <p class="saveSecond">用于发送给家长</p>
                         <p class="last">邀请他们进班</p>
                     </div>
-                </li> -->
+                </li>
             </ul>
         </div>
-        <mt-button class="referOk" size="large" @click="overRefer" >完成认证</mt-button>
+
+        <button class="referOk"  @click="overRefer" >完成认证</button>
+
         <!--  完成认证 确认保存二维码 弹窗 -->
         <div class="modalShow" v-if="isSave" @click="HiddenSaveModal" >
             <div class="modal">
-                <saveModal :saveTitle="saveTitle" :saveContent="saveContent" :saveTip="saveTip" @changeIsSaveModal="HiddenSaveModal"></saveModal>
+                <saveModal  @changeIsSaveModal="HiddenSaveModal"></saveModal>
             </div>
         </div>
     </div>    
@@ -61,10 +63,10 @@ export default {
             zhiwenImg:zhiwenImg,
             clNum:'班级号',
             clNumber:'460540',
-            isSave:false,
-            saveTitle:'确认已保存',
-            saveContent:'请确保您已保存二维码',
-            saveTip:'将用于发送给家长,邀请他们进班',
+            isSave:true,
+            // saveTitle:'确认已保存',
+            // saveContent:'请确保您已保存二维码,将用于发送给家长,邀请他们进班'
+            // // saveTip:'将用于发送给家长,邀请他们进班',
         }
     },
     methods:{
@@ -81,16 +83,21 @@ export default {
 }
 </script>
 <style scoped>
-/*// @import  '../assets/css/variables.scss';
-// @import  '../assets/css/CLNewTeacher.css';*/
-
 
 #CLNewTeacher .classContent {
   width: 100%;
   height: 100%;
-  padding: 30px;
-  font-size: 16px;
   box-sizing: border-box;
+}
+
+#CLNewTeacher .classContent  p{
+  font-family: PingFangSC-Light;
+  font-size: 0.3733rem;
+  color: #AAAAAA;
+  line-height: 0.3733rem;
+  margin-top: 0.5333rem;
+  margin-left: 0.5333rem;
+  
 }
 
 #CLNewTeacher .classContent .title {
@@ -99,14 +106,14 @@ export default {
 }
 
 #CLNewTeacher .classContent .classList {
-  list-style: none;
   margin-bottom: 20px;
-  width: 100%;
-  height: 100%;
-  border: 1px solid #ccc;
-  border-radius: 15px;
-  float: left;
-  margin-top: 10px;
+  width: 9.2rem;
+  height: 4.7467rem;
+  background: #FFFFFF;
+  border-radius: 0.0533rem;
+  margin-top: 0.5333rem;
+  margin-left: 0.4rem;
+  margin-bottom: 0.5333rem;
 }
 
 #CLNewTeacher .classContent .classList .left {
@@ -169,21 +176,23 @@ export default {
 }
 
 #CLNewTeacher .referOk {
-  width: 80%;
+  width: 9.2rem;
+  height: 1.28rem;
   text-align: center;
-  margin-left: 10%;
-  margin-top: 100px;
-  border-radius: 25px;
-  background: rgba(0, 0, 0, 0.5);
-  color: orangered;
-  position: fixed;
-  bottom: 120px;
+  margin-left: 0.4rem;
+  margin-top: 2.0rem;
+  border-radius: 0.0533rem;
+  background: #F8E71C;
+  font-family: PingFangSC-Regular;
+  font-size: 0.4533rem;
+  color: #000000;
+  line-height: 0.4533rem;
 }
 
 #CLNewTeacher .modalShow {
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   position: fixed;
   top: 0;
   left: 0;
@@ -193,17 +202,13 @@ export default {
 }
 
 #CLNewTeacher .modalShow .modal {
-  width: 90%;
-  height: 45%;
-  margin-left: 5%;
-  margin-right: 5%;
+  width: 8.9333rem;
+  height: 5.4667rem;
+  margin-left: 0.5333rem;
+  margin-right: 0.5333rem;
   position: absolute;
-  top: 0;
+  top: 4.8267rem;
   left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  background: #fff;
 }
 
 
