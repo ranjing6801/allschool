@@ -40,8 +40,8 @@ export default {
             num:1,
             classList:[
                 {name:"一年级1班"},
-                // {name:"一年级2班"},
-                // {name:"一年级3班"}
+                {name:"一年级2班"},
+                {name:"一年级3班"}
             ]
         }
     },
