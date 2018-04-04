@@ -20,11 +20,11 @@
       <input @keyup="tel" type="tel" placeholder="请输入小黑板账号 / 手机号"  v-model="phone"
                v-on:input="focus" class="input"  maxlength=13 />
                
-      <span class="telePhone" @click="clearTel" v-if="telNum">x</span>
+      <span class="telePhone" @click="clearTel" v-if="telNum"></span>
       <button :class="!btn?'referBtn':''" class="refer"  :disabled="btn" @click="telPromise" >提交</button>
     </div>
     
-    <!--  验证码错误弹窗 -->
+    <!--  验证码发送失败 -->
     <div class="codeFail" v-if="isCodeFailShow" @click="codeFailKnow" >
         <div class="fail">
             <div id="codeFailModal" >
@@ -98,7 +98,7 @@ import api from '../api/api'
       },
       telPromise(){  // 获取验证码
             console.log('点击按钮了..');
-      //请求数据之前 要判断手机号是否合法
+    //请求数据之前 要判断手机号是否合法
           let myphone = this.phone.split(' ').join('');
           if(!(/^1[3|4|5|7|8][0-9]\d{4,8}$/.test(myphone))) {
               this.isRightNumber = true;
@@ -108,7 +108,7 @@ import api from '../api/api'
               return;
           }
   
-          api.myGet("users",{id:1})
+          api.myGet("users",{id:4})
                .then(res => {
                   console.log(res[0].id)         
                   if(res[0].id == 1){   // 提示 该手机号已经加入其他学校
@@ -135,16 +135,16 @@ import api from '../api/api'
          .catch(err => {
            // 手机号码验证错误
            //this.isRightNumber = true;
-                      //$('.mint-cell').addClass('red');
+            //$('.mint-cell').addClass('red');
          })
       },
       tel(){
         //禁止输入非数字
         this.phone = this.phone.replace(/[^\d]/g,'');
       },
-            codeFailKnow(){
-                this.isCodeFailShow = false;
-            } 
+      codeFailKnow(){
+          this.isCodeFailShow = false;
+      } 
     },
       mounted(){
       document.title = "输入手机号";
@@ -167,9 +167,6 @@ button{
   margin-left:0.4rem;
   display: flex;
   background: #363636;
-  /*justify-content: center;
-  align-items: center;*/
-  
 }
 .head .left{
   width: 1.6rem;
@@ -197,6 +194,7 @@ button{
   color: #FFFFFF;
    line-height: 0.6933rem;
 }
+/*   head end*/
 
 .content {
   width: 9.2rem;
@@ -219,7 +217,7 @@ button{
 .input {
   font-family: PingFangSC-Light;
   margin-top: 0.2667rem;
-  width: 100%;
+  width: 8.9333rem;
   height: 1.44rem;
   font-size: 0.4533rem;
   line-height: 0.4533rem;
@@ -228,7 +226,7 @@ button{
   border: none;
   color: #fff;
   background: #2b2b2b;
-  border-bottom:  2px solid #555555;;
+  border-bottom:  0.0267rem solid #555555;
 }
 
 .telePhone{
@@ -236,20 +234,19 @@ button{
     height: 0.4267rem;
     display: inline-block;
     line-height: 0.3733rem;
-    background: red;
     text-align: center;
     position: absolute;
     top: 1.2533rem;
     left: 8.3733rem;
     color: #fff;
-    background: #AAAAAA;
+    background: url('../../static/images/clear.png');
     border-radius: 50%;
 }
 .content .hot{
-  border-bottom: 2px solid #AAAAAA;;
+  border-bottom: 0.0267rem solid #AAAAAA;;
 }
 .content .red{
-  border-bottom: 2px solid #FF6688;
+  border-bottom: 0.0267rem solid #FF6688;
 }
 
 .content input::-webkit-input-placeholder {
@@ -260,14 +257,6 @@ button{
   line-height: 0.4533rem;
 }
 
-/*.content .volidateNum {
-  position: absolute;
-  top: 70px;
-  right: 25px;
-  font-size: 12px;
-  color: #ccc;
-}
-*/
 .content .refer {
   width: 9.2rem;
   height: 1.28rem;
@@ -291,19 +280,19 @@ button{
   position: absolute;
   z-index: 10;
   top: 1.6rem;
-  left: 0.1333rem;
 }
 
 .content .telError .telPhone {
+
   display: inline-block;
   font-size: 0.2133rem;
   width: 0.2667rem;
   height: 0.2667rem;
-  line-height: 0.2667rem;
+/*  line-height: 0.2667rem;*/
   text-align: center;
   border-radius: 50%;
   color: #000;
-  background: #FF6688;
+  background: url(../../static/images/warn.png);
 }
 
 .content .telError .rightPhone {
@@ -311,37 +300,12 @@ button{
   color: #FF6688;
 }
 
-.modalShow {
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-}
-
-.modalShow .modal {
-  width: 90%;
-  height: 45%;
-  margin-left: 5%;
-  margin-right: 5%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  background: #fff;
-}
-
 /* 验证码错误弹窗*/
 .codeFail {
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  background: rgba(0, 0, 0, 0.7);
   position: fixed;
   top: 0;
   left: 0;
@@ -351,54 +315,53 @@ button{
 }
 
 .codeFail .fail {
-  width: 80%;
-  height: 40%;
-  margin-left: 10%;
-  margin-right: 10%;
+  width: 8.9333rem;
+  height: 4.7733rem;
+  margin-left: 0.5333rem;
+  margin-right: 0.5333rem;
+  background: #2B2B2B;
+  border: 0.0533rem solid #BBAB71;
+  border-radius: 0.2667rem;
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  background: #fff;
-}
-
-
-
-.codeFail .fail #codeFailModal {
-  height: 100%;
-  width: 100%;
+  top: 5.1733rem;
+  bottom: 7.84rem;
 }
 
 .codeFail .fail #codeFailModal .title {
-  font-size: 16px;
-  padding-top: 20px;
-  padding-left: 20px;
-  font-weight: bold;
+  text-align: center;
+  font-family: PingFangSC-Light;
+  font-size: 0.5333rem;
+  color: #FFFFFF;
+  letter-spacing: -0.0064rem;
+  line-height: 0.5333rem;
+  margin-top: 0.5333rem;
 }
 
 .codeFail .fail #codeFailModal .content-p {
-  font-size: 18px;
-  margin-top: 50px;
-  padding-left: 30px;
-  padding-right: 20px;
-  line-height: 2;
+  margin-top: 0.5333rem;
+  margin-left: 1.6rem;
+  margin-right: 1.5733rem;
   text-align: center;
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+  letter-spacing: 0.0055rem;
+  line-height: 0.6933rem;
 }
 
 .codeFail .fail #codeFailModal .btn {
-  font-size: 16px;
-  line-height: 40px;
+  width: 8.1333rem;
+  height:1.28rem;
+  font-size: 0.4533rem;
+  font-family: PingFangSC-Regular;
+  color: #000000;
+  letter-spacing: -0.41px;
+  line-height: 1.28rem;
+  background: #F8E71C;
+  border-radius: 0.0533rem;
   text-align: center;
-  color: #fff;
-  width: 50%;
-  height: 40px;
-  margin-left: 25%;
-  text-align: center;
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 20px;
-  margin-top: 80px;
+  margin-top: 0.6667rem;
+  margin-left: 0.4rem;
 }
 
 </style>
