@@ -30,7 +30,7 @@
                 <textarea maxlength="200" rows="8" cols="40" class="rebackContent" v-model="reback"></textarea>
             </li>
         </ul>
-        <div :class="user&&rad&&reback?'active':''" class="btn" @click="getContent">提交</div>
+        <div :class="user&&cur&&reback?'active':''" class="btn" @click="getContent">提交</div>
     </div>
 
    </div>
@@ -46,17 +46,16 @@ export default {
         return {
             title:'验证码发送次数已达上限',
             helpMessage:'请填写反馈信息帮助我们及时解决哦',
-            user:'冉靖',
+            user:'',
             reback:'',
             value:'',
             isbtn:false,
-            rad:'',
             cur:''
         }
     },
     methods:{
         getContent(){
-          if(this.user&&this.rad&&this.reback){
+          if(this.user&&this.cur&&this.reback){
             this.$router.push({path:'/AuthenticationOk',query:{}})
           }else{
             console.log('请输入完整的信息...');
@@ -64,14 +63,8 @@ export default {
         },
         txt() {
           console.log('this.user:',this.user);
-          console.log('this.rad:',this.rad);
+          console.log('this.cur:',this.cur);
           console.log('this.reback:',this.reback);
-        },
-        getRadio1() {
-          this.rad = 'yes';
-        },
-        getRadio2() {
-          this.rad = 'no';
         }
     },
     mounted(){
@@ -113,7 +106,7 @@ export default {
   height: 1.44rem;
   width: 7.8667rem;
   font-size: 16px;
-  margin-top: 0.64rem;
+  margin-top: 0.8rem;
   margin-right: 0.4rem;
   font-size: 0.4533rem;
   line-height: 0.4533rem;
@@ -125,6 +118,7 @@ export default {
   color: #AAAAAA;
   font-size: 0.3733rem;
   line-height: 0.3733rem;
+  margin-top: 0.32rem;
   font-family: PingFangSC-Light;
 }
 
@@ -140,6 +134,7 @@ export default {
   color: #AAAAAA;
   font-size: 0.3733rem;
   line-height: 0.3733rem;
+  text-indent: 0.1067rem;
   margin-bottom: 0.2667rem;
   font-family: PingFangSC-Light;
 }
@@ -173,7 +168,7 @@ export default {
 }
 .hot{
   background: #F8E71C;
-  border: 1px solid #F8E71C;
+  border: 0.0267rem solid #F8E71C;
   border-radius: 0.0533rem;
   color: #000;
 }
