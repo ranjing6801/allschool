@@ -44,7 +44,6 @@ export default {
     },
     data(){
         return {
-            imgSrc:imgSrc,
             title:'验证码发送次数已达上限',
             helpMessage:'请填写反馈信息帮助我们及时解决哦',
             user:'冉靖',

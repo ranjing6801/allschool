@@ -186,13 +186,13 @@ button{
 .head .right {
   height: 1.44rem;
   width: 7.8667rem;
-  font-size: 16px;
   margin-top: 0.64rem;
   margin-right: 0.4rem;
   font-family: PingFangSC-Regular;
   font-size: 0.4533rem;
   color: #FFFFFF;
-   line-height: 0.6933rem;
+  line-height: 0.6933rem;
+  text-indent: -0.1067rem;
 }
 /*   head end*/
 
@@ -240,6 +240,7 @@ button{
     left: 8.3733rem;
     color: #fff;
     background: url('../../static/images/clear.png');
+    background-size: 0.4267rem 0.4267rem;
     border-radius: 50%;
 }
 .content .hot{

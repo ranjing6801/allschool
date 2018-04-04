@@ -44,7 +44,7 @@
 
   <!-- 验证码发送失败弹窗  -->
         <div class="codeFail" v-if="isCodeFail" @click="codeFailHidden" >
-        <div class="fail">
+        <div class="Listenfail">
             <div id="codeFailModal" >
               <p class="title">验证码发送失败</p>
               <p class="content-p">验证码发送失败, 请稍后重试</p>
@@ -185,7 +185,7 @@ export default {
             this.YZM = false;
         },
         codePromise(){ // 验证码提交
-            api.myGet("users",{id:3,reCredNum:this.reCredNum}) 
+            api.myGet("users",{id:1,reCredNum:this.reCredNum}) 
                .then(res => {
                    // console.log(res[0].id)
                     if(res[0].id == 1){  // 跳转到 userName
@@ -257,13 +257,12 @@ export default {
 .head .right {
   height: 1.44rem;
   width: 7.8667rem;
-  font-size: 16px;
   margin-top: 0.64rem;
   margin-right: 0.4rem;
   font-family: PingFangSC-Regular;
   font-size: 0.4533rem;
   color: #FFFFFF;
-   line-height: 0.6933rem;
+  line-height: 0.6933rem;
 }
 /*   head end*/
 
