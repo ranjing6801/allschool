@@ -4,25 +4,26 @@
         <p class="leadTitle">您是{{ num }}个班级班主任, 请选择:</p>
         
         <!--   展示已经认证好了的班级  -->
-        <ul>
-            <li v-if="isCompleteClass" v-for="item in AtteCompleteClass" :key="item.index" class="classList"  
-                                                                            @click="getDetail">
+        <!-- <ul>
+            <li v-if="isCompleteClass" v-for="item in AtteCompleteClass" :key="item.index" 
+                          class="classList"   @click="getDetail">
                 <span class="className"> {{ item.name }}</span>  
                 <span> ========></span>
                 <span class="className"> {{ item.teamName }} </span>
-                <span class="more"> > </span>
+                <span class="more"></span>
             </li>
-        </ul>
+        </ul> -->
         
          <!--  展示还没有认证的班级  -->
         <ul>
             <li v-for="item in classList" :key="item.index" class="classList" @click="getMore">
-             <span class="className"> {{ item.name }}</span>  的对应班级   <span class="more" > > </span>
+             <span class="className"> {{ item.name }}</span> 
+             <span class="classTeam" > 的对应班级</span>   
+             <span class="more" ></span>
             </li>
         </ul>
 
-      <mt-button id="referName" :disabled="dis" size="large" @click="classRefer" >认证班级
-      </mt-button>
+      <button id="referName" :disabled="dis"  @click="classRefer">认证班级</button>
   </div>
 </template>
 <script>
@@ -81,50 +82,68 @@ export default {
 }
 </script>
 <style scoped>
-/*@import  '../assets/css/variables.scss';
-@import  '../assets/css/CLYchooseClass.css';*/
 
 #clychooseClass .leadTitle {
-  font-size: 16px;
-  font-weight: 500;
-  background: rgba(0, 0, 0, 0.2);
-  padding-top: 20px;
-  padding-bottom: 20px;
-  padding-left: 20px;
+  font-family: PingFangSC-Light;
+  font-size: 0.3733rem;
+  color: #888888;
+  line-height: 0.3733rem;
+  margin-top: 0.5333rem;
+  margin-left: 0.5333rem;
 }
 
 #clychooseClass .classList {
+  width: 9.2rem;
+  height: 1.8667rem;
+  background: #363636;
+  border-radius: 0.0533rem;
+  line-height: 1.8667rem;
+  margin-top: 0.5333rem;
+  margin-left: 0.4rem;
   position: relative;
-  font-size: 16px;
-  height: 80px;
-  line-height: 80px;
-  padding-left: 40px;
-  padding-right: 60px;
-  margin-bottom: 10px;
-  background: rgba(0, 0, 0, 0.1);
 }
 
 #clychooseClass .classList .className {
-  font-weight: bold;
+  margin-left: 0.4rem;
+  margin-right: 0.2667rem;
+  font-family: PingFangSC-Regular;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+  line-height: 0.4533rem;
 }
-
+.classTeam{
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  color: #AAAAAA;
+  line-height: 0.4533rem;
+}
 #clychooseClass .classList .more {
-  font-size: 20px;
   position: absolute;
-  right: 50px;
+  top: 0.7467rem;
+  left: 8.5867rem;
+  display: inline-block;
+  width: 0.2133rem;
+  height: 0.3733rem;
+  line-height: 0.4533rem;
+  background-size:0.2133rem  0.3733rem;
+  background:url('../../static/images/more.png') no-repeat center;
 }
 
 #clychooseClass #referName {
-  width: 80%;
-  margin-left: 10%;
+  width: 9.2rem;
+  height: 1.28rem;
+  margin-left: 0.4rem;
   position: fixed;
-  bottom: 80px;
-  border-radius: 25px;
-  background: rgba(0, 0, 0, 0.5);
-  color: orangered;
+  bottom: 60px;
+  border-radius: 0.0533rem;
+  background: #AAAAAA;
+  font-family: PingFangSC-Regular;
+  font-size: 0.4533rem;
+  color: #000000;
+  line-height: 0.4533rem;
 }
 
-#clychooseClass #AttestationComple {
+/*#clychooseClass #AttestationComple {
   background: rgba(0, 0, 0, 0.1);
 }
 
@@ -136,8 +155,8 @@ export default {
   padding-bottom: 20px;
   padding-left: 20px;
 }
-
-#clychooseClass #AttestationComple .classList {
+*/
+/*#clychooseClass #AttestationComple .classList {
   position: relative;
   font-size: 16px;
   height: 80px;
@@ -167,7 +186,7 @@ export default {
   background: rgba(0, 0, 0, 0.5);
   color: orangered;
 }
-
+*/
 
 
 </style>
