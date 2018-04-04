@@ -44,7 +44,7 @@
 
   <!-- 验证码发送失败弹窗  -->
         <div class="codeFail" v-if="isCodeFail" @click="codeFailHidden" >
-        <div class="Listenfail">
+        <div class="pushfail">
             <div id="codeFailModal" >
               <p class="title">验证码发送失败</p>
               <p class="content-p">验证码发送失败, 请稍后重试</p>
@@ -185,7 +185,7 @@ export default {
             this.YZM = false;
         },
         codePromise(){ // 验证码提交
-            api.myGet("users",{id:1,reCredNum:this.reCredNum}) 
+            api.myGet("users",{id:3,reCredNum:this.reCredNum}) 
                .then(res => {
                    // console.log(res[0].id)
                     if(res[0].id == 1){  // 跳转到 userName
@@ -387,6 +387,7 @@ export default {
     margin-top: 0.2667rem;
     margin-left: -0.4rem;
     color: ##FF6688 ;
+    background-size: 0.2667rem  0.2667rem;
     background: url('../../static/images/warn.png');
     border-radius: 50%;
 }
@@ -438,9 +439,9 @@ export default {
   margin: auto;
 }
 
-.codeFail .Listenfail {
+.codeFail .pushfail {
   width: 8.9333rem;
-  height: 6.16rem;
+  height: 4.7733rem;
   margin-left: 0.5333rem;
   margin-right: 0.5333rem;
   background: #2B2B2B;
@@ -453,7 +454,7 @@ export default {
 
 
 
-.codeFail .Listenfail #codeFailModal .title {
+.codeFail .pushfail #codeFailModal .title {
   text-align: center;
   font-family: PingFangSC-Light;
   font-size: 0.5333rem;
@@ -463,7 +464,7 @@ export default {
   margin-top: 0.5333rem;
 }
 
-.codeFail .Listenfail #codeFailModal .content-p {
+.codeFail .pushfail #codeFailModal .content-p {
   margin-top: 0.5333rem;
   margin-left: 1.6rem;
   margin-right: 1.5733rem;
@@ -475,7 +476,7 @@ export default {
   line-height: 0.6933rem;
 }
 
-.codeFail .Listenfail #codeFailModal .btn {
+.codeFail .pushfail #codeFailModal .btn {
   width: 8.1333rem;
   height:1.28rem;
   font-size: 0.4533rem;

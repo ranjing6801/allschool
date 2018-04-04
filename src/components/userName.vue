@@ -117,37 +117,39 @@ export default {
 }
 </script>
 <style scoped>
-/*@import  '../assets/css/variables.scss';
-@import  '../assets/css/userName.css';*/
 
 .head {
-  width: 100%;
-  height: 130px;
+  width:9.2rem;
+  height: 2.6667rem;
+  margin-top:0.5333rem;
+  margin-left:0.4rem;
   display: flex;
-  background: #eee;
-  justify-content: center;
-  align-items: center;
-  
+  background: #363636;
 }
 .head .left{
-  width: 80px;
-  height: 80px;
-  margin-right: 20px
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-top:0.5333rem ;
+  margin-left: 0.4rem;
+  margin-right:0.2667rem;
 }
 .head .left img {
-  width: 80px;
-  height: 80px;
+  width: 1.6rem;
+  height:1.6rem;
   border-radius: 50%;
   display: block;
+
 }
 
 .head .right {
-  height: 60px;
-  width: 250px;
-  font-size: 16px;
-  padding-top: 20px;
-  font-weight: 600;
-  color: #1f1e22;
+  height: 1.44rem;
+  width: 7.8667rem;
+  margin-top: 0.64rem;
+  margin-right: 0.4rem;
+  font-family: PingFangSC-Regular;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+  line-height: 0.6933rem;
 }
 
 .contentUser {
