@@ -200,7 +200,7 @@ export default {
             
         },
         codePromise(){ // 验证码提交
-            api.myGet("users",{id:3,reCredNum:this.reCredNum}) 
+            api.myGet("users",{id:1,reCredNum:this.reCredNum}) 
                .then(res => {
                    // console.log(res[0].id)
                     if(res[0].id == 1){  // 跳转到 userName
