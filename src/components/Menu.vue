@@ -11,9 +11,9 @@
     </div>
     <!--  content  -->
     <div class="content">
-      <p class="tip" v-show="tip">无小黑板账号请输入手机号</p>
+      <p class="tip" v-show="tip">无晓黑板账号请输入手机号</p>
       <p class="telError"  v-show="isRightNumber">
-        <span class="telPhone" @click="rightNumberTip" v-show="isRightNumber"></span>
+        <span class="telPhone" @click="rightNumberTip" v-show="isRightNumber"><img src="/static/images/warn.png" alt="!"></span>
         <span class="rightPhone">请输入正确的手机号码</span>
       </p>
     
@@ -284,17 +284,19 @@ button{
   top: 1.6rem;
 }
 
-.content .telError .telPhone {
-
+.content .telPhone {
   display: inline-block;
-  font-size: 0.2133rem;
   width: 0.2667rem;
   height: 0.2667rem;
   text-align: center;
-  border-radius: 50%;
   color: #000;
-  background-size: 0.2667rem 0.2667rem;
-  background: url(../../static/images/warn.png);
+  /*background-size: 0.1333rem;*/
+  /*background: url('../../static/images/warn.png') no-repeat center;*/
+}
+.telPhone img{
+  display: block;
+  width: 0.2667rem;
+  height: 0.2667rem;
 }
 
 .content .telError .rightPhone {

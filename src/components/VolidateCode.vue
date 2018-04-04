@@ -24,7 +24,7 @@
             <div v-show="!listenCode" class="listencode"></div>
 
             <p class="telError"  v-if="isShowCode">
-                <span class="telPhone" @click="clearCode" v-if="isShowCode"></span>
+                <span class="telPhone" @click="clearCode" v-if="isShowCode"><img src="/static/images/warn.png" alt="!"></span>
                 <span class="rightPhone">验证码错误</span>
             </p>
             <span class="volidateNum"  v-show="isTimer">{{ time }} s</span>
@@ -142,6 +142,8 @@ export default {
         
         regetNum(){ // 重新获取短信验证码
             this.reNum = false;
+            this.YZM = true;
+            this.ListenYzm = false;
             api.myGet("users",{id:'1'})
     				   .then(res => {
                     this.ShowNumber();
@@ -182,7 +184,7 @@ export default {
         clear(){   
             // 语音验证码  点击取消  弹窗
             this.isCodeFailShow = false; 
-            this.reNum = false; 
+            //this.reNum = false; 
         },
         know(){  // 请求语音验证码 点击 好的 
             api.myGet("users",{id:'1'}) // 点击 好的  语音验证码请求数据返回成功  
@@ -200,7 +202,7 @@ export default {
             
         },
         codePromise(){ // 验证码提交
-            api.myGet("users",{id:3,reCredNum:this.reCredNum}) 
+            api.myGet("users",{id:1,reCredNum:this.reCredNum}) 
                .then(res => {
                    // console.log(res[0].id)
                     if(res[0].id == 1){  // 跳转到 userName
@@ -391,17 +393,21 @@ export default {
   left: 0.3333rem;
 }
 
-.content .telError .telPhone {
+.content .telPhone {
     width: 0.2667rem;
     height: 0.2667rem;
-    display: inline-block;
-    line-height: 0.3733rem;
     margin-top: 0.2667rem;
     margin-left: -0.4rem;
     color: #FF6688 ;
-    background-size: 0.2667rem  0.2667rem;
-    background: url('../../static/images/warn.png');
-    border-radius: 50%;
+    display: inline-block;
+    /*background-size: 0.2667rem  0.2667rem;*/
+    /*background: url('../../static/images/warn.png');*/
+    /*border-radius: 50%;*/
+}
+.telPhone img{
+  display: block;
+  width: 0.2667rem;
+  height: 0.2667rem;
 }
 
 .content .telError .rightPhone {
