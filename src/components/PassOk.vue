@@ -1,86 +1,159 @@
 <template>
     <div id="passOk">
+        <div v-if="isIOS" class="ios">
         <div class="content" slot="header">
-            <p class="title">恭喜成为校园认证用户</p>
-            <p class="share">现在您可以免费享受「小黑板」提供的增值信息服务</p>
+            <p class="p-img"><img src="/static/images/v.png" alt=""></p>
+            <p class="title">恭喜您成为校园认证用户</p>
+            <p class="title1">现在起您可以免费享受【晓黑板】提供的增值服务</p>
         </div>
         <div class="footer">
-            <div class="btn" @click="openSmallDesk">打开小黑板</div>
+            <div class="btn" @click="openSmallDesk">打开晓黑板</div>
         </div>
-        <slot></slot>
+      </div>
+      <div v-if="isAND" class="android">
+        <div class="content2">
+            <p class="p-img"><img src="/static/images/v.png" alt=""></p>
+            <p class="title">恭喜您成为校园认证用户</p>
+            <p class="title1">现在起您可以免费享受【晓黑板】提供的增值服务</p>
+        </div>
+        <div class="footer2">
+            <div class="btn" @click="openSmallDesk">打开晓黑板</div>
+        </div>
+        <div class="img">
+            <p><span class="line1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>找对方法，下载更快捷<span class="line2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+            <img src="/static/images/android.png" alt="">
+        </div>
+      </div>
   </div>
 </template>
 <script>
 export default {
     name:'passOK',
     data(){
-        return {
-
+        return{
+          isIOS: true,
+          isAND: false
         }
     },
     methods:{
         openSmallDesk(){
-            alert("小黑板")
+            // 打开晓黑板
+            alert("打开晓黑板")
         }
     },
-    mounted(){
-        document.title = '认证成功'
+    created() {
+        document.title = "反馈成功"
+    },
+    mounted() {
+      //判断手机类型
+      var ua = navigator.userAgent.toLowerCase();
+
+      if(/android/.test(ua)){
+          console.log('android...');
+          this.isAND = true;
+          this.isIOS = false;
+        }
+
+      if(/iphone|ipad|ipod/.test(ua)){
+          console.log('ios...');
+          this.isIOS = true;
+          this.isAND = false;
+        }
     }
 }
 </script>
 
 <style scoped>
-/*@import  '../assets/css/variables.scss';
-@import  '../assets/css/PassOk.css';*/
-
-
 #passOk {
   width: 100%;
   height: 100%;
-  line-height: 100%;
   box-sizing: border-box;
 }
-
-#passOk .content {
+.content {
   width: 100%;
   height: 100%;
-  padding-top: 50%;
-  font-size: 20px;
-  text-align: center;
-  letter-spacing: 2px;
-  font-family: "微软雅黑";
 }
-
-#passOk .content .share {
-  font-size: 14px;
-  letter-spacing: normal;
-  color: #ccc;
+.content2{
+  width: 100%;
+  height: 100%;
 }
-
-#passOk .footer {
-  margin-top: 50%;
+.btn {
+  width: 9.2rem;
+  height: 1.28rem;
+  font-size: 0.4533rem;
+  line-height: 1.28rem;
+  border-radius: 0.0533rem;
+  margin: 0 auto;
+  color: #000000;
+  background: #F8E71C;
+  text-align: center;
+  font-family: PingFangSC-Regular;
 }
-
-#passOk .footer .footerTip {
-  font-size: 14px;
-  letter-spacing: 1.5px;
-  margin-bottom: -5px;
+.img{
   text-align: center;
-  color: #666;
 }
-
-#passOk .footer .btn {
-  font-size: 20px;
-  line-height: 40px;
+.img p{
+  color: #AAAAAA;
+  font-size: 0.3733rem;
+  line-height: 0.3733rem;
+  margin: 0.8rem 0 0.8rem 0;
+  font-family: PingFangSC-Light;
+}
+.img img{
+  width: 8.5867rem;
+  height: 5.2533rem;
+}
+.p-img{
   text-align: center;
-  color: #fff;
-  width: 80%;
-  height: 40px;
-  margin-left: 10%;
+}
+.content .p-img img{
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-top: 2.4rem;
+  margin-bottom: 0.4rem;
+}
+.content2 .p-img img{
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-top: 0.8rem;
+  margin-bottom: 0.4rem;
+}
+.title{
+  color: #FFFFFF;
+  font-size: 0.5333rem;
+  line-height: 0.4533rem;
+  margin-bottom: 0.2667rem;
   text-align: center;
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 20px;
-  margin-top: 0px;
+  font-family: PingFangSC-Light;
+}
+.content .title1{
+  color: #aaa;
+  font-size: 0.3733rem;
+  line-height: 0.3733rem;
+  margin-bottom: 2.4rem;
+  text-align: center;
+  font-family: PingFangSC-Light;
+}
+.content2 .title1{
+  color: #aaa;
+  font-size: 0.3733rem;
+  line-height: 0.3733rem;
+  margin-bottom: 1.3333rem;
+  text-align: center;
+  font-family: PingFangSC-Light;
+}
+.line1,.line2{
+  color: #888;
+  width: 0.8rem;
+  line-height: 0.3733rem;
+  text-decoration: line-through;
+  display: inline-block;
+}
+.line1{
+  margin-right: 0.4rem;
+}
+.line2{
+  margin-left: 0.4rem;
 }
 
 
