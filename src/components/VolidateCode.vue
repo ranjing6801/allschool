@@ -25,7 +25,7 @@
 
             <p class="telError"  v-if="isShowCode">
                 <span class="telPhone" @click="clearCode" v-if="isShowCode">
-                  <!-- <img src="/static/images/warn.png" alt="!"> -->
+                  <img src="/static/images/warn.png" alt="!">
                 </span>
                 <span class="rightPhone">验证码错误</span>
             </p>
@@ -404,9 +404,8 @@ export default {
     margin-left: -0.4rem;
     color: #FF6688 ;
     display: inline-block;
-    background-size: 0.2667rem  0.2667rem;
-    background: url('../../static/images/warn.png');
-    /*background: url('../../static/images/icon.jpg');*/
+    /*background-size: 0.2667rem 0.2667rem;*/
+    /*background: url('../../static/images/warn.png') no-repeat center;*/
     border-radius: 50%;
 
 }
