@@ -20,6 +20,8 @@
                           <span>邀请他们进班</span>
                         </p>
                     </div>
+
+                    <img class="myimg" src="/static/images/secImg.jpg" alt="">
                 </li>
                 <!-- <li class="classList">
                     <div class="left">
@@ -66,7 +68,7 @@ export default {
             zhiwenImg:zhiwenImg,
             clNum:'班级号',
             clNumber:'460540',
-            isSave:true,
+            isSave:false,
             // saveTitle:'确认已保存',
             // saveContent:'请确保您已保存二维码,将用于发送给家长,邀请他们进班'
             // // saveTip:'将用于发送给家长,邀请他们进班',
@@ -237,7 +239,16 @@ export default {
   top: 4.8267rem;
   left: 0;
 }
-
+.classList{
+  position: relative;
+}
+.myimg{
+  position: absolute;
+  right: 0.8rem;
+  top: 0.5rem;
+  opacity: 0.01;
+  z-index: 9;
+}
 
 
 </style>
