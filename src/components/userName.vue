@@ -10,7 +10,7 @@
         </div>
     </div>
     <div class="contentUser">
-        <input maxlength="20" placeholder="请输入您的姓名" type="text" v-model="userName" v-on:input="userNameFocus">
+        <input maxlength="20" placeholder="请输入您的姓名" type="text" v-model="userName" v-on:input="userNameFocus"  class="user" >
         <button class="refer" id="referName" :disabled="dis" @click="NamePromise" >提交</button>
     </div>
 </div>
@@ -57,7 +57,7 @@ export default {
         },
         NamePromise(){ // 姓名验证 
             // var url = '/h5/index/';
-            api.myGet("users",{id:1})
+            api.myGet("users",{id:6})
                .then( res => {
                 //    console.log(res)
                 //    console.log(res[0].id)
@@ -84,7 +84,7 @@ export default {
                         this.$router.push({path:'/NewAuthenticationOk',query:{}})
                    }
 
-            //  是班主任       
+    //  是班主任       
                    if(res[0].id == 6){  // 姓名存在 是班主任
                         if(res[0].username == "Leopoldo_Corker y"){  // 1. 无班级,自动创建班级并认证
                             this.$router.push({path:'/CLNewTeacher',query:{}}) 
@@ -117,201 +117,89 @@ export default {
 }
 </script>
 <style scoped>
-/*@import  '../assets/css/variables.scss';
-@import  '../assets/css/userName.css';*/
 
 .head {
-  width: 100%;
-  height: 130px;
+  width:9.2rem;
+  height: 2.6667rem;
+  margin-top:0.5333rem;
+  margin-left:0.4rem;
   display: flex;
-  background: #eee;
-  justify-content: center;
-  align-items: center;
-  
+  background: #363636;
 }
 .head .left{
-  width: 80px;
-  height: 80px;
-  margin-right: 20px
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-top:0.5333rem ;
+  margin-left: 0.4rem;
+  margin-right:0.2667rem;
 }
 .head .left img {
-  width: 80px;
-  height: 80px;
+  width: 1.6rem;
+  height:1.6rem;
   border-radius: 50%;
   display: block;
+
 }
 
 .head .right {
-  height: 60px;
-  width: 250px;
-  font-size: 16px;
-  padding-top: 20px;
-  font-weight: 600;
-  color: #1f1e22;
+  height: 1.44rem;
+  width: 7.8667rem;
+  margin-top: 0.64rem;
+  margin-right: 0.4rem;
+  font-family: PingFangSC-Regular;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+  line-height: 0.6933rem;
+  text-indent: -0.1067rem;
 }
 
 .contentUser {
-  margin: 10px 10px 10px 10px;
-  padding: 20px 20px 20px 20px;
+  width: 9.2rem;
+  margin-top:0.5333rem;
+  margin-left:0.4rem;
   box-sizing: border-box;
   position: relative;
 }
-input{
+
+.user{
+  font-family: PingFangSC-Light;
+  margin-top: 0.9333rem;
+  width: 8.9333rem;
+  height: 1.44rem;
+  font-size: 0.4533rem;
+  line-height: 0.4533rem;
+  text-indent:  0.1333rem;
   outline: none;
   border: none;
-}
-.contentUser input{
-  width: 98%;
-  height: 38px;
-  font-size: 16px;
-  line-height: 38px;
-  color: #333;
-  border-bottom: 1px solid #666;
-}
-.contentUser button{
-  font-size: 17px;
-  line-height: 36px;
-  text-align: center;
-  color: #666;
-  width: 98%;
-  height: 36px;
-  margin: 0 auto;
-  text-align: center;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 20px;
-}
+  color: #fff;
+  background: #2b2b2b;
+  border-bottom:  0.0267rem solid #555555;
 
-.contentUser p {
-  font-size: 14px;
-  color: #ccc;
-  margin-bottom: 30px;
 }
 
 .contentUser input::-webkit-input-placeholder {
-  color: #ccc;
-}
-
-.contentUser .volidateNum {
-  position: absolute;
-  top: 70px;
-  right: 25px;
-  font-size: 12px;
-  color: #ccc;
-}
-
-.contentUser #referCode {
-  margin-top: 60px;
-  border-radius: 25px;
-  background: rgba(0, 0, 0, 0.1);
-  color: orangered;
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  color: #555555;
+  line-height: 0.4533rem;
 }
 
 .contentUser .refer {
-  width: 100%;
-  height: 40px;
-  font-size: 16px;
-  margin-top: 60px;
-  border-radius: 25px;
-  border: 1px solid #ccc;
-  background: #fff;
-  color: #ccc;
+  width: 9.2rem;
+  height: 1.28rem;
+  margin-top: 1.6rem;
+  text-align: center;
+  font-family: PingFangSC-Regular;
+  font-size: 0.4533rem;
+  color: #000000;
+  background: #888888;
+  border-radius: 0.0533rem;
+  line-height: 0.4533rem;
+  border: none;
 }
 .contentUser .active{
-  border: 1px solid #333;
-  background: #333;
-  color: #fff;
+  background: #F8E71C;
 }
-
-.contentUser .listencode {
-  font-size: 13px;
-  color: #ccc;
-  text-align: right;
-}
-
-.contentUser .listencode .getListen {
-  position: relative;
-  color: rgba(0, 0, 0, 0.6);
-  font-size: 13px;
-  font-weight: bold;
-}
-
-.contentUser .telError {
-  position: absolute;
-  z-index: 10;
-  top: 105px;
-  left: 25px;
-}
-
-.contentUser .telError .telPhone {
-  display: inline-block;
-  font-size: 16px;
-  width: 14px;
-  height: 14px;
-  line-height: 14px;
-  text-align: center;
-  border-radius: 50%;
-  color: #fff;
-  background: rgba(0, 0, 0, 0.5);
-}
-
-.contentUser .telError .rightPhone {
-  font-size: 12px;
-  color: #666;
-}
-
-.modalShow {
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-}
-
-.modalShow .modal {
-  width: 90%;
-  height: 45%;
-  margin-left: 5%;
-  margin-right: 5%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  background: #fff;
-}
-
-.codeFail {
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-}
-
-.codeFail .fail {
-  width: 80%;
-  height: 40%;
-  margin-left: 10%;
-  margin-right: 10%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  background: #fff;
-}
-
 
 </style>
 

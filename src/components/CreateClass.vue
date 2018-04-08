@@ -36,7 +36,7 @@
 
 <script>
 import secImg from  '../../static/images/secImg.jpg'
-import zhiwenImg from  '../../static/images/time.png'
+import zhiwenImg from  '../../static/images/zhiwen.png'
 import CLcreateOkModal from './CLcreateOkModal'
 
 export default {

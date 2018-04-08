@@ -14,12 +14,15 @@
           <div class="title">
               <p class="className">
                 <span class="classTitle">{{ teamName}} </span>
-
-                <span class="num">({{ classNum }}人)</span>
               </p>
+
               <p class="classNumber">
-                  <span>班级号:</span> <span>{{ banjiNumber }}</span>
-                  <span>创建者:</span> <span>{{ banjichuangjianzhe }}</span>
+                  <span class="classNum common"></span> 
+                  <span class="banjiNumber">{{ banjiNumber }}</span>
+                  <span class="classCreater common"></span> 
+                  <span>{{ banjichuangjianzhe }}</span>
+                  <span class="classMembers common"></span>
+                  <span>{{ Members }}</span>
               </p>
           </div> 
         </div> 
@@ -69,7 +72,7 @@ export default {
             teamName:'阳光中队',  // 班级名称
             banjiNumber:'123654',   // 班级号
             banjichuangjianzhe:'王姐姐',   //  班级创建者 如果不知道真实姓名下展示小黑板账号
-            classNum:32  ,  // 班级中的人数
+            Members:32  ,  // 班级中的人数
             dis:true,    // 按钮disabled属性
             isReCertificationShow:false,  // 重新认证 班级已经被人认证了  顶替弹窗
             accountTile:'重新验证该班级',
@@ -143,16 +146,14 @@ export default {
 
 
 <style scoped>
-/*@import  '../assets/css/variables.scss';
-@import  '../assets/css/getClass.css';*/
 
 #getClass .checkList {
-  background: rgba(0, 0, 0, 0.1);
-  height: 100px;
-  line-height: 100px;
-  margin-bottom: 10px;
-  list-style: none;
-  width: 100%;
+  width: 9.2rem;
+  height: 1.8667rem;
+  background: #363636;
+  border-radius: 0.0533rem;
+  margin-left: 0.4rem;
+  margin-top: 0.5333rem;
   position: relative;
 }
 
@@ -175,34 +176,33 @@ export default {
   -webkit-align-items: center;
   -ms-flex-align: center;
   display: block;
-  line-height: 100px;
+/*  line-height: 100px;
   text-align: center;
   width: 50px;
-  height: 100px;
-  background: red;
+  height: 100px;*/
+  /* background: red; */
 }
 
 .checkbox-group input[type=radio]+label:before {
-  line-height: 20px;
+  width: 0.64rem;
+  height: 0.64rem;
   display: inline-block;
-  width: 18px;
-  height: 18px;
-  margin-right: 8px;
+  line-height: 0.64rem;
   content: '';
-  color: #fff;
-  border: 1px solid #dce4e6;
-  background-color: #f3f6f8;
+  background: rgba(43,43,43,0.30);
+  margin-left: 0.4rem;
+  margin-right: 0.2667rem;
+  margin-top: 0.64rem;
+  color: #000;
+  border: 1px solid #FFFFFF;
   border-radius: 50%;
 }
 
 .checkbox-group input[type=radio]:checked+label:before {
-  content: '\2713';
-  color: #fff;
-  background-color: #31b968;
+  content: '';
+  background:url('../../static/images/radio.png') no-repeat center;
+  background-size: 0.64rem 0.64rem;
   border-radius: 50%;
-  font-size: 16px;
-  text-align: center;
-  border-color: #31b968;
 }
 
 
@@ -262,24 +262,28 @@ export default {
   top: 0px;
   right: 0;
   height: 100px;
-  background: #ccc;
-  width: calc(100% - 50px);
-  margin-left: 50px;
+  /*background: #ccc;*/
+  /*width: 300px;*/
+  margin-left: 0.1333rem;
 }
 
 #getClass .checkList .right .logo {
-  width: 50px;
-  height: 100px;
-  background: lime;
+  width: 1.3333rem;
+  height: 1.3333rem;
+  border-radius: 0.2667rem;
+  margin-top: 0.2667rem;
+  margin-right: 6.56rem;
+  background: url('../../static/images/logo.jpg');
 }
 
 #getClass .checkList .right .title {
-  font-size: 18px;
-  height: 100px;
-  width: calc(100% - 50px);
+  font-family: PingFangSC-Regular;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+  line-height: 0.4533rem;
   position: absolute;
-  top: 0px;
-  left: 60px;
+  top: 0;
+  right: 1.0933rem;
 }
 
 #getClass .checkList .right .title .className {
@@ -289,20 +293,59 @@ export default {
 }
 
 #getClass .checkList .right .title .className .classTitle {
-  font-size: 16px;
+  display: inline-block;
+  font-family: PingFangSC-Regular;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+  line-height: 0.4533rem;
+  margin-top: 0.3733rem;
+
 }
 
-#getClass .checkList .right .title .className .num {
+/*#getClass .checkList .right .title .className .num {
   color: #666;
   font-size: 16px;
+}*/
+.classNumber {
+  margin-top: 0.2667rem;
+}
+.banjiNumber{
+  margin-left: 0.1333rem;
+}
+#getClass .checkList .right .title .classNumber span {
+  font-family: PingFangSC-Light;
+  font-size: 0.3733rem;
+  color: #888888;
+  line-height: 0.3733rem;
+  margin-top: 0.2667rem;
+}
+.classNumber span:nth-child(1){
+  /*display: inline-block;*/
+  /*background: red;*/
+  /*margin-right:0.2667rem;*/
+}
+.common {
+  height: 0.2667rem;
+  width: 0.2667rem;
+  font-family: PingFangSC-Light;
+  font-size: 0.3733rem;
+  color: #888888;
+  line-height: 0.4267rem;
+  display: inline-block;
+  background-size: 0.2667rem 0.2667rem;
+  /*margin-right:0.1067rem*/
+}
+.classNum {
+  
+  background: url('../../static/images/classNum.png') no-repeat center;
+}
+.classCreater {
+  background: url('../../static/images/classCreater.png') no-repeat center;
+}
+.classMembers {
+  background: url('../../static/images/classMembers.png') no-repeat center;
 }
 
-#getClass .checkList .right .title .classNumber {
-  font-size: 14px;
-  color: #fff;
-  height: 50px;
-  line-height: 25px;
-}
 
 #getClass .checkList .right .title span {
   font-size: 14px;

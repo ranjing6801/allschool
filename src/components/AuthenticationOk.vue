@@ -40,8 +40,8 @@ export default {
     },
     methods:{
         openSmallDesk(){
-            // 打开小黑板
-            alert("打开小黑板")
+            // 打开晓黑板
+            alert("打开晓黑板")
         }
     },
     created() {
