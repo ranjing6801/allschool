@@ -5,20 +5,23 @@
             <ul >
                 <li class="classList">
                     <div class="left">
-                        <p >{{clName}} </p>
-                        
+                        <!-- <p >{{clName}} </p> -->
                             <img :src="secImg">
-                        
-                        <p class="bot">{{clNum}}: {{clNumber}}</p>
+                            <!-- <div class="line"></div> -->
+                        <!-- <p class="bot">{{clNum}}: {{clNumber}}</p> -->
                     </div>
+                  
+
                     <div class="right">
                         <img :src="zhiwenImg" alt="">
                         <p class="save">长按保存二维码</p>
-                        <p class="saveSecond">用于发送给家长</p>
-                        <p class="last">邀请他们进班</p>
+                        <p class="saveSecond">
+                          <span>用于发送给家长</span>
+                          <span>邀请他们进班</span>
+                        </p>
                     </div>
                 </li>
-                <li class="classList">
+                <!-- <li class="classList">
                     <div class="left">
                         <p >{{clName}} </p>
                         
@@ -32,7 +35,7 @@
                         <p class="saveSecond">用于发送给家长</p>
                         <p class="last">邀请他们进班</p>
                     </div>
-                </li>
+                </li> -->
             </ul>
         </div>
 
@@ -49,7 +52,7 @@
 
 <script>
     import secImg from  '../../static/images/secImg.jpg'
-    import zhiwenImg from  '../../static/images/time.png'
+    import zhiwenImg from  '../../static/images/zhiwen.png'
     import saveModal from './saveModal'
 export default {
     name:'CLNewTeacher',
@@ -100,10 +103,10 @@ export default {
   
 }
 
-#CLNewTeacher .classContent .title {
+/*#CLNewTeacher .classContent .title {
   padding-left: 30px;
   margin-bottom: 10px;
-}
+}*/
 
 #CLNewTeacher .classContent .classList {
   margin-bottom: 20px;
@@ -114,60 +117,83 @@ export default {
   margin-top: 0.5333rem;
   margin-left: 0.4rem;
   margin-bottom: 0.5333rem;
+  position: relative;
 }
 
 #CLNewTeacher .classContent .classList .left {
-  width: 44%;
-  float: left;
-  padding-left: 40px;
+  width: 9.2rem;
+  height: 4.7467rem;
+  position: absolute;
+  z-index: 5;
+
+
 }
 
 #CLNewTeacher .classContent .classList .left img {
-  width: 65%;
-  height: 100%;
+  height: 3.6267rem;
+  width: 2.6667rem;
   display: block;
-  margin-top: 5px;
-  margin-right: 10%;
-  padding-right: 50px;
-  border-right: 1px solid #ddd;
+  padding-top: 0.5067rem;
+  margin-left: 0.96rem;
 }
 
-#CLNewTeacher .classContent .classList .left p {
+.line {
+    height: 2.6667rem;
+    width: 0.0267rem;
+    display: block;
+    position: absolute;
+    top: 1.04rem;
+    left: 4.5867rem;
+    background: #F8F8F8;
+}
+/*#CLNewTeacher .classContent .classList .left p {
   font-size: 16px;
   font-weight: 600;
   margin-top: 10px;
   padding-left: 10px;
-}
+}*/
 
-#CLNewTeacher .classContent .classList .left .bot {
+/*#CLNewTeacher .classContent .classList .left .bot {
   margin-bottom: 10px;
 }
-
+*/
 #CLNewTeacher .classContent .classList .right {
-  float: left;
-  width: 40%;
-  margin-top: 10px;
-  margin-left: 10px;
-  color: #ccc;
+  width: 9.2rem;
+  height: 4.7467rem;
+  /*background: #ccc;*/
 }
 
 #CLNewTeacher .classContent .classList .right img {
-  width: 50%;
-  height: 75%;
-  padding-left: 8%;
+  width: 1.2533rem;
+  height: 1.3333rem;
+  padding-left: 6.2667rem;
+  padding-top: 0.9333rem;
   display: block;
-  margin-left: 20%;
+
 }
 
 #CLNewTeacher .classContent .classList .right .save {
-  font-size: 14px;
-  margin-top: 10px;
+  font-family: PingFangSC-Light;
+  font-size: 0.3733rem;
+  color: #000000;
+  line-height: 0.3733rem;
   text-align: center;
+  margin-left: 5.6rem;
+  margin-top: 0.2667rem;
+  width: 2.6133rem;
+  height: 0.3733rem;
 }
 
 #CLNewTeacher .classContent .classList .right .saveSecond {
-  font-size: 12px;
+  width: 1.8667rem;
+  height: 0.7467rem;
   text-align: center;
+  margin-left: 5.9733rem;
+  margin-top: 0.16rem;
+  font-family: PingFangSC-Light;
+  font-size: 0.2667rem;
+  color: #AAAAAA;
+  line-height: 0.3733rem;
 }
 
 #CLNewTeacher .classContent .classList .right .last {
@@ -199,6 +225,7 @@ export default {
   right: 0;
   bottom: 0;
   margin: auto;
+  z-index: 100;
 }
 
 #CLNewTeacher .modalShow .modal {

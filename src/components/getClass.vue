@@ -201,6 +201,7 @@ export default {
 .checkbox-group input[type=radio]:checked+label:before {
   content: '';
   background:url('../../static/images/radio.png') no-repeat center;
+  background-size: 0.64rem 0.64rem;
   border-radius: 50%;
 }
 

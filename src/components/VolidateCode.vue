@@ -21,10 +21,12 @@
                 <span  v-show="listenCode" class="getListen" @click="getListenCode">接听语音验证码</span>
             </p>
             <!--  div  占位符 -->
-            <!-- <div v-show="!listenCode" class="listencode"></div> -->
+            <div v-show="!listenCode" class="listencode"></div>
 
             <p class="telError"  v-if="isShowCode">
-                <span class="telPhone" @click="clearCode" v-if="isShowCode"><img src="/static/images/warn.png" alt="!"></span>
+                <span class="telPhone" @click="clearCode" v-if="isShowCode">
+                  <!-- <img src="/static/images/warn.png" alt="!"> -->
+                </span>
                 <span class="rightPhone">验证码错误</span>
             </p>
             <span class="volidateNum"  v-show="isTimer">{{ time }} s</span>
@@ -202,7 +204,7 @@ export default {
             
         },
         codePromise(){ // 验证码提交
-            api.myGet("users",{id:2,reCredNum:this.reCredNum}) 
+            api.myGet("users",{id:1,reCredNum:this.reCredNum}) 
                .then(res => {
                    // console.log(res[0].id)
                     if(res[0].id == 1){  // 跳转到 userName
@@ -286,7 +288,6 @@ export default {
 
 .content {
   width: 9.2rem;
-  margin-top:0.5333rem;
   margin-left:0.4rem;
   box-sizing: border-box;
   position: relative;
@@ -346,7 +347,7 @@ export default {
     line-height: 0.4533rem;
     background: #888888;
     border-radius: 0.0533rem;
-    margin-top: 1.0133rem;
+    margin-top: 0.7467rem;
 }
 .content .referBtn{
   background: #F8E71C;
@@ -388,18 +389,12 @@ export default {
 }
 
 .content .telError {
-  float: left;
-  margin-top: 0.2667rem;
+  /*float: left;
+  margin-top: 0.2667rem;*/
+  position: absolute;
+  top:1.6rem;
   line-height: 0.5333rem;
   margin-left: 0.333rem;
-}
-.telError::after{
-  display: block;
-  content: '.';
-  height: 0;
-  visibility: hidden;
-  overflow: hidden;
-  clear: both;
 }
 
 .content .telPhone {
@@ -409,9 +404,11 @@ export default {
     margin-left: -0.4rem;
     color: #FF6688 ;
     display: inline-block;
-    /*background-size: 0.2667rem  0.2667rem;*/
-    /*background: url('../../static/images/warn.png');*/
-    /*border-radius: 50%;*/
+    background-size: 0.2667rem  0.2667rem;
+    background: url('../../static/images/warn.png');
+    /*background: url('../../static/images/icon.jpg');*/
+    border-radius: 50%;
+
 }
 .telPhone img{
   display: block;
