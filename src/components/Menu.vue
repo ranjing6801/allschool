@@ -15,10 +15,10 @@
       <input @keyup="tel" type="tel" placeholder="请输入晓黑板账号 / 手机号"  v-model="phone"
                v-on:input="focus" class="input"  maxlength=13 />
 
-      <p class="telError"  v-show="isRightNumber">
-        <span class="telPhone" @click="rightNumberTip" v-show="isRightNumber"><img src="/static/images/warn.png" alt="!"></span>
+      <div class="telError" :class="isRightNumber?'':'hidden'">
+        <img src="/static/images/warn.png" alt="!" />
         <span class="rightPhone">请输入正确的手机号码</span>
-      </p>
+      </div>
                
       <span class="telePhone" @click="clearTel" v-if="telNum"></span>
       <button :class="!btn?'referBtn':''" class="refer"  :disabled="btn" @click="telPromise" >提交</button>
@@ -227,7 +227,7 @@ button{
   border: none;
   color: #fff;
   background: #2b2b2b;
-  border-bottom: 0.0267rem solid #555555;
+  border-bottom: 1px solid #555555;
   border-radius: 0;
 }
 
@@ -246,10 +246,10 @@ button{
     border-radius: 50%;
 }
 .content .hot{
-  border-bottom: 0.0267rem solid #AAAAAA;
+  border-bottom: 1px solid #AAAAAA;
 }
 .content .red{
-  border-bottom: 0.0267rem solid #FF6688;
+  border-bottom: 1px solid #FF6688;
 }
 
 .content input::-webkit-input-placeholder {
@@ -270,8 +270,7 @@ button{
   line-height: 0.4533rem;
   background: #888888;
   border-radius: 0.0533rem;
-  margin-top: 1.6rem;
-
+  margin-top: 1.0133rem;
 }
 
 .content .referBtn{
@@ -279,26 +278,18 @@ button{
 }
 
 .content .telError {
-  float: left;
   margin-top: 0.2667rem;
-  line-height: 0.5333rem;
+  display: flex;
+  align-items: center;
 }
-
-.content .telPhone {
-  display: inline-block;
+.hidden{
+  opacity: 0.01;
+}
+.telError img{
   width: 0.2667rem;
   height: 0.2667rem;
-  text-align: center;
-  color: #000;
-  border-radius: 50%;
-  /*background-size: 0.1333rem;*/
-  /*background: url('../../static/images/warn.png') no-repeat center;*/
-}
-.telPhone img{
-  float: left;
-  display: block;
-  width: 0.2667rem;
-  height: 0.2667rem;
+  margin-right: 0.1333rem;
+  vertical-align: middle;
 }
 
 .content .telError .rightPhone {
