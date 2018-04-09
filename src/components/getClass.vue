@@ -1,7 +1,27 @@
 <template>
   <div id="getClass">
+
     <ul>
-      <li class="checkList" v-for='option in options' :key="option.index">
+      <li v-for="data in dataList" :key="data.index" class="dataList">
+          <div class="vipLogo">
+            <img src="../../static/images/vip.png" >
+          </div>
+
+          <div class="teamClass">
+            <p class="teamTitle">一年级8班 已对应</p>
+            <p class="sun">阳光8队</p>
+          </div>
+
+          <div class="cancle" @click="cancle">
+            <img src="../../static/images/cancle.png">
+          </div>
+      </li>
+    </ul>
+
+
+    <!--  班级列表页 -->
+    <ul>
+      <li class="checkList" v-for='(option,index) in options' :key="option.index">
         <div class="checkbox-group ">
           <input type="radio" :id="option.name" name="classChoose" :value="option.name" 
                      v-model="team"  @change="change" />
@@ -9,18 +29,17 @@
         </div>
         <div class="right">
           <div class="logo">
-              <img src="" alt="">
+              <img src="../../static/images/logo.jpg" alt="">
           </div>
           <div class="title">
               <p class="className">
-                <span class="classTitle">{{ teamName}} </span>
+                <span class="classTitle">{{ teamName }}--{{index}} </span>
               </p>
-
               <p class="classNumber">
                   <span class="classNum common"></span> 
                   <span class="banjiNumber">{{ banjiNumber }}</span>
                   <span class="classCreater common"></span> 
-                  <span>{{ banjichuangjianzhe }}</span>
+                  <span class="created">{{ banjichuangjianzhe }}</span>
                   <span class="classMembers common"></span>
                   <span>{{ Members }}</span>
               </p>
@@ -28,18 +47,22 @@
         </div> 
       </li>
     </ul>
+
+    <!--  创建班级去认证 -->
     <ul>
-      <li class="creatClass">
-          <div id="Clcreateclass">
+      <li class="checkList">
+          <div class="checkbox-group">
               <input type="radio" name="classChoose" id="create" v-model="team">
               <label for="create"></label>
           </div>
-          <div class="rightClass" >
-              <label for="create" class="create">创建新班级认证</label>
+          <div class="textCreate" >
+              <label for="create" class="createClass">创建新班级认证</label>
           </div>
       </li>
     </ul> 
+    
 
+    <!--  顶替弹窗 -->
     <div class="modalShow" v-if="isReCertificationShow" @click="ReCertificationShow" >
         <div class="modal">
             <ReCertification :accountTile="accountTile" :classTitle="classTitle" 
@@ -48,11 +71,13 @@
             </ReCertification>
         </div>
     </div>
-    <mt-button id="referClass" :disabled="dis" size="large" @click="getClassPromise" >确认</mt-button>
+
+    <button class="referClass" :disabled="dis"  @click="getClassPromise" >确认</button>
     </div>
 </template>
 <script>
 import axios from 'axios'
+import $ from 'jquery'
 import api from '../api/api'
 import ReCertification from './ReCertification'
 
@@ -78,7 +103,10 @@ export default {
             accountTile:'重新验证该班级',
             classTitle:'一年级二班',
             classUser:'王宇娟' ,
-            accountReplace:'您是否要顶替Ta,成为该班级班主任'
+            accountReplace:'您是否要顶替Ta,成为该班级班主任',
+            dataList:[
+              {name:'一年级8班',team:'阳光八队'}
+            ]
         }
     },
     methods:{
@@ -92,18 +120,18 @@ export default {
                 3.第三种情况，就是 班级认证完了，创建班级 
             */
             console.log('确认班级认证')
-            api.myGet("users",{id:'6'})
+            api.myGet("users",{id:6})
                 .then(res => {
                     // console.log(res)
                      // 请求接口,数据判断 
                     if(res[0].id == 6){  // 第一种情况: 如果该班级没有被其他的班主任认证    点击确认跳转到 前面 查询 班主任的列表页
-                        let data = [{
-                            name: this.$route.query.list[0].name,
-                            num:this.num,
-                            teamName:this.teamName
-                        }]
-                        console.log("data=",data)
-                        this.$router.push({name:'CLYchooseClass',params:data})    
+                        // let data = {
+                        //     name: this.$route.query.list[0].name,
+                        //     num:this.num,
+                        //     teamName:this.teamName
+                        // }
+                        // console.log("data=",data)
+                        this.$router.push({path:'/CLYchooseClass',query:{name:this.$route.query.list[0].name, num:this.$route.query.num,teamName:this.teamName}})    
                     }
 
                     if(res[0].id == 4){   // 第二种情况:如果在认证某一个班级的时候,他已经被其他老师认证过了,会提示弹窗
@@ -121,14 +149,17 @@ export default {
                 })
         },
         change(){ // 单选框change事件
-          console.log(this.team)
             if(this.team){
+              console.log("this.team=",this.team)
                 this.dis = false
-                document.querySelector("#referClass").style.background="rgba(0,0,0,0.6)"
+                $(".referClass").addClass('active')
             }
         },
         ReCertificationShow(){  // 关闭被顶替的弹窗
                this.isReCertificationShow = false
+        },
+        cancle(){
+          alert("取消已经认证过的班级,重新认证")
         }
     },
     mounted(){
@@ -139,6 +170,8 @@ export default {
          this.num = this.$route.query.num
          console.log(this.$route.query)
          console.log(this.options);
+
+         
     },
 }
 
@@ -146,6 +179,80 @@ export default {
 
 
 <style scoped>
+/* 已经认证完成的班级列表样式 start*/
+
+#getClass .dataList {
+  width: 9.2rem;
+  height: 1.8667rem;
+  background: #363636;
+  border-radius: 0.0533rem;
+  margin-top: 0.5333rem;
+  margin-left: 0.4rem;
+  position: relative;
+}
+
+#getClass .vipLogo {
+  width: 1.3067rem;
+  height: 1.8667rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+ 
+}
+
+#getClass .vipLogo img{
+  width: 0.64rem;
+  height: 0.64rem;
+  display: block;
+}
+
+#getClass .teamClass{
+  height: 1.8667rem;
+  color: #888888;
+  line-height: 0.3733rem;
+  position: absolute;
+  top: 0;
+  left: 1.3333rem;
+}
+
+#getClass .teamTitle {
+  width: 3.1467rem;
+  font-family: PingFangSC-Regular;
+  font-size: 0.3733rem;
+  color: #888888;
+  line-height: 0.4533rem;
+  margin-top: 0.3467rem;
+  margin-left: 0.2667rem;
+
+}
+
+#getClass .sun {
+  font-family: PingFangSC-Regular;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+  line-height: 0.4533rem;
+  margin-top: 0.2667rem;
+  margin-left: 0.2667rem;
+}
+
+#getClass .cancle {
+  width: 2.16rem;
+  height: 1.8667rem;
+  position: absolute;
+  top: 0;
+  right: 0.4rem;
+}
+#getClass .cancle img {
+  width: 2.16rem;
+  height: 0.64rem;
+  display: block;
+  margin-top: 0.6133rem;
+  
+
+}
+
+/* 已经认证完成的班级列表样式 end*/
+
 
 #getClass .checkList {
   width: 9.2rem;
@@ -161,8 +268,8 @@ export default {
 /* 选择班级修饰input[type=radio]*/
 
 #getClass .checkList .checkbox-group {
-  width: 50px;
-  height: 100px;
+  width: 1.3067rem;
+  height: 1.8667rem;
 }
 
 .checkbox-group input {
@@ -176,11 +283,6 @@ export default {
   -webkit-align-items: center;
   -ms-flex-align: center;
   display: block;
-/*  line-height: 100px;
-  text-align: center;
-  width: 50px;
-  height: 100px;*/
-  /* background: red; */
 }
 
 .checkbox-group input[type=radio]+label:before {
@@ -206,90 +308,48 @@ export default {
 }
 
 
-/* 创建班级修饰input[type=radio]*/
-
-#getClass .checkList #Clcreateclass {
-  width: 60px;
-  height: 70px;
-}
-
-#Clcreateclass input {
-  display: none;
-  opacity: 0;
-}
-
-#Clcreateclass input[type=radio]+label {
-  display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  -ms-flex-align: center;
-  display: block;
-  line-height: 70px;
-  text-align: center;
-  width: 50px;
-  height: 70px;
-  background: red;
-}
-
-#Clcreateclass input[type=radio]+label:before {
-  line-height: 20px;
-  display: inline-block;
-  width: 18px;
-  height: 18px;
-  margin-right: 8px;
-  content: '';
-  color: #fff;
-  border: 1px solid #dce4e6;
-  background-color: #f3f6f8;
-  border-radius: 50%;
-}
-
-#Clcreateclass input[type=radio]:checked+label:before {
-  content: '\2713';
-  color: #fff;
-  background-color: #31b968;
-  border-radius: 50%;
-  font-size: 16px;
-  text-align: center;
-  border-color: #31b968;
-}
-
-
-/* 创建班级修饰input[type=radio]*/
-
 #getClass .checkList .right {
   position: absolute;
   top: 0px;
   right: 0;
   height: 100px;
-  /*background: #ccc;*/
-  /*width: 300px;*/
+  height: 1.8667rem;
   margin-left: 0.1333rem;
 }
 
 #getClass .checkList .right .logo {
   width: 1.3333rem;
-  height: 1.3333rem;
-  border-radius: 0.2667rem;
-  margin-top: 0.2667rem;
+  height: 1.8667rem;
   margin-right: 6.56rem;
-  background: url('../../static/images/logo.jpg');
+}
+.logo img {
+    width: 1.3333rem;
+    height: 1.3333rem;
+    display: block;
+    margin-top: 0.2667rem;
+    border-radius: 0.2667rem;
 }
 
 #getClass .checkList .right .title {
+  height: 1.8667rem;
+  width: 6.2667rem;
   font-family: PingFangSC-Regular;
   font-size: 0.4533rem;
   color: #FFFFFF;
   line-height: 0.4533rem;
+  margin-left: 0.1333rem;
   position: absolute;
   top: 0;
-  right: 1.0933rem;
+  left:1.4533rem;
 }
 
 #getClass .checkList .right .title .className {
-  font-size: 18px;
-  height: 50px;
-  line-height: 75px;
+  font-family: PingFangSC-Regular;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+  line-height: 0.4533rem;
+  height: 0.4533rem;
+  margin-top: 0.3733rem;
 }
 
 #getClass .checkList .right .title .className .classTitle {
@@ -298,63 +358,46 @@ export default {
   font-size: 0.4533rem;
   color: #FFFFFF;
   line-height: 0.4533rem;
-  margin-top: 0.3733rem;
+  /*margin-top: 0.3733rem;*/
 
 }
 
-/*#getClass .checkList .right .title .className .num {
-  color: #666;
-  font-size: 16px;
-}*/
 .classNumber {
   margin-top: 0.2667rem;
+  height:0.3733rem;
 }
 .banjiNumber{
-  margin-left: 0.1333rem;
+  margin-right: 0.3467rem;
+
 }
 #getClass .checkList .right .title .classNumber span {
   font-family: PingFangSC-Light;
   font-size: 0.3733rem;
   color: #888888;
   line-height: 0.3733rem;
-  margin-top: 0.2667rem;
 }
-.classNumber span:nth-child(1){
-  /*display: inline-block;*/
-  /*background: red;*/
-  /*margin-right:0.2667rem;*/
-}
+
 .common {
-  height: 0.2667rem;
-  width: 0.2667rem;
+  height: 0.32rem;
+  width: 0.32rem;
   font-family: PingFangSC-Light;
   font-size: 0.3733rem;
   color: #888888;
-  line-height: 0.4267rem;
+  line-height: 0.3733rem;
   display: inline-block;
-  background-size: 0.2667rem 0.2667rem;
-  /*margin-right:0.1067rem*/
+  background-size: 0.32rem 0.32rem;
 }
 .classNum {
-  
   background: url('../../static/images/classNum.png') no-repeat center;
 }
 .classCreater {
   background: url('../../static/images/classCreater.png') no-repeat center;
 }
+.created {
+  margin-right: 0.4rem;
+}
 .classMembers {
   background: url('../../static/images/classMembers.png') no-repeat center;
-}
-
-
-#getClass .checkList .right .title span {
-  font-size: 14px;
-  margin-right: 10px;
-}
-
-#getClass .checkList .right .createClass {
-  font-size: 18px;
-  margin-left: 20px;
 }
 
 #getClass .creatClass {
@@ -362,38 +405,33 @@ export default {
   position: relative;
 }
 
-#getClass .creatClass .create {
-  height: 70px;
-  width: calc(100% - 50px);
-  background: #ccc;
-  position: absolute;
-  top: 0;
-  left: 50px;
-  padding-left: 20px;
-  line-height: 70px;
-  font-size: 18px;
+.createClass {
+  font-family: PingFangSC-Regular;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+  line-height: 0.4533rem;
+}
+.textCreate {
+    position: absolute;
+    left: 1.44rem;
+    top: 0.72rem;
 }
 
-
-#getClass .checkList .rightClass {
-  position: absolute;
-  top: 0;
-  left: 50px;
-  font-size: 18px;
-  padding-left: 20px;
-  line-height: 60px;
-  background: #666;
-  width: calc(100% - 50px);
-}
-
-#getClass #referClass {
-  width: 80%;
-  margin-left: 10%;
+#getClass .referClass {
+  width: 9.2rem;
+  height: 1.28rem;
+  margin-left: 0.4rem;
   position: fixed;
-  bottom: 120px;
-  border-radius: 25px;
-  background: rgba(0, 0, 0, 0.1);
-  color: orangered;
+  bottom: 0.8rem;
+  border-radius: 0.0533rem;
+  background: #AAAAAA;
+  font-family: PingFangSC-Regular;
+  font-size: 0.4533rem;
+  color: #000000;
+  line-height: 0.4533rem;
+}
+#getClass .active {
+  background: #F8E71C;
 }
 
 #getClass .modalShow {
@@ -409,17 +447,19 @@ export default {
 }
 
 #getClass .modalShow .modal {
-  width: 90%;
-  height: 45%;
-  margin-left: 5%;
-  margin-right: 5%;
+  width: 8.9333rem;
+  height: 6.16rem;
+  margin-left: 0.5333rem;
+  margin-right:0.5333rem;
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 4.48rem;
+  /*left: 0.5333rem;*/
+/*  right: 0;
   bottom: 0;
-  margin: auto;
-  background: #fff;
+  margin: auto;*/
+  background: #2B2B2B;
+  border: 0.0533rem solid #BBAB71;
+  border-radius: 0.2667rem;
 }
 
 
