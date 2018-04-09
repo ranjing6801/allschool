@@ -24,7 +24,9 @@
             <!-- <div v-show="!listenCode" class="listencode"></div> -->
 
             <p class="telError"  v-if="isShowCode">
-                <span class="telPhone" @click="clearCode" v-if="isShowCode"><img src="/static/images/warn.png" alt="!"></span>
+                <span class="telPhone" @click="clearCode" v-if="isShowCode">
+                  <img src="/static/images/warn.png" alt="!">
+                </span>
                 <span class="rightPhone">验证码错误</span>
             </p>
             <span class="volidateNum"  v-show="isTimer">{{ time }} s</span>
@@ -410,9 +412,10 @@ export default {
     margin-left: -0.4rem;
     color: #FF6688 ;
     display: inline-block;
-    /*background-size: 0.2667rem  0.2667rem;*/
-    /*background: url('../../static/images/warn.png');*/
-    /*border-radius: 50%;*/
+    /*background-size: 0.2667rem 0.2667rem;*/
+    /*background: url('../../static/images/warn.png') no-repeat center;*/
+    border-radius: 50%;
+
 }
 .telPhone img{
   display: block;

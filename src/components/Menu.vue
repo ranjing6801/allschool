@@ -288,7 +288,6 @@ button{
   display: inline-block;
   width: 0.2667rem;
   height: 0.2667rem;
-  margin: 0 0.0533rem 0 0;
   text-align: center;
   color: #000;
   border-radius: 50%;
@@ -300,12 +299,12 @@ button{
   display: block;
   width: 0.2667rem;
   height: 0.2667rem;
-  margin-top: 0.0267rem;
 }
 
 .content .telError .rightPhone {
   font-size: 0.32rem;
   color: #FF6688;
+  margin-left: 0.0533rem;
 }
 
 /* 验证码错误弹窗*/
