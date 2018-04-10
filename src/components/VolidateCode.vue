@@ -16,19 +16,19 @@
                     @keyup="codeNumber" v-on:input="reCredNumFocus" />
 
             <span class="volidateNum" @click="regetNum" v-if="reNum">重发短信验证码</span>
-
-            <p v-show="listenCode" class="listencode">收不到验证码?
+            
+            <div class="box">
+              <div class="telError" :class="isShowCode?'':'hidden'">
+                <img src="/static/images/warn.png" alt="!">
+                <span class="rightPhone">验证码错误</span>
+              </div>
+              <div v-show="listenCode" class="listencode">收不到验证码?
                 <span  v-show="listenCode" class="getListen" @click="getListenCode">接听语音验证码</span>
-            </p>
+              </div>
+            </div>
+            
             <!--  div  占位符 -->
             <!-- <div v-show="!listenCode" class="listencode"></div> -->
-
-            <p class="telError"  v-if="isShowCode">
-                <span class="telPhone" @click="clearCode" v-if="isShowCode">
-                  <img src="/static/images/warn.png" alt="!">
-                </span>
-                <span class="rightPhone">验证码错误</span>
-            </p>
             <span class="volidateNum"  v-show="isTimer">{{ time }} s</span>
             <button :class="!dis ? 'referBtn': '' " :disabled="dis" class="referCode"   @click="codePromise" >提交</button>
         </div>
@@ -155,7 +155,7 @@ export default {
                     //     console.log('this.count:',this.count);
                     //     this.listenCode = true;
                     // }
-                    if(this.count > 4){ // 每天最多可以获取5次验证码
+                    if(this.count >= 4){ // 每天最多可以获取5次验证码
                         console.log("验证码发送次数已达上限");
                         this.$router.push({path:'/overCount',query:{title:this.codeOverTime,helpMessage:this.helpMessage}});
                     }
@@ -332,10 +332,11 @@ export default {
     text-indent:  0.1333rem;
     outline: none;
     border: none;
+    padding: 0;
     border-radius: 0;
     color: #fff;
     background: #2b2b2b;
-    border-bottom:  0.0267rem solid #555555;
+    border-bottom:  1px solid #555555;
 }
 
 .content .referCode {
@@ -358,10 +359,10 @@ export default {
 
 /* 输入框动态样式*/
 .content .hot{  
-  border-bottom: 0.0533rem solid #AAAAAA;
+  border-bottom: 1px solid #AAAAAA;
 }
 .content .red{
-  border-bottom: 0.0533rem solid #FF6688;
+  border-bottom: 1px solid #FF6688;
 }
 .content .active{
   border: 1px solid #333;
@@ -377,32 +378,31 @@ export default {
   font-size: 0.32rem;
   color: #AAAAAA;
   line-height: 0.32rem;
-  margin-top: 0.5333rem;
-  margin-right: 0.6667rem;
-  margin-bottom: 0.7467rem;
+  margin-right: 0.2667rem;
+  margin-top: 0.2667rem;
 }
 
 .content .listencode .getListen {
   position: relative;
   font-family: PingFangSC-Regular;
   font-size: 0.32rem;
-  /*color: #000000;*/
   line-height: 0.32rem;
 }
-
-.content .telError {
-  float: left;
-  margin-top: 0.2667rem;
-  line-height: 0.5333rem;
-  margin-left: 0.333rem;
+.box{
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
 }
-.telError::after{
-  display: block;
-  content: '.';
-  height: 0;
-  visibility: hidden;
-  overflow: hidden;
-  clear: both;
+.content .telError {
+  margin-top: 0.2667rem;
+  display: flex;
+  align-items: center;
+}
+.telError img{
+  width: 0.2667rem;
+  height: 0.2667rem;
+  margin-right: 0.1333rem;
+  vertical-align: middle;
 }
 
 .content .telPhone {
@@ -589,6 +589,9 @@ export default {
   
   background:#F8E71C;
   color: #000000;
+}
+.hidden{
+  opacity: 0.01;
 }
 
 </style>
