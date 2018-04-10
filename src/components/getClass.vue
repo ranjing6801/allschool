@@ -1,10 +1,11 @@
 <template>
   <div id="getClass">
-
+    
+    <!-- 已经认证完成的班级  可以取消对应列表 -->
     <ul>
-      <li v-for="data in dataList" :key="data.index" class="dataList">
+      <li v-show="dataListShow"  class="dataList" >
           <div class="vipLogo">
-            <img src="../../static/images/vip.png" >
+            <img src="/static/images/vip.png" >
           </div>
 
           <div class="teamClass">
@@ -21,11 +22,11 @@
 
     <!--  班级列表页 -->
     <ul>
-      <li class="checkList" v-for='(option,index) in options' :key="option.index">
+      <!-- <li class="checkList" v-for='(option,index) in options' :key="option.index"> -->
+      <li class="checkList">
         <div class="checkbox-group ">
-          <input type="radio" :id="option.name" name="classChoose" :value="option.name" 
-                     v-model="team"  @change="change" />
-          <label :for="option.name"></label>
+          <input type="radio" id="name" name="classChoose" value="name" v-model="team"  @change="change" />
+          <label for="name"></label>
         </div>
         <div class="right">
           <div class="logo">
@@ -33,7 +34,7 @@
           </div>
           <div class="title">
               <p class="className">
-                <span class="classTitle">{{ teamName }}--{{index}} </span>
+                <span class="classTitle">{{ teamName }}</span>
               </p>
               <p class="classNumber">
                   <span class="classNum common"></span> 
@@ -60,8 +61,6 @@
           </div>
       </li>
     </ul> 
-    
-
     <!--  顶替弹窗 -->
     <div class="modalShow" v-if="isReCertificationShow" @click="ReCertificationShow" >
         <div class="modal">
@@ -71,7 +70,6 @@
             </ReCertification>
         </div>
     </div>
-
     <button class="referClass" :disabled="dis"  @click="getClassPromise" >确认</button>
     </div>
 </template>
@@ -88,6 +86,7 @@ export default {
     },
     data(){
         return {
+            getClassId:'',  // 接收从CLYchooseClass 组件传过来的id
             value:'',
             radioValue:'',
             num:null,
@@ -106,7 +105,10 @@ export default {
             accountReplace:'您是否要顶替Ta,成为该班级班主任',
             dataList:[
               {name:'一年级8班',team:'阳光八队'}
-            ]
+            ],
+            dataListShow:false, // 展示点击取消 已经认证好的班级
+            // 跳转到CLYchooseClass 的参数设置 
+            nameClass:'',  // 设置 nameClass = this.$route.query.list[0].name;
         }
     },
     methods:{
@@ -125,19 +127,16 @@ export default {
                     // console.log(res)
                      // 请求接口,数据判断 
                     if(res[0].id == 6){  // 第一种情况: 如果该班级没有被其他的班主任认证    点击确认跳转到 前面 查询 班主任的列表页
-                        // let data = {
-                        //     name: this.$route.query.list[0].name,
-                        //     num:this.num,
-                        //     teamName:this.teamName
-                        // }
-                        // console.log("data=",data)
-                        this.$router.push({path:'/CLYchooseClass',query:{name:this.$route.query.list[0].name, num:this.$route.query.num,teamName:this.teamName}})    
+                        
+                        // console.log("this.$route.query.list[0].name=",this.$route.query.list[0].name);
+                        // console.log("this.$route.query.num=",this.$route.query.num);
+                        // console.log("this.teamName=",this.teamName);
+                        this.$router.push({path:'/CLYchooseClass',query:{ClassId:this.getClassId}})    
                     }
 
                     if(res[0].id == 4){   // 第二种情况:如果在认证某一个班级的时候,他已经被其他老师认证过了,会提示弹窗
                          this.isReCertificationShow = true
                     }
-
 
                     if(res[0].id == 7){ // 第三种情况，就是 班级认证完了，创建班级
                         alert("开始创建班级")
@@ -165,12 +164,12 @@ export default {
     mounted(){
         document.title = '选择班级'
         // 进入到这个组件  请求数据
-        // console.log('options:',this.options);
-        this.options = this.$route.query.list
-         this.num = this.$route.query.num
-         console.log(this.$route.query)
-         console.log(this.options);
+          this.getClassId = this.$route.query.id
 
+
+         if(this.$route.query.CLYTogetClassId){
+            this.dataListShow = true
+         }
          
     },
 }
@@ -244,7 +243,7 @@ export default {
 }
 #getClass .cancle img {
   width: 2.16rem;
-  height: 0.64rem;
+ /* height: 0.64rem;*/
   display: block;
   margin-top: 0.6133rem;
   
@@ -429,6 +428,7 @@ export default {
   font-size: 0.4533rem;
   color: #000000;
   line-height: 0.4533rem;
+  border: none;
 }
 #getClass .active {
   background: #F8E71C;

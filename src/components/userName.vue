@@ -39,9 +39,9 @@ export default {
             helpMessage:'您的反馈信息可以帮助我们及时更正哦',
             num:1,
             classList:[
-                {name:"一年级1班"},
-                {name:"一年级2班"},
-                {name:"一年级3班"}
+                {name:"一年级1班",userId:1},
+                // {name:"一年级2班",userId:2}
+                // {name:"一年级3班",userId:3}
             ]
         }
     },
@@ -59,9 +59,6 @@ export default {
             // var url = '/h5/index/';
             api.myGet("users",{id:6})
                .then( res => {
-                //    console.log(res)
-                //    console.log(res[0].id)
-
             // 姓名不存在的用户
                    if(res[0].id == 1){  // 姓名不存在
                         //alert("姓名不存在")
@@ -91,10 +88,13 @@ export default {
                         }
                         else{  // 有班级 [ 选择班级认证]  或者  [创建班级认证]
                              if(res[0].website == "ola.org"){  //第一种: [ 选择班级认证] 
-                                    console.log("选择班级认证")
+                                    console.log("选择班级认证");
                                     // console.log(this.classList)
                                     // console.log(this.num);
                                 this.$router.push({path:'/CLYchooseClass',query:{num:this.num,classList:this.classList}})
+
+                             }else {
+                                //  班主任 有班级  创建班级认证
 
                              }
                         }
@@ -110,7 +110,6 @@ export default {
         }
     },
     mounted(){
-        // console.log(this.$route)
         document.title = "填写姓名"
         this.title = this.$route.query.title
     }

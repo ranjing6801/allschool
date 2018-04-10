@@ -42,11 +42,13 @@
 <script>
 import imgSrc from  '../../static/images/logo.jpg'
 import VolidateCode from './VolidateCode'
-import axios from 'axios'
 import $ from 'jquery'
 import api from '../api/api'
   export default {
     name:'myMenu',
+    meataInfo:{
+      title:'输入手机号'
+    },
     data(){
       return {
         title:'苏州工业园二十一世纪实验幼儿园二期',  // 扫码进来后的标题
@@ -111,7 +113,9 @@ import api from '../api/api'
           }
   
           api.myGet("users",{id:4})
+          // this.axios.get("users",{id:4})
                .then(res => {
+                console.log('res:',res);
                   console.log(res[0].id)         
                   if(res[0].id == 1){   // 提示 该手机号已经加入其他学校
                         this.isRightNumber = true;
@@ -151,6 +155,7 @@ import api from '../api/api'
     },
       mounted(){
       document.title = "输入手机号";
+
     }
   }
 </script>

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+
 import Menu from '../components/Menu'
 import VolidateCode from '../components/VolidateCode'
 import overCount from '../components/overCount'
@@ -14,25 +15,26 @@ import getClass from '../components/getClass'
 import AttestationComple from '../components/AttestationComple'   
 import CreateClass from '../components/CreateClass' 
 
+
 Vue.use(VueRouter)
 
 const router = new VueRouter({
     routes:[
         {
             path:'/',
-            component:Menu
+            component:Menu 
         },
-        {
+        {  // 输入手机号
             path:'/menu',
             name:'menu',
             component:Menu
         },
-        { 
+        {  // 验证码
             path:'/VolidateCode',
             name:'VolidateCode',
             component:VolidateCode
         },
-        { 
+        {  // 用户名
             path:'/userName',
             name:'userName',
             component:userName
