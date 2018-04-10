@@ -12,7 +12,7 @@
                   <p class="vBg"></p>
                   <p class="classContent">阳光中队</p>
               </div> 
-              <div class="over" style="display:inline-block">
+              <div class="over">
                 <img src='/static/images/over.png'>
               </div>  
               <div class="moreInfo">
@@ -51,13 +51,14 @@ export default {
     methods:{
         getMore(){
              // console.log("获取更多")  // 跳转到 选择班级组件
-             console.log(this.classList)
+             
             this.$router.push({ path:'/getClass',query:{id:this.id}});
         },
 
         getDetail(){ //  认证完成之后点击展示 绑定的班级详细信息 
             alert("获取班级详细信息!");
             this.$router.push({path:'/getClass',query:{CLYTogetClassId:this.id}});
+            // this.havenListShow = true;
         },
         classRefer(){  // 班级确认
             // 这里判断是否所有的班级都认证了,如果都认证了,按钮的状态为可点击,否则是不可点击状态
@@ -73,9 +74,9 @@ export default {
         console.log("this.$route=",this.$route);
         this.num = this.$route.query.num;
         this.classList = this.$route.query.classList;
-        this.id = this.$route.query.classId;
+        this.CLYTogetClassId = this.$route.query.classId;
         //console.log ("this.classList=",this.classList);
-        //console.log ("this.id=",this.id);  //1
+        console.log ("this.id=",this.id);  //1
 
 
         // 认证成功 从getClass 跳转到CLYchooseClass 跳转回来 

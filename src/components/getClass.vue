@@ -3,9 +3,10 @@
     
     <!-- 已经认证完成的班级  可以取消对应列表 -->
     <ul>
+      <p class="leadTitle">您是 {{ num }} 个班级班主任, 请选择:</p>
       <li v-show="dataListShow"  class="dataList" >
           <div class="vipLogo">
-            <img src="/static/images/vip.png" >
+            <img src="../../static/images/vip.png" >
           </div>
 
           <div class="teamClass">
@@ -23,14 +24,14 @@
     <!--  班级列表页 -->
     <ul>
       <!-- <li class="checkList" v-for='(option,index) in options' :key="option.index"> -->
-      <li class="checkList">
+      <li class="checkList" v-if="checkList">
         <div class="checkbox-group ">
           <input type="radio" id="name" name="classChoose" value="name" v-model="team"  @change="change" />
           <label for="name"></label>
         </div>
         <div class="right">
           <div class="logo">
-              <img src="../../static/images/logo.jpg" alt="">
+              <img src="/static/images/logo.jpg" alt="">
           </div>
           <div class="title">
               <p class="className">
@@ -51,7 +52,7 @@
 
     <!--  创建班级去认证 -->
     <ul>
-      <li class="checkList">
+      <li class="checkList" v-if="checkList">
           <div class="checkbox-group">
               <input type="radio" name="classChoose" id="create" v-model="team">
               <label for="create"></label>
@@ -89,7 +90,7 @@ export default {
             getClassId:'',  // 接收从CLYchooseClass 组件传过来的id
             value:'',
             radioValue:'',
-            num:null,
+            num:1,
             options:[],  //  
             create:'',  // 选中  创建班级
             team:'',    // 检测是否 有选择一个班级
@@ -109,6 +110,7 @@ export default {
             dataListShow:false, // 展示点击取消 已经认证好的班级
             // 跳转到CLYchooseClass 的参数设置 
             nameClass:'',  // 设置 nameClass = this.$route.query.list[0].name;
+            checkList:true,  // 一个班级的列表
         }
     },
     methods:{
@@ -164,11 +166,13 @@ export default {
     mounted(){
         document.title = '选择班级'
         // 进入到这个组件  请求数据
+        console.log("this.$route.query.id=",this.$route.query.id)
           this.getClassId = this.$route.query.id
 
 
          if(this.$route.query.CLYTogetClassId){
-            this.dataListShow = true
+            this.dataListShow = true;
+            this.checkList = false;
          }
          
     },
@@ -179,6 +183,15 @@ export default {
 
 <style scoped>
 /* 已经认证完成的班级列表样式 start*/
+#getClass .leadTitle {
+  font-family: PingFangSC-Light;
+  font-size: 0.3733rem;
+  color: #888888;
+  line-height: 0.3733rem;
+  margin-top: 0.5333rem;
+  margin-left: 0.5333rem;
+}
+
 
 #getClass .dataList {
   width: 9.2rem;
