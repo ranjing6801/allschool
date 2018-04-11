@@ -4,30 +4,28 @@
     <!-- 已经认证完成的班级  可以取消对应列表 -->
     <ul>
       <p class="leadTitle">您是 {{ num }} 个班级班主任, 请选择:</p>
-      <li v-show="dataListShow"  class="dataList" >
+      <li  class="dataList" v-show="dataListShow" v-for="item in items" :key="item.index"  >
           <div class="vipLogo">
-            <img src="../../static/images/vip.png" >
+            <img src="/static/images/vip.png" >
           </div>
 
           <div class="teamClass">
             <p class="teamTitle">一年级8班 已对应</p>
-            <p class="sun">阳光8队</p>
+            <p class="sun">{{ item.teamName }}</p>
           </div>
 
           <div class="cancle" @click="cancle">
-            <img src="../../static/images/cancle.png">
+            <img src="/static/images/cancle.png">
           </div>
       </li>
     </ul>
 
-
     <!--  班级列表页 -->
     <ul>
-      <!-- <li class="checkList" v-for='(option,index) in options' :key="option.index"> -->
-      <li class="checkList" v-if="checkList">
+      <li class="checkList" v-if="checkList" v-for="option in options" :key="option.index">
         <div class="checkbox-group ">
-          <input type="radio" id="name" name="classChoose" value="name" v-model="team"  @change="change" />
-          <label for="name"></label>
+          <input type="radio" :id="option.Members" name="classChoose" :value=option.pid  v-model="team"  @change="change" />
+          <label :for="option.Members"></label>
         </div>
         <div class="right">
           <div class="logo">
@@ -35,15 +33,15 @@
           </div>
           <div class="title">
               <p class="className">
-                <span class="classTitle">{{ teamName }}</span>
+                <span class="classTitle">{{ option.teamName }}</span>
               </p>
               <p class="classNumber">
                   <span class="classNum common"></span> 
-                  <span class="banjiNumber">{{ banjiNumber }}</span>
+                  <span class="banjiNumber">{{ option.banjiNumber }}</span>
                   <span class="classCreater common"></span> 
-                  <span class="created">{{ banjichuangjianzhe }}</span>
+                  <span class="created">{{ option.banjichuangjianzhe }}</span>
                   <span class="classMembers common"></span>
-                  <span>{{ Members }}</span>
+                  <span>{{ option.Members }}</span>
               </p>
           </div> 
         </div> 
@@ -54,8 +52,8 @@
     <ul>
       <li class="checkList" v-if="checkList">
           <div class="checkbox-group">
-              <input type="radio" name="classChoose" id="create" v-model="team">
-              <label for="create"></label>
+              <input type="radio" name="classChoose" value="4" id="value" v-model="team" @change="change">
+              <label for="value"></label>
           </div>
           <div class="textCreate" >
               <label for="create" class="createClass">创建新班级认证</label>
@@ -72,7 +70,7 @@
         </div>
     </div>
     <button class="referClass" :disabled="dis"  @click="getClassPromise" >确认</button>
-    </div>
+  </div>
 </template>
 <script>
 import axios from 'axios'
@@ -89,15 +87,33 @@ export default {
         return {
             getClassId:'',  // 接收从CLYchooseClass 组件传过来的id
             value:'',
-            radioValue:'',
-            num:1,
-            options:[],  //  
+            num:2,
+            items:[],  // 展示已经认证过的班级
             create:'',  // 选中  创建班级
             team:'',    // 检测是否 有选择一个班级
-            teamName:'阳光中队',  // 班级名称
-            banjiNumber:'123654',   // 班级号
-            banjichuangjianzhe:'王姐姐',   //  班级创建者 如果不知道真实姓名下展示小黑板账号
-            Members:32  ,  // 班级中的人数
+            options:[
+              {
+                teamName:'阳光中队',  // 班级名称
+                banjiNumber:'123654',   // 班级号
+                banjichuangjianzhe:'王姐姐',   //  班级创建者 如果不知道真实姓名下展示小黑板账号
+                Members:32,  // 班级中的人数
+                pid:0 
+              },
+              { 
+                teamName:'1年级2班数学组',
+                banjiNumber:'666666',
+                banjichuangjianzhe:'张老师',
+                Members:50,
+                pid:1
+              },
+              { 
+                teamName:'小花班',
+                banjiNumber:'888888',
+                banjichuangjianzhe:'刘老师',
+                Members:60,
+                pid:2
+              }
+            ],
             dis:true,    // 按钮disabled属性
             isReCertificationShow:false,  // 重新认证 班级已经被人认证了  顶替弹窗
             accountTile:'重新验证该班级',
@@ -107,10 +123,13 @@ export default {
             dataList:[
               {name:'一年级8班',team:'阳光八队'}
             ],
-            dataListShow:false, // 展示点击取消 已经认证好的班级
-            // 跳转到CLYchooseClass 的参数设置 
-            nameClass:'',  // 设置 nameClass = this.$route.query.list[0].name;
-            checkList:true,  // 一个班级的列表
+            dataListShow:false,  // 展示点击取消 已经认证好的班级
+            checkList:true,     // 已经认证过的班级列表
+        }
+    },
+    computed:{
+        arrItems(){  // 存储已经认证好了的班级数组
+
         }
     },
     methods:{
@@ -121,28 +140,32 @@ export default {
             /*
                 1.第一种情况: 如果该班级没有被其他的班主任认证    点击确认跳转到 前面 班主任列表查询页
                 2.第二种情况:如果在认证某一个班级的时候,他已经被其他老师认证过了,会提示弹窗
-                3.第三种情况，就是 班级认证完了，创建班级 
+                3.第三种情况:就是 班级认证完了,创建班级 
             */
-            console.log('确认班级认证')
             api.myGet("users",{id:6})
                 .then(res => {
-                    // console.log(res)
-                     // 请求接口,数据判断 
+                  // console.log("this.team=",this.team);
+                    // 请求接口,数据判断 
                     if(res[0].id == 6){  // 第一种情况: 如果该班级没有被其他的班主任认证    点击确认跳转到 前面 查询 班主任的列表页
-                        
-                        // console.log("this.$route.query.list[0].name=",this.$route.query.list[0].name);
-                        // console.log("this.$route.query.num=",this.$route.query.num);
-                        // console.log("this.teamName=",this.teamName);
-                        this.$router.push({path:'/CLYchooseClass',query:{ClassId:this.getClassId}})    
+                         // for(var i = 0;i< this.options.length; i++){
+                         //    if(i == this.team){
+                         //      this.options.splice(this.team,1);
+                         //      // console.log("this.items=",this.options[this.team]);
+                         //      this.items.push(this.options[this.team]);
+                         //    }
+                         // }
+                            // console.log("this.options=",this.options);
+                         
+                        this.$router.push({path:'/CLYchooseClass',query:{ClassId:this.getClassId}}); 
                     }
 
                     if(res[0].id == 4){   // 第二种情况:如果在认证某一个班级的时候,他已经被其他老师认证过了,会提示弹窗
-                         this.isReCertificationShow = true
+                         this.isReCertificationShow = true;
                     }
 
                     if(res[0].id == 7){ // 第三种情况，就是 班级认证完了，创建班级
-                        alert("开始创建班级")
-                        this.$router.push({name:'CreateClass'})
+                        alert("开始创建班级");
+                        this.$router.push({name:'CreateClass'});
                     }
                 })
                 .catch(err => {
@@ -150,35 +173,55 @@ export default {
                 })
         },
         change(){ // 单选框change事件
-            if(this.team){
-              console.log("this.team=",this.team)
-                this.dis = false
-                $(".referClass").addClass('active')
+            if(this.team+1){
+              // console.log("this.team=",this.team)
+                this.dis = false;
+                $(".referClass").addClass('active');
             }
         },
         ReCertificationShow(){  // 关闭被顶替的弹窗
-               this.isReCertificationShow = false
+               this.isReCertificationShow = false;
         },
         cancle(){
-          alert("取消已经认证过的班级,重新认证")
+          alert("取消已经认证过的班级,重新认证");
         }
     },
+    created(){
+        document.title = '选择班级';
+    },
     mounted(){
-        document.title = '选择班级'
-        // 进入到这个组件  请求数据
-        console.log("this.$route.query.id=",this.$route.query.id)
-          this.getClassId = this.$route.query.id
+        // console.log("this.$route.query.id=",this.$route.query.id)
+        // getClassId 记录是哪个班级的id
+          this.getClassId = this.$route.query.id;
 
-
-         if(this.$route.query.CLYTogetClassId){
-            this.dataListShow = true;
-            this.checkList = false;
+          // 在 cLYchoose 点击已经认证完成的班级  在getClass组件显示已经认证的班级和还没有认证的班级
+         if(this.$route.query.CLYTogetClassId + 1 ){ 
+                this.dataListShow = true;
+                this.checkList = true;
+            for(var i = 0;i< this.options.length; i++){
+                if(i == this.$route.query.CLYTogetClassId){
+                  this.options.splice(i,1);
+                  // console.log("this.items====",this.options[this.$route.query.CLYTogetClassId]);
+                  this.items.push(this.options[this.$route.query.CLYTogetClassId]);
+                }
+            }
          }
-         
     },
 }
 
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <style scoped>
@@ -295,6 +338,7 @@ export default {
   -webkit-align-items: center;
   -ms-flex-align: center;
   display: block;
+  height: 1.8667rem;
 }
 
 .checkbox-group input[type=radio]+label:before {

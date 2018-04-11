@@ -21,7 +21,7 @@
                 </li>
             </ul>
         </div>
-        <mt-button class="referOk" size="large" @click="overRefer" >完成认证</mt-button>
+        <button class="referOk"  @click="overRefer" >完成认证</button>
 
         <!--  完成认证 确认保存二维码 弹窗 -->
         <div class="modalShow" v-if="isSave" @click="HiddenSaveModal" >
@@ -65,7 +65,6 @@ export default {
             this.isSave = false
             //  创建完班级之后 跳转到班主任 班级的列表页
            	// this.$router.push({name:'CLYchooseClass'})
-
         }
     },
     mounted(){
@@ -73,12 +72,9 @@ export default {
     }
 }
 
-
 </script>
 
 <style scoped>
-/*@import  '../assets/css/variables.scss';
-@import  '../assets/css/CreateClass.css';*/
 
 #createClass .classContent {
   width: 100%;
@@ -199,10 +195,5 @@ export default {
   margin: auto;
   background: #fff;
 }
-
-
-/*# sourceMappingURL=CreateClass.css.map */
-
-
 
 </style>

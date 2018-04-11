@@ -24,6 +24,20 @@
             <img src="/static/images/android.png" alt="">
         </div>
       </div>
+
+
+      <!--  重复验证弹窗 -->
+      <div class="reVolidateModal" v-if="reVolidate" >
+          <div class="reVolidate">
+              <div id="modal">
+                  <p class="titleListen">请勿重复认证</p>
+                  <p class="contentListen"> 
+                      您已是认证用户,请勿重复认证
+                  </p>
+                  <button class="Btn" @click="knowing">我知道啦</button>
+              </div>
+          </div>
+      </div>
   </div>
 </template>
 <script>
@@ -32,17 +46,23 @@ export default {
     data(){
         return{
           isIOS: true,
-          isAND: false
+          isAND: false,
+          reVolidate:false
         }
     },
     methods:{
         openSmallDesk(){
             // 打开晓黑板
             alert("打开晓黑板")
+        },
+        knowing(){
+          this.reVolidate = false;
         }
     },
     created() {
         document.title = "反馈成功"
+
+        
     },
     mounted() {
       //判断手机类型
@@ -58,6 +78,21 @@ export default {
           console.log('ios...');
           this.isIOS = true;
           this.isAND = false;
+        } 
+
+        pushHistory();  
+        let that = this;
+        window.addEventListener("popstate", function(e) {  
+              that.reVolidate = true;
+
+        }, false);  
+      
+        function pushHistory() {  
+            var state = {  
+                title: "",  
+                url: "/Menu"  
+            };  
+            window.history.pushState(state, state.title, state.url);  
         }
     }
 }
@@ -157,6 +192,66 @@ export default {
 }
 
 
+/* 重复认证弹窗*/
+
+
+.reVolidateModal {
+  width: 100%;
+  height: 100%;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+.reVolidateModal .reVolidate {
+  width: 8.9333rem;
+  height: 4.7733rem;
+  margin-left: 0.5333rem;
+  margin-right: 0.5333rem;
+  background: #2B2B2B;
+  border: 0.0533rem solid #BBAB71;
+  border-radius: 0.2667rem;
+  position: absolute;
+  top: 3.84rem;
+  bottom: 9.1733rem;
+}
+.reVolidateModal .reVolidate #modal .titleListen {
+  font-family: PingFangSC-Light;
+  font-size: 0.5333rem;
+  color: #FFFFFF;
+  line-height: 0.5333rem;
+  text-align: center;
+  margin-top: 0.5333rem;
+}
+
+.reVolidateModal .reVolidate #modal .contentListen {
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+  line-height: 0.6933rem;
+  text-align: center;
+  margin-top: 0.5333rem;
+}
+
+.reVolidateModal .reVolidate #modal .Btn {
+    width: 8.1333rem;
+    height: 1.28rem;
+    background: #2B2B2B;
+    font-family: PingFangSC-Regular;
+    font-size: 0.4533rem;
+    color: #000000;
+    line-height: 0.4533rem;
+    margin-top: 0.6667rem;
+    margin-left: 0.4rem;
+    border-radius: 0.0533rem;
+    background: #F8E71C;
+    border: none;
+}
 
 </style>
 

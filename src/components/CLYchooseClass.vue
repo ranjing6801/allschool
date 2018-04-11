@@ -5,10 +5,9 @@
         
         <!--   展示已经认证好了的班级  -->
         <ul>
-            <!-- <li v-for="item in havenClass" :key="item.index" class="classList"   @click="getDetail"> -->
-            <li class="havenList" @click="getDetail" v-if="havenListShow"> 
+            <li v-for="item in havenClass" :key="item.index"  class="havenList" @click="getDetail" > 
               <div  class="wrap">
-                  <p class="classTitle"> 一年级1班</p>  
+                  <p class="classTitle"> {{ item.name }}</p>  
                   <p class="vBg"></p>
                   <p class="classContent">阳光中队</p>
               </div> 
@@ -23,14 +22,14 @@
         
          <!--  展示还没有认证的班级  -->
         <ul>
-            <li v-for="(item,index) in classList" :key="item.index" class="classList" @click="getMore">
-             <span class="className"> {{ item.name }}--{{index}}</span> 
+            <li v-for="(item,index) in classList" :key="item.index" class="classList" @click="getMore(item.userId)">
+             <span class="className"> {{ item.name }}</span> 
              <span class="classTeam" > 的对应班级</span>   
              <span class="more" ></span>
             </li>
         </ul>
 
-      <button id="referName" :disabled="dis"  @click="classRefer">认证班级</button>
+      <button :class="!dis?'referBtn':''"  class="referName" :disabled="dis"  @click="classRefer">认证班级</button>
   </div>
 </template>
 <script>
@@ -38,26 +37,34 @@ export default {
     name:'clychooseClass',
     data(){
         return {
-            num:1,     // 数量
+            num:2,     // 数量
             classList:[], // 所有班级列表
             havenClass:[], // 存储从getClass跳转过来的已经认证好的班级
             dis:true,   // 按钮样式
             teamName:'',  // 认证班级的名称
             havenListShow:false, // 展示已经认证好的班级,
-            id:1,  // 接收从userName 组件传过来的userId
+            // id:1,  // 接收从userName 组件传过来的userId
             CLYTogetClassId:'', // 接收从getClass 传过来的认证好了的班级id
+            classList:[
+                {name:"一年级1班",userId:0},
+                {name:"一年级2班",userId:1}
+            ]
         }
     },
+    computed:{
+      ComphavenClass(){
+        return this.havenClass;
+      }
+    },
     methods:{
-        getMore(){
-             // console.log("获取更多")  // 跳转到 选择班级组件
-             
-            this.$router.push({ path:'/getClass',query:{id:this.id}});
+        getMore(id){    // 跳转到getClass组件
+            alert(id);
+            this.$router.push({ path:'/getClass',query:{id:id}});
         },
 
         getDetail(){ //  认证完成之后点击展示 绑定的班级详细信息 
             alert("获取班级详细信息!");
-            this.$router.push({path:'/getClass',query:{CLYTogetClassId:this.id}});
+            this.$router.push({path:'/getClass',query:{CLYTogetClassId:this.CLYTogetClassId}});
             // this.havenListShow = true;
         },
         classRefer(){  // 班级确认
@@ -65,26 +72,35 @@ export default {
            // 如果都认证完成了,跳转到认证成功
           //  这里可以判断 classList  数组的长度是否为0 来显示按钮的是否可点击状态
 
+          if(1){  // 老用户 跳转到认证组件
+              this.$router.push({path:'/PassOk'})
+
+          }
+          else{ // 新用户跳转到有弹窗的组件
+             this.$router.push({path:'/NewAuthenticationOk'})
+          }
         }
     },
     mounted(){
         document.title = "认证班级";
-
-        // userName 跳转到此组件
-        console.log("this.$route=",this.$route);
-        this.num = this.$route.query.num;
-        this.classList = this.$route.query.classList;
-        this.CLYTogetClassId = this.$route.query.classId;
-        //console.log ("this.classList=",this.classList);
-        console.log ("this.id=",this.id);  //1
-
-
-        // 认证成功 从getClass 跳转到CLYchooseClass 跳转回来 
-        console.log("从getCla跳转过来的=",this.$route);
-
-        if(this.$route.query.ClassId){ 
-           this.havenListShow = true;
+        this.CLYTogetClassId = this.$route.query.ClassId;
+        console.log(this.CLYTogetClassId);
+        // 从getClass组件跳转过来 接收参数calssid 
+        if(this.$route.query.ClassId + 1){ 
+            console.log("this.$route.query.ClassId=",this.$route.query.ClassId);
+           // this.havenListShow = true;
+           this.havenClass.push(this.classList[this.$route.query.ClassId])
+           this.classList.splice(this.$route.query.ClassId,1)
+           console.log(this.havenClass)
+           this.CLYTogetClassId = this.$route.query.ClassId;
         }
+
+
+        // 如果所有班级的数组长度为0 按钮可以点击
+        if(this.classList.length == 0){
+            this.dis = false;
+        }
+        
 
     }
 }
@@ -226,7 +242,7 @@ export default {
   background:url('../../static/images/more.png') no-repeat center;
 }
 
-#clychooseClass #referName {
+#clychooseClass .referName {
   width: 9.2rem;
   height: 1.28rem;
   margin-left: 0.4rem;
@@ -238,6 +254,10 @@ export default {
   font-size: 0.4533rem;
   color: #000000;
   line-height: 0.4533rem;
+}
+
+#clychooseClass .referBtn{
+  background: #F8E71C;
 }
 
 </style>

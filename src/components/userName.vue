@@ -13,6 +13,19 @@
         <input maxlength="20" placeholder="请输入您的姓名" type="text" v-model="userName" v-on:input="userNameFocus"  class="user" >
         <button class="refer" id="referName" :disabled="dis" @click="NamePromise" >提交</button>
     </div>
+
+     <!--  重复认证弹窗 -->
+      <div class="reVolidateModal" v-if="reVolidate" >
+          <div class="reVolidate">
+              <div id="modal">
+                  <p class="titleListen">请勿重复认证</p>
+                  <p class="contentListen"> 
+                      您已是认证用户,请勿重复认证
+                  </p>
+                  <button class="Btn" @click="knowing">我知道啦</button>
+              </div>
+          </div>
+      </div>
 </div>
 </template>
 <script>
@@ -38,22 +51,22 @@ export default {
             errTitle:'您填写的教师姓名不存在',
             helpMessage:'您的反馈信息可以帮助我们及时更正哦',
             num:1,
-            classList:[
-                {name:"一年级1班",userId:1},
-                // {name:"一年级2班",userId:2}
-                // {name:"一年级3班",userId:3}
-            ]
+            reVolidate:false, // 用户重复认证弹窗
+            
         }
     },
     methods:{
         userNameFocus(){  // 聚焦
             if(this.userName.length > 0){
                   $('.refer').addClass('active');
-                  this.dis = false;
-                }else{
+                    this.dis = false;
+            }else{
                   $('.refer').removeClass('active');
-                  this.dis = true;
-                }
+                    this.dis = true;
+            }
+        },
+        knowing(){
+          this.reVolidate = false;
         },
         NamePromise(){ // 姓名验证 
             // var url = '/h5/index/';
@@ -81,7 +94,7 @@ export default {
                         this.$router.push({path:'/NewAuthenticationOk',query:{}})
                    }
 
-    //  是班主任       
+            //  是班主任       
                    if(res[0].id == 6){  // 姓名存在 是班主任
                         if(res[0].username == "Leopoldo_Corker y"){  // 1. 无班级,自动创建班级并认证
                             this.$router.push({path:'/CLNewTeacher',query:{}}) 
@@ -91,11 +104,10 @@ export default {
                                     console.log("选择班级认证");
                                     // console.log(this.classList)
                                     // console.log(this.num);
-                                this.$router.push({path:'/CLYchooseClass',query:{num:this.num,classList:this.classList}})
+                                this.$router.push({path:'/CLYchooseClass',query:{}})
 
                              }else {
                                 //  班主任 有班级  创建班级认证
-
                              }
                         }
                    }
@@ -103,6 +115,11 @@ export default {
                    if(res[0].id == 7){  // 班主任的验证,是新用户 
                         this.$router.push({name:'CreateClass'})
                    }
+                   if(res[0].id == 8){  //已经认证过了,提示请勿重复认证弹窗
+                      this.reVolidate = true;
+                        
+                   }
+
                })
                .catch(err => {
 
@@ -200,6 +217,66 @@ export default {
   background: #F8E71C;
 }
 
+/* 重复认证弹窗*/
+
+
+.reVolidateModal {
+  width: 100%;
+  height: 100%;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+.reVolidateModal .reVolidate {
+  width: 8.9333rem;
+  height: 4.7733rem;
+  margin-left: 0.5333rem;
+  margin-right: 0.5333rem;
+  background: #2B2B2B;
+  border: 0.0533rem solid #BBAB71;
+  border-radius: 0.2667rem;
+  position: absolute;
+  top: 3.84rem;
+  bottom: 9.1733rem;
+}
+.reVolidateModal .reVolidate #modal .titleListen {
+  font-family: PingFangSC-Light;
+  font-size: 0.5333rem;
+  color: #FFFFFF;
+  line-height: 0.5333rem;
+  text-align: center;
+  margin-top: 0.5333rem;
+}
+
+.reVolidateModal .reVolidate #modal .contentListen {
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+  line-height: 0.6933rem;
+  text-align: center;
+  margin-top: 0.5333rem;
+}
+
+.reVolidateModal .reVolidate #modal .Btn {
+    width: 8.1333rem;
+    height: 1.28rem;
+    background: #2B2B2B;
+    font-family: PingFangSC-Regular;
+    font-size: 0.4533rem;
+    color: #000000;
+    line-height: 0.4533rem;
+    margin-top: 0.6667rem;
+    margin-left: 0.4rem;
+    border-radius: 0.0533rem;
+    background: #F8E71C;
+    border: none;
+}
 </style>
 
 

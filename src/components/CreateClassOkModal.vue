@@ -46,9 +46,6 @@ export default {
 </script>
 
 <style scoped>
-/*@import  '../assets/css/variables.scss';
-@import  '../assets/css/CreateClassOkModal.css';*/
-
 
 #CreateClassOkModal .title {
   font-size: 18px;

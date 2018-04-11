@@ -30,7 +30,29 @@ export default {
             AttestationCompleNum:null,
             dis:true,
             teamComplete:'',
-            picked: ''
+            picked: '',
+            items:[],
+            options:[
+              {
+                teamName:'阳光中队',  // 班级名称
+                banjiNumber:'123654',   // 班级号
+                banjichuangjianzhe:'王姐姐',   //  班级创建者 如果不知道真实姓名下展示小黑板账号
+                Members:32,  // 班级中的人数
+                pid:0
+              },
+              { teamName:'1年级2班数学组',
+                banjiNumber:'666666',
+                banjichuangjianzhe:'张老师',
+                Members:50,
+                pid:1
+              },
+              { teamName:'小花班',
+                banjiNumber:'888888',
+                banjichuangjianzhe:'刘老师',
+                Members:60,
+                pid:2
+              }
+            ]
 
         }
     },
@@ -50,10 +72,7 @@ export default {
     },
     mounted(){
         document.title = "认证成功"
-        // console.log(this.$route)
-        // console.log(this.$route.params[0].num)
-        // this.AttestationCompleNum = this.$route.params[0].num + 1
-        // this.AtteCompleteClass = this.$route.params
+        
         
         
     }
