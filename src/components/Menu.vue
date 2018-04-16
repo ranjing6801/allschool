@@ -102,12 +102,12 @@ import $ from 'jquery'
         }
       },
       telPromise(){  // 获取验证码
-            console.log('点击按钮了..');
+            console.log('点击提交按钮');
             //请求数据之前 要判断手机号是否合法
           let myphone = this.phone.split(' ').join('');
           if(!(/^1[3|4|5|7|8][0-9]\d{4,8}$/.test(myphone))) {
               this.isRightNumber = true;
-              console.log('myphone:',myphone);
+              console.log('输入的手机号:',myphone);
               $('.input').addClass('red');
               $('.rightPhone').html('请填写正确的手机号码');
               return;
