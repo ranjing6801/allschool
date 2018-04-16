@@ -42,7 +42,7 @@ export default {
     name:'clychooseClass',
     data(){
         return {
-            num:2,       // 数量
+            num:3,       // 数量
            // classList:[],        // 所有班级列表
             // HavenClass:[],       // 保存从getClass跳转过来的已经认证好的班级
             dis:true,            // 按钮样式

@@ -24,7 +24,7 @@
     <ul>
       <li class="checkList" v-if="checkList" v-for="(option,index) in optionList" :key="index">
         <div class="checkbox-group" v-if="!option.isbgShow">
-          <input type="radio" :id="option.Members"  name="classChoose" :value=option.pid  v-model="team"  @change="change" />
+          <input type="radio" :id="option.Members"  name="classChoose" :value="option.pid"  v-model="team"  @change="change" />
           <label :for="option.Members"></label>
         </div>
         <div class="vipLogo" v-if="option.isbgShow">
@@ -113,7 +113,7 @@ export default {
         return {
             getClassId:'',  // 接收从CLYchooseClass 组件传过来的id
             value:'',
-            num:2,
+            num:3,
             itemList:[],  // 展示已经认证过的班级
             create:'',  // 选中  创建班级
             team:'',    // 检测是否 有选择一个班级
@@ -147,7 +147,6 @@ export default {
                     alert('班主任创建班级');
                 }else{
                   // 选择班级认证
-                   console.log("this.taem=",this.team);
                     this.$store.state.res1[this.getClassId].teamId = this.team;
                     this.$store.state.res1[this.getClassId].className = this.$store.state.res2[this.team].teamName;
                     this.$store.state.res2[this.team].teamShow = this.$store.state.res1[this.team].name;
@@ -158,6 +157,7 @@ export default {
                 }
         },
         change(){ // 单选框change事件
+            console.log('this.team:',this.team);
             if(this.team+1){
                 this.dis = false;
                 $(".referClass").addClass('active');
@@ -279,6 +279,7 @@ export default {
   background:url('../../static/images/radio.png') no-repeat center;
   background-size: 0.64rem 0.64rem;
   border-radius: 50%;
+  border: 1px solid transparent;
 }
 
 
