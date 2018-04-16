@@ -2,9 +2,9 @@
   <div id="getClass">
     
     <!-- 已经认证完成的班级  可以取消对应列表 -->
-    <ul>
+    <!-- <ul>
       <p class="leadTitle">您是 {{ num }} 个班级班主任, 请选择:</p>
-      <li  class="dataList" v-show="dataListShow" v-for="item in items" :key="item.index"  >
+      <li  class="dataList" v-show="dataListShow" v-for="(item,index) in itemList" :key="index">
           <div class="vipLogo">
             <img src="/static/images/vip.png" >
           </div>
@@ -18,24 +18,30 @@
             <img src="/static/images/cancle.png">
           </div>
       </li>
-    </ul>
+    </ul> -->
 
     <!--  班级列表页 -->
     <ul>
-      <li class="checkList" v-if="checkList" v-for="option in options" :key="option.index">
-        <div class="checkbox-group ">
-          <input type="radio" :id="option.Members" name="classChoose" :value=option.pid  v-model="team"  @change="change" />
+      <li class="checkList" v-if="checkList" v-for="(option,index) in optionList" :key="index">
+        <div class="checkbox-group" v-if="!option.isbgShow">
+          <input type="radio" :id="option.Members"  name="classChoose" :value=option.pid  v-model="team"  @change="change" />
           <label :for="option.Members"></label>
         </div>
-        <div class="right">
-          <div class="logo">
-              <img src="/static/images/logo.jpg" alt="">
+        <div class="vipLogo" v-if="option.isbgShow">
+            <img src="/static/images/vip.png" >
+        </div>
+
+        <div class="right" v-if="!option.isbgShow">
+          <div class="logo"  v-if="!option.isbgShow">
+              <img src="/static/images/logo.jpg" alt="" >
           </div>
+
           <div class="title">
-              <p class="className">
+   <!--  没有认证完成的班级 -->
+              <p class="className" v-if="!option.isbgShow">   
                 <span class="classTitle">{{ option.teamName }}</span>
               </p>
-              <p class="classNumber">
+              <p class="classNumber" v-if="!option.isbgShow">
                   <span class="classNum common"></span> 
                   <span class="banjiNumber">{{ option.banjiNumber }}</span>
                   <span class="classCreater common"></span> 
@@ -43,6 +49,25 @@
                   <span class="classMembers common"></span>
                   <span>{{ option.Members }}</span>
               </p>
+          </div> 
+        </div> 
+
+   <!--  已经认证完成的班级 -->
+        <div class="right" v-if="option.isbgShow">
+          <div class="logo"  v-if="!option.isbgShow">
+              <img src="/static/images/logo.jpg" alt="" >
+          </div>
+
+          <div class="title passTitle">
+              <div class="teamClass" v-if="option.isbgShow">
+                <p class="teamTitle">{{ option.teamShow}} 已对应</p>
+              </div>
+              <p class="className" v-if="option.isbgShow">
+                <span class="classTitle">{{ option.teamName }}</span>
+              </p>
+              <div class="cancle" @click="cancle(option)">
+                <img src="/static/images/cancle.png">
+              </div>
           </div> 
         </div> 
       </li>
@@ -73,6 +98,7 @@
   </div>
 </template>
 <script>
+
 import axios from 'axios'
 import $ from 'jquery'
 import api from '../api/api'
@@ -88,49 +114,24 @@ export default {
             getClassId:'',  // 接收从CLYchooseClass 组件传过来的id
             value:'',
             num:2,
-            items:[],  // 展示已经认证过的班级
+            itemList:[],  // 展示已经认证过的班级
             create:'',  // 选中  创建班级
             team:'',    // 检测是否 有选择一个班级
-            options:[
-              {
-                teamName:'阳光中队',  // 班级名称
-                banjiNumber:'123654',   // 班级号
-                banjichuangjianzhe:'王姐姐',   //  班级创建者 如果不知道真实姓名下展示小黑板账号
-                Members:32,  // 班级中的人数
-                pid:0 
-              },
-              { 
-                teamName:'1年级2班数学组',
-                banjiNumber:'666666',
-                banjichuangjianzhe:'张老师',
-                Members:50,
-                pid:1
-              },
-              { 
-                teamName:'小花班',
-                banjiNumber:'888888',
-                banjichuangjianzhe:'刘老师',
-                Members:60,
-                pid:2
-              }
-            ],
             dis:true,    // 按钮disabled属性
             isReCertificationShow:false,  // 重新认证 班级已经被人认证了  顶替弹窗
             accountTile:'重新验证该班级',
             classTitle:'一年级二班',
             classUser:'王宇娟' ,
             accountReplace:'您是否要顶替Ta,成为该班级班主任',
-            dataList:[
-              {name:'一年级8班',team:'阳光八队'}
-            ],
-            dataListShow:false,  // 展示点击取消 已经认证好的班级
+            dataListShow:true,  // 展示点击取消 已经认证好的班级
             checkList:true,     // 已经认证过的班级列表
         }
     },
     computed:{
-        arrItems(){  // 存储已经认证好了的班级数组
-
-        }
+      optionList(){
+        console.log("optionList=",this.$store.state.res2);
+        return  this.$store.state.res2
+      }    
     },
     methods:{
         getClassListData(){  // 请求数据
@@ -142,110 +143,50 @@ export default {
                 2.第二种情况:如果在认证某一个班级的时候,他已经被其他老师认证过了,会提示弹窗
                 3.第三种情况:就是 班级认证完了,创建班级 
             */
-            api.myGet("users",{id:6})
-                .then(res => {
-                  // console.log("this.team=",this.team);
-                    // 请求接口,数据判断 
-                    if(res[0].id == 6){  // 第一种情况: 如果该班级没有被其他的班主任认证    点击确认跳转到 前面 查询 班主任的列表页
-                         // for(var i = 0;i< this.options.length; i++){
-                         //    if(i == this.team){
-                         //      this.options.splice(this.team,1);
-                         //      // console.log("this.items=",this.options[this.team]);
-                         //      this.items.push(this.options[this.team]);
-                         //    }
-                         // }
-                            // console.log("this.options=",this.options);
-                         
-                        this.$router.push({path:'/CLYchooseClass',query:{ClassId:this.getClassId}}); 
-                    }
-
-                    if(res[0].id == 4){   // 第二种情况:如果在认证某一个班级的时候,他已经被其他老师认证过了,会提示弹窗
-                         this.isReCertificationShow = true;
-                    }
-
-                    if(res[0].id == 7){ // 第三种情况，就是 班级认证完了，创建班级
-                        alert("开始创建班级");
-                        this.$router.push({name:'CreateClass'});
-                    }
-                })
-                .catch(err => {
-                    console.log(err)
-                })
+                if(this.team == '4'){
+                    alert('班主任创建班级');
+                }else{
+                  // 选择班级认证
+                   console.log("this.taem=",this.team);
+                    this.$store.state.res1[this.getClassId].teamId = this.team;
+                    this.$store.state.res1[this.getClassId].className = this.$store.state.res2[this.team].teamName;
+                    this.$store.state.res2[this.team].teamShow = this.$store.state.res1[this.team].name;
+                    console.log('$store.teamShow=',this.$store.state.res1[this.team].name);
+                    this.$store.state.res1[this.getClassId].symbol = true;
+                    this.$store.state.res2[this.getClassId].isbgShow = true;
+                    this.$router.push({path:'/CLYchooseClass'});
+                }
         },
         change(){ // 单选框change事件
             if(this.team+1){
-              // console.log("this.team=",this.team)
                 this.dis = false;
                 $(".referClass").addClass('active');
             }
         },
         ReCertificationShow(){  // 关闭被顶替的弹窗
-               this.isReCertificationShow = false;
+            this.isReCertificationShow = false;
         },
-        cancle(){
-          alert("取消已经认证过的班级,重新认证");
+        cancle(obj){
+          // alert("取消已经认证过的班级,重新认证");
+          
+          console.log('obj=',obj.pid);
+          this.$store.state.res2[obj.pid].isbgShow = false;
+          this.$store.state.res1[obj.pid].symbol = false;
+       
         }
     },
-    created(){
-        document.title = '选择班级';
-    },
     mounted(){
-        // console.log("this.$route.query.id=",this.$route.query.id)
-        // getClassId 记录是哪个班级的id
-          this.getClassId = this.$route.query.id;
-
-          // 在 cLYchoose 点击已经认证完成的班级  在getClass组件显示已经认证的班级和还没有认证的班级
-         if(this.$route.query.CLYTogetClassId + 1 ){ 
-                this.dataListShow = true;
-                this.checkList = true;
-            for(var i = 0;i< this.options.length; i++){
-                if(i == this.$route.query.CLYTogetClassId){
-                  this.options.splice(i,1);
-                  // console.log("this.items====",this.options[this.$route.query.CLYTogetClassId]);
-                  this.items.push(this.options[this.$route.query.CLYTogetClassId]);
-                }
-            }
-         }
-    },
+        document.title = '选择班级';
+        this.getClassId = this.$route.query.userId;
+        console.log(this.$route.query.userId);
+    }
+  
 }
 
 </script>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style scoped>
 /* 已经认证完成的班级列表样式 start*/
-#getClass .leadTitle {
-  font-family: PingFangSC-Light;
-  font-size: 0.3733rem;
-  color: #888888;
-  line-height: 0.3733rem;
-  margin-top: 0.5333rem;
-  margin-left: 0.5333rem;
-}
-
-
-#getClass .dataList {
-  width: 9.2rem;
-  height: 1.8667rem;
-  background: #363636;
-  border-radius: 0.0533rem;
-  margin-top: 0.5333rem;
-  margin-left: 0.4rem;
-  position: relative;
-}
-
 #getClass .vipLogo {
   width: 1.3067rem;
   height: 1.8667rem;
@@ -261,14 +202,6 @@ export default {
   display: block;
 }
 
-#getClass .teamClass{
-  height: 1.8667rem;
-  color: #888888;
-  line-height: 0.3733rem;
-  position: absolute;
-  top: 0;
-  left: 1.3333rem;
-}
 
 #getClass .teamTitle {
   width: 3.1467rem;
@@ -277,33 +210,18 @@ export default {
   color: #888888;
   line-height: 0.4533rem;
   margin-top: 0.3467rem;
-  margin-left: 0.2667rem;
-
-}
-
-#getClass .sun {
-  font-family: PingFangSC-Regular;
-  font-size: 0.4533rem;
-  color: #FFFFFF;
-  line-height: 0.4533rem;
-  margin-top: 0.2667rem;
-  margin-left: 0.2667rem;
 }
 
 #getClass .cancle {
-  width: 2.16rem;
-  height: 1.8667rem;
-  position: absolute;
-  top: 0;
-  right: 0.4rem;
+    position: absolute;
+    top: 0.6133rem;
+    right: -0.6rem;
+    justify-content: center;
+    display: flex;
+    align-items: center;
 }
 #getClass .cancle img {
   width: 2.16rem;
- /* height: 0.64rem;*/
-  display: block;
-  margin-top: 0.6133rem;
-  
-
 }
 
 /* 已经认证完成的班级列表样式 end*/
@@ -365,6 +283,8 @@ export default {
 
 
 #getClass .checkList .right {
+  height: 1.8667rem;
+  width: 7.8933rem;
   position: absolute;
   top: 0px;
   right: 0;
@@ -373,7 +293,7 @@ export default {
   margin-left: 0.1333rem;
 }
 
-#getClass .checkList .right .logo {
+#getClass .logo {
   width: 1.3333rem;
   height: 1.8667rem;
   margin-right: 6.56rem;
@@ -386,7 +306,7 @@ export default {
     border-radius: 0.2667rem;
 }
 
-#getClass .checkList .right .title {
+#getClass  .title {
   height: 1.8667rem;
   width: 6.2667rem;
   font-family: PingFangSC-Regular;
@@ -399,7 +319,7 @@ export default {
   left:1.4533rem;
 }
 
-#getClass .checkList .right .title .className {
+#getClass .className {
   font-family: PingFangSC-Regular;
   font-size: 0.4533rem;
   color: #FFFFFF;
@@ -407,8 +327,13 @@ export default {
   height: 0.4533rem;
   margin-top: 0.3733rem;
 }
+#getClass  .passTitle{
+    position: absolute;
+    top: 0;
+    left: 0;
+}
 
-#getClass .checkList .right .title .className .classTitle {
+#getClass  .classTitle {
   display: inline-block;
   font-family: PingFangSC-Regular;
   font-size: 0.4533rem;
@@ -426,7 +351,7 @@ export default {
   margin-right: 0.3467rem;
 
 }
-#getClass .checkList .right .title .classNumber span {
+#getClass  .classNumber span {
   font-family: PingFangSC-Light;
   font-size: 0.3733rem;
   color: #888888;
@@ -510,17 +435,9 @@ export default {
   margin-right:0.5333rem;
   position: absolute;
   top: 4.48rem;
-  /*left: 0.5333rem;*/
-/*  right: 0;
-  bottom: 0;
-  margin: auto;*/
   background: #2B2B2B;
   border: 0.0533rem solid #BBAB71;
   border-radius: 0.2667rem;
 }
-
-
-
-
 </style>
 

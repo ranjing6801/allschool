@@ -54,7 +54,7 @@ const router = new VueRouter({
             name:'NewAuthenticationOk',
             component:NewAuthenticationOk
         },
-        { // 班主任 没有班级
+        { // 班主任 没有班级 
             path:'/CLNewTeacher',
             name:'CLNewTeacher',
             component:CLNewTeacher     

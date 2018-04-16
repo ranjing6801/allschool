@@ -4,8 +4,8 @@
         <p class="leadTitle">您是{{ num }}个班级班主任, 请选择:</p>
         
         <!--   展示已经认证好了的班级  -->
-        <ul>
-            <li v-for="item in havenClass" :key="item.index"  class="havenList" @click="getDetail" > 
+        <!-- <ul>
+            <li v-for="(item,index) in HClass" :key="index"  class="havenList" @click="getDetail" > 
               <div  class="wrap">
                   <p class="classTitle"> {{ item.name }}</p>  
                   <p class="vBg"></p>
@@ -18,14 +18,19 @@
                 
               </div>
             </li>
-        </ul>
+        </ul> -->
         
          <!--  展示还没有认证的班级  -->
         <ul>
-            <li v-for="(item,index) in classList" :key="item.index" class="classList" @click="getMore(item.userId)">
+            <li v-if="classListShow" v-for="item in classList" :key="item.index" 
+                    class="classList" @click="getMore(item.classId)">
              <span class="className"> {{ item.name }}</span> 
-             <span class="classTeam" > 的对应班级</span>   
-             <span class="more" ></span>
+             <p v-if="item.symbol" class="vBg"></p>
+             <span class="classTeam"> {{ item.className}}</span>   
+             <div class="over" v-if="item.symbol">
+                <img src='/static/images/over.png'>
+              </div> 
+             <span  class="more"></span>
             </li>
         </ul>
 
@@ -37,87 +42,62 @@ export default {
     name:'clychooseClass',
     data(){
         return {
-            num:2,     // 数量
-            classList:[], // 所有班级列表
-            havenClass:[], // 存储从getClass跳转过来的已经认证好的班级
-            dis:true,   // 按钮样式
-            teamName:'',  // 认证班级的名称
+            num:2,       // 数量
+           // classList:[],        // 所有班级列表
+            // HavenClass:[],       // 保存从getClass跳转过来的已经认证好的班级
+            dis:true,            // 按钮样式
+            teamName:'',         // 认证班级的名称
             havenListShow:false, // 展示已经认证好的班级,
-            // id:1,  // 接收从userName 组件传过来的userId
-            CLYTogetClassId:'', // 接收从getClass 传过来的认证好了的班级id
-            classList:[
-                {name:"一年级1班",userId:0},
-                {name:"一年级2班",userId:1}
-            ]
+            id:1,                // 接收从userName 组件传过来的userId
+            CLYTogetClassId:'',  // 接收从getClass 传过来的认证好了的班级id
+            classListShow:true,
         }
     },
     computed:{
-      ComphavenClass(){
-        return this.havenClass;
+      classList(){
+        return  this.$store.state.res1;
       }
     },
     methods:{
-        getMore(id){    // 跳转到getClass组件
-            alert(id);
-            this.$router.push({ path:'/getClass',query:{id:id}});
+        getMore(id){             // 跳转到getClass组件
+            console.log("userID=",id);
+            this.$router.push({ path:'/getClass',query:{userId:id}});
         },
-
-        getDetail(){ //  认证完成之后点击展示 绑定的班级详细信息 
+        getDetail(){             //  认证完成之后点击展示 绑定的班级详细信息 
             alert("获取班级详细信息!");
+            console.log(this.CLYTogetClassId);
             this.$router.push({path:'/getClass',query:{CLYTogetClassId:this.CLYTogetClassId}});
-            // this.havenListShow = true;
+            
         },
         classRefer(){  // 班级确认
-            // 这里判断是否所有的班级都认证了,如果都认证了,按钮的状态为可点击,否则是不可点击状态
-           // 如果都认证完成了,跳转到认证成功
-          //  这里可以判断 classList  数组的长度是否为0 来显示按钮的是否可点击状态
+             // 这里判断是否所有的班级都认证了,如果都认证了,按钮的状态为可点击,否则是不可点击状态
+             // 如果都认证完成了,跳转到认证成功
+          
 
           if(1){  // 老用户 跳转到认证组件
-              this.$router.push({path:'/PassOk'})
-
+              this.$router.push({path:'/PassOk'});
           }
           else{ // 新用户跳转到有弹窗的组件
-             this.$router.push({path:'/NewAuthenticationOk'})
+             this.$router.push({path:'/NewAuthenticationOk'});
           }
         }
     },
     mounted(){
         document.title = "认证班级";
-        this.CLYTogetClassId = this.$route.query.ClassId;
-        console.log(this.CLYTogetClassId);
-        // 从getClass组件跳转过来 接收参数calssid 
-        if(this.$route.query.ClassId + 1){ 
-            console.log("this.$route.query.ClassId=",this.$route.query.ClassId);
-           // this.havenListShow = true;
-           this.havenClass.push(this.classList[this.$route.query.ClassId])
-           this.classList.splice(this.$route.query.ClassId,1)
-           console.log(this.havenClass)
-           this.CLYTogetClassId = this.$route.query.ClassId;
-        }
-
-
-        // 如果所有班级的数组长度为0 按钮可以点击
-        if(this.classList.length == 0){
-            this.dis = false;
+        // 认证班级按钮的显示隐藏
+        var result = this.$store.state.res1.every(function(el){
+            if(el.symbol){
+               return true;
+            }  
+        });
+        if(result){
+          this.dis = false;
         }
         
-
+        
     }
 }
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 <style scoped>
@@ -132,25 +112,8 @@ export default {
   margin-left: 0.4rem;
   position: relative;
 }
-#clychooseClass .wrap {
-  position: absolute;
-  height: 1.8667rem;
-  width: 6.7307rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-#clychooseClass .wrap p {
-  /*display: inline-block;*/
-}
-#clychooseClass .classTitle {
-  font-family: PingFangSC-Regular;
-  font-size: 0.4533rem;
-  color: #FFFFFF;
-  line-height: 0.4533rem;
-  margin-left: 0.4rem;
-  margin-right: 0.2133rem;
-}
+
+
 
 #clychooseClass .vBg {
   display: inline-block;
@@ -161,40 +124,21 @@ export default {
 
 }
 
-#clychooseClass .classContent {
-  font-family: PingFangSC-Regular;
-  font-size: 0.4533rem;
-  color: #FFFFFF;
-  line-height: 0.4533rem;
-  margin-left: 0.2133rem;
-  margin-right: 1.1333rem;
-}
-
 #clychooseClass  .over {
   position: absolute;
   right: 0.8107rem;
   width:1.6587rem;
   height: 1.8667rem ;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 #clychooseClass .over img{
   display: inline-block;
-  width:1.6587rem;
-  height: 1.6187rem;
   margin-top: 0.1333rem;
+  margin-left: 84.1.1307rem;
 }
 
-
-#clychooseClass .moreInfo{
-  position: absolute;
-  right: 0.4rem;
-  bottom: 0.7467rem;
-  width: 0.2133rem;
-  height: 0.3733rem;
-  margin-left:0.1973rem ;
-  background-size: 0.2133rem 0.3733rem;
-  background: url('../../static/images/more.png')no-repeat center;
-}
-/**/
 
 #clychooseClass .leadTitle {
   font-family: PingFangSC-Light;
@@ -214,6 +158,9 @@ export default {
   margin-top: 0.5333rem;
   margin-left: 0.4rem;
   position: relative;
+  display:flex;
+  /*justify-content:center;*/
+  align-items: center;
 }
 
 #clychooseClass .classList .className {
@@ -229,6 +176,7 @@ export default {
   font-size: 0.4533rem;
   color: #AAAAAA;
   line-height: 0.4533rem;
+  margin-left: 0.2133rem;
 }
 #clychooseClass .classList .more {
   position: absolute;

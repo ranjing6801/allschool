@@ -53,37 +53,39 @@ export default {
     methods:{
         openSmallDesk(){
             // 打开晓黑板
-            alert("打开晓黑板")
+            alert("打开晓黑板");
         },
         knowing(){
           this.reVolidate = false;
+        },
+        forbiddenReback(){
+          this.reVolidate = true;
         }
     },
     created() {
-        document.title = "反馈成功"
-
-        
+        document.title = "反馈成功";
     },
     mounted() {
       //判断手机类型
-      var ua = navigator.userAgent.toLowerCase();
+        var ua = navigator.userAgent.toLowerCase();
 
-      if(/android/.test(ua)){
+        if(/android/.test(ua)){
           console.log('android...');
           this.isAND = true;
           this.isIOS = false;
         }
 
-      if(/iphone|ipad|ipod/.test(ua)){
+        if(/iphone|ipad|ipod/.test(ua)){
           console.log('ios...');
           this.isIOS = true;
           this.isAND = false;
         } 
 
+// 微信浏览器 返回事件
         pushHistory();  
         let that = this;
         window.addEventListener("popstate", function(e) {  
-              that.reVolidate = true;
+              that.forbiddenReback();
 
         }, false);  
       

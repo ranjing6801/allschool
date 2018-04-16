@@ -37,6 +37,8 @@ import overCount from './overCount'
 import AuthenticationOk from './AuthenticationOk'
 import NewAuthenticationOk from './NewAuthenticationOk' 
 import CLNewTeacher from './CLNewTeacher' 
+
+
 export default {
     name:'userName',
     components:{
@@ -101,9 +103,6 @@ export default {
                         }
                         else{  // 有班级 [ 选择班级认证]  或者  [创建班级认证]
                              if(res[0].website == "ola.org"){  //第一种: [ 选择班级认证] 
-                                    console.log("选择班级认证");
-                                    // console.log(this.classList)
-                                    // console.log(this.num);
                                 this.$router.push({path:'/CLYchooseClass',query:{}})
 
                              }else {
@@ -113,7 +112,7 @@ export default {
                    }
                    //是班主任, 是新用户
                    if(res[0].id == 7){  // 班主任的验证,是新用户 
-                        this.$router.push({name:'CreateClass'})
+                        this.$router.push({name:'CLNewTeacher'})
                    }
                    if(res[0].id == 8){  //已经认证过了,提示请勿重复认证弹窗
                       this.reVolidate = true;
