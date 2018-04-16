@@ -63,9 +63,9 @@
 
 <script>
 import imgSrc from  '../../static/images/logo.jpg'
-import axios from 'axios'
+// import axios from 'axios'
 import $ from 'jquery'
-import api from '../api/api'
+// import api from '../api/api'
 // import codeFail from './codeFail'
 import overCount from './overCount'
 import userName from './userName'
@@ -94,7 +94,7 @@ export default {
                 codeOverTime:'验证码发送次数已达上限',
                 helpMessage:'您填写的信息可以帮助我们及时更正哦',
                 txt:'验证码累计错误已达上线',
-                dis:true,
+                dis:false,
                 getCodeNum:0,   // 记录获取验证码次数, 到达10次 就进入反馈界面
                 isCodeFailShow:false,  // 语音验证码
 
@@ -106,6 +106,18 @@ export default {
         }
     },
     methods:{
+        getVolidateCode(){
+          // 刚刚进入这个组件  就获取验证码
+          this.axios.post('/h5/index/sendMessageCode',{
+                phone:localStorage.getItem('phone')
+          })
+          .then(res => {
+            console.log('res=',ers);
+          })
+          .catch(err => {
+            console.log('err=',err);
+          })
+        },
         codeFailHidden(){ // 验证码发送失败弹窗
             this.isCodeFail = false;
         },
@@ -117,18 +129,14 @@ export default {
         },
         
         reCredNumFocus(){    // 验证码输入框 焦点事件
-
             if(this.reCredNum.length > 0){
-
                 $('.VolidateCode').addClass('hot');
             }
             else{
                 $('.VolidateCode').removeClass('hot');
             }
-
             if(this.reCredNum.length == 4 ){  
                 this.dis = false;
-
             }
             else{
                 this.dis = true;
@@ -142,29 +150,29 @@ export default {
         getListenCode(){  // 获取语音验证码
             this.isCodeFailShow = true;
         },
-        
         regetNum(){ // 重新获取短信验证码
             this.reNum = false;
             this.YZM = true;
             this.ListenYzm = false;
-            api.myGet("users",{id:'1'})
-    				   .then(res => {
-                    this.ShowNumber();
-                    // this.count++;
-                    // if(this.count > 0){
-                    //     console.log('this.count:',this.count);
-                    //     this.listenCode = true;
-                    // }
-                    if(this.count >= 4){ // 每天最多可以获取5次验证码
-                        console.log("验证码发送次数已达上限");
-                        this.$router.push({path:'/overCount',query:{title:this.codeOverTime,helpMessage:this.helpMessage}});
-                    }
-    				   })
-    				   .catch(err => {
-      					   // 手机号码验证错误
-      					   console.log(err);
-                   $('.VolidateCode').addClass('hot');
-    				   })
+            thihs.getVolidateCode();  
+            //  api.myGet("users",{id:'1'})
+    				//    .then(res => {
+            //         this.ShowNumber();
+            //         // this.count++;
+            //         // if(this.count > 0){
+            //         //     console.log('this.count:',this.count);
+            //         //     this.listenCode = true;
+            //         // }
+            //         if(this.count >= 4){ // 每天最多可以获取5次验证码
+            //             console.log("验证码发送次数已达上限");
+            //             this.$router.push({path:'/overCount',query:{title:this.codeOverTime,helpMessage:this.helpMessage}});
+            //         }
+    				//    })
+    				//    .catch(err => {
+      			// 		   // 手机号码验证错误
+      			// 		   console.log(err);
+            //        $('.VolidateCode').addClass('hot');
+    				//    })
         },
         ShowNumber(){  // 显示倒计时
            clearInterval(this.timer)   //调用定时器之前先清除定时器
@@ -190,8 +198,11 @@ export default {
             //this.reNum = false; 
         },
         know(){  // 请求语音验证码 点击 好的 
-            api.myGet("users",{id:'1'}) // 点击 好的  语音验证码请求数据返回成功  
+            this.axios.post('/h5/index/sendvoicecode',{
+                phone:localStorage.getItem('phone')
+            })
             .then(res => {
+              console.log('res=',res);
                 this.isCodeFailShow = false;  //语音短信码弹窗关闭
                 this.reNum = false;      //关闭重发验证码提示
                 this.ListenYzm = true;    
@@ -200,41 +211,49 @@ export default {
                 this.ShowNumber();
             })
             .catch(err => {
-              console.log(err)
+              console.log('err=',err);
             })
             
         },
         codePromise(){ // 验证码提交
             api.myGet("users",{id:1,reCredNum:this.reCredNum}) 
-               .then(res => {
-                   // console.log(res[0].id)
-                    if(res[0].id == 1){  // 跳转到 userName
-                        this.$router.push({path:'/userName',query:{title:this.$route.query.title}})
-                    }
+            this.axios.post('/h5/index/checkcode',{
+                    phone:localStorage.getItem('phone'),
+                    code:this.reCredNum
+                })
+                .then(res => {
+                   console.log('res=',res);
+                    // if(res[0].id == 1){  // 跳转到 userName
+                    //     this.$router.push({path:'/userName',query:{title:this.$route.query.title}})
+                    // }
 
-                    if(res[0].id == 2){  // 验证码错误
-                      $('.VolidateCode').addClass('red')
-                        this.isShowCode = true
-                        this.getCodeNum ++ ;
-                        $(".rightPhone").html('验证码错误');
-                        console.log('验证码输入错误次数:',this.getCodeNum)
-                        if(this.getCodeNum > 9){   // 记录验证码输入错误的次数, 到达10次 就进入反馈界面
-                            console.log("验证码输入错误超过10次");
-                            this.$router.push({path:"/overCount",query:{title:this.txt,helpMessage:this.helpMessage}});
-                        } 
-                    }
-                     if(res[0].id==3){
-                        // 验证码发送失败
-                        this.isCodeFail = true;
-                    }
-               })  
-               .catch(err => {
-
-               })
+                    // if(res[0].id == 2){  // 验证码错误
+                    //   $('.VolidateCode').addClass('red')
+                    //     this.isShowCode = true
+                    //     this.getCodeNum ++ ;
+                    //     $(".rightPhone").html('验证码错误');
+                    //     console.log('验证码输入错误次数:',this.getCodeNum)
+                    //     if(this.getCodeNum > 9){   // 记录验证码输入错误的次数, 到达10次 就进入反馈界面
+                    //         console.log("验证码输入错误超过10次");
+                    //         this.$router.push({path:"/overCount",query:{title:this.txt,helpMessage:this.helpMessage}});
+                    //     } 
+                    // }
+                    // if(res[0].id==3){
+                    //     // 验证码发送失败
+                    //     this.isCodeFail = true;
+                    // }
+                })  
+                .catch(err => {
+                    console.log('err=',err);
+                })
         }
     },
+    created(){
+      // 刚刚进入这个组件  就获取验证码
+        this.getVolidateCode();
+      
+    },
     mounted(){
-        // console.log(this.$route)
         this.YZM = true
         document.title = "填写验证码"
         this.title = this.$route.query.title
@@ -246,6 +265,8 @@ export default {
           this.reNum = true   // 进入验证码界面就获取验证码.并且显示重新获取验证码提示
         }
         sessionStorage.removeItem('phone')  // 防止刷新页面后出现倒计时, 刷新页面应该出现重新获取验证码
+
+        
     }
 }
 </script>

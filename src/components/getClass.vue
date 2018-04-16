@@ -145,6 +145,7 @@ export default {
             */
                 if(this.team == '4'){
                     alert('班主任创建班级');
+                    this.$router.push({path:'/ClNewTeacher'});
                 }else{
                   // 选择班级认证
                    console.log("this.taem=",this.team);
@@ -171,8 +172,7 @@ export default {
           
           console.log('obj=',obj.pid);
           this.$store.state.res2[obj.pid].isbgShow = false;
-          this.$store.state.res1[obj.pid].symbol = false;
-       
+          this.$store.state.res1[obj.pid].symbol = false;   
         }
     },
     mounted(){

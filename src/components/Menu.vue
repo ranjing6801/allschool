@@ -40,10 +40,11 @@
 </template>
 
 <script>
-import imgSrc from  '../../static/images/logo.jpg'
+// import imgSrc from  '../../static/images/logo.jpg'
 import VolidateCode from './VolidateCode'
 import $ from 'jquery'
-import api from '../api/api'
+
+// import api from '../api/api'
   export default {
     name:'myMenu',
     meataInfo:{
@@ -51,8 +52,8 @@ import api from '../api/api'
     },
     data(){
       return {
-        title:'苏州工业园二十一世纪实验幼儿园二期',  // 扫码进来后的标题
-        imgSrc:imgSrc,
+        title:'',  // 扫码进来后的标题
+        imgSrc:'',
         tip:true,
         phone:'',
         btn:true,
@@ -111,39 +112,41 @@ import api from '../api/api'
               $('.rightPhone').html('请填写正确的手机号码');
               return;
           }
-  
-          api.myGet("users",{id:4})
-          // this.axios.get("users",{id:4})
-               .then(res => {
-                console.log('res:',res);
-                  console.log(res[0].id)         
-                  if(res[0].id == 1){   // 提示 该手机号已经加入其他学校
-                        this.isRightNumber = true;
-                        $('.input').addClass('red');
-                        $('.rightPhone').html('该手机号已经加入其他学校');
+          
+          this.axios.post('/h5/index/checkPhoneNumber',{
+                  phone:'18616253090',
+                })
+              .then(res => {
+                console.log('resPhone=',res);
+                  // console.log(res[0].id)         
+                  // if(res[0].id == 1){   // 提示 该手机号已经加入其他学校
+                  //       this.isRightNumber = true;
+                  //       $('.input').addClass('red');
+                  //       $('.rightPhone').html('该手机号已经加入其他学校');
 
-                  }else if(res[0].id==2){ // 手机号码验证错误
-                        this.isRightNumber = true;
-                        $('.input').addClass('red');
-                        $('.rightPhone').html('请填写正确的手机号码');
+                  // }else if(res[0].id==2){ // 手机号码验证错误
+                  //       this.isRightNumber = true;
+                  //       $('.input').addClass('red');
+                  //       $('.rightPhone').html('请填写正确的手机号码');
 
-                  }else if(res[0].id==3){
-                        // 验证码发送失败
-                        this.isCodeFailShow = true;
+                  // }else if(res[0].id==3){
+                  //       // 验证码发送失败
+                  //       this.isCodeFailShow = true;
 
-                  }else{
-                    //手机号码验证成功  跳转 到验证码界面
+                  // }else{
+                  //   //手机号码验证成功  跳转 到验证码界面
+                          //  localStorage.setItem("phone",this.phone); 
+                  //       sessionStorage.setItem("phone",this.phone);   // 将电话号码存储在 本地 
+                  //       this.$router.push({name:'VolidateCode',query:{title:this.title,phone:this.phone}});
 
-                        sessionStorage.setItem("phone",this.phone);   // 将电话号码存储在 本地 
-                        this.$router.push({name:'VolidateCode',query:{title:this.title,phone:this.phone}});
-
-                  }
-         })
-         .catch(err => {
-           // 手机号码验证错误
-           //this.isRightNumber = true;
-            //$('.mint-cell').addClass('red');
-         })
+                  // }
+              })
+              .catch(err => {
+                alert('请求错误');
+                console.log('errPhone=',err);
+                // 手机号码验证错误
+                //this.isRightNumber = true;
+              });
       },
       tel(){
         //禁止输入非数字
@@ -155,7 +158,15 @@ import api from '../api/api'
     },
     mounted(){
       document.title = "输入手机号";
-      
+      this.axios.get('/h5/index/index?tcode='+ 16695090)
+          .then(res => {
+            // console.log('res=',res.data.response.school_info);
+            this.imgSrc = res.data.response.school_info.school_img;
+            this.title = res.data.response.school_info.school_name;
+          })
+          .catch(err => {
+            console.log('err=',err);
+          })
     }
   }
 </script>
@@ -163,10 +174,6 @@ import api from '../api/api'
 <style scoped>
 button{
   outline: none;
-}
-#myMenu{
-    
-    
 }
 .head {
   width:9.2rem;

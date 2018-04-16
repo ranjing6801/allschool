@@ -52,11 +52,27 @@ export default {
             isbtn:false,
             cur:''
         }
-    },
+    }, 
     methods:{
-        getContent(){
+        getContent(){   // 提交反馈信息 
           if(this.user&&this.cur&&this.reback){
-            this.$router.push({path:'/AuthenticationOk',query:{}})
+            this.axios.post('/h5/index/questionBack',{
+                user_name:'',  //老师姓名 
+                is_director:'',//是否班主任
+                school_id:'',  // 学校id
+                phone:'',      //手机号
+                keyword:'',    // 关键字
+                detail:''      // 问题详情
+            })
+            .then(res => {
+              console.log('res=',res);
+              this.$router.push({path:'/AuthenticationOk',query:{}})
+
+            })
+            .catch(err => {
+              console.log('err=',err);
+            })
+
           }else{
             console.log('请输入完整的信息...');
           }

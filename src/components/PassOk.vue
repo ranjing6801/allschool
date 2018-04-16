@@ -52,7 +52,7 @@ export default {
     },
     methods:{
         openSmallDesk(){
-            // 打开晓黑板
+            // 打开晓黑板  跳转到晓黑板
             alert("打开晓黑板");
         },
         knowing(){

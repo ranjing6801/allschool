@@ -76,14 +76,14 @@ export default {
     },
     methods:{
         overRefer(){  // 认证完成
-            this.isSave = true
+            this.isSave = true;
         },
         HiddenSaveModal(){
-            this.isSave = false
+            this.isSave = false;
         }
     },
     mounted(){
-        document.title = "创建班级并认证"
+        document.title = "创建班级并认证";
     }
 }
 </script>

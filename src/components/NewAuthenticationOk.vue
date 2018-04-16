@@ -81,6 +81,22 @@ export default {
           this.isIOS = true;
           this.isAND = false;
         }
+        
+// 微信浏览器 返回事件
+      pushHistory();  
+      let that = this;
+      window.addEventListener("popstate", function(e) {  
+            that.forbiddenReback();
+
+      }, false);  
+    
+      function pushHistory() {  
+          var state = {  
+              title: "",  
+              url: "/Menu"  
+          };  
+          window.history.pushState(state, state.title, state.url);  
+      }
     }
 }
 </script>
