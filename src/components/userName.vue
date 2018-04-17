@@ -68,23 +68,64 @@ export default {
           this.reVolidate = false;
         },
         NamePromise(){ // 姓名验证 
+          // 1 无整校班级 — 老用户 - 认证成功：打开晓黑板
+          // 2 无整校班级 — 新用户 - 认证成功：打开晓黑板（账号密码）
+
+          // 3 有整校班级 — 非班主任 — 老用户 - 认证成功：打开晓黑板
+          // 4 有整校班级 — 非班主任 — 新用户 - 认证成功：打开晓黑板（账号密码）
+
+          // 5 有整校班级 — 班主任 — 老用户 — 无晓黑板班级 - 创建班级 - 生成二维码 - 认证成功：打开晓黑板
+          // 6 有整校班级 — 班主任 — 老用户 — 有晓黑板班级 - 认证班级/创建班级 - 认证成功：打开晓黑板
+          // 7 有整校班级 — 班主任 — 新用户 — 无晓黑板班级 - 创建班级 - 生成二维码 - 认证成功：打开晓黑板
+            console.log('输入的姓名是:',this.userName);
+            console.log('您的手机号是:',sessionStorage.getItem('phone'));
             this.axios.post('/h5/index/getUserDetail',{
                     name:this.userName,
                     phone:sessionStorage.getItem('phone')
                 })
                .then( res => {
-                   console.log('getUserDetail:',res);
+                  console.log('getUserDetail:',res);
                   if(res.data.response){
-                      
-                    }
+                    var obj = res.data.response;
+                      //1
+                      if(obj.is_has_school_class==0 && obj.is_regular==1){
+                        this.$router.push({path:'/PassOk',query:{}})
+                      }
+                      //2
+                      if(obj.is_has_school_class==0 && obj.is_regular==0){
+                        this.$router.push({path:'/NewAuthenticationOk',query:{}})
+                      }
+                      //3
+                      if(obj.is_has_school_class==1 && obj.is_class_director==0 && obj.is_regular==1){
+                        this.$router.push({path:'/PassOk',query:{}})
+                      }
+                      //4
+                      if(obj.is_has_school_class==1 && obj.is_class_director==0 && obj.is_regular==0){
+                        this.$router.push({path:'/NewAuthenticationOk',query:{}})
+                      }
+                      //5
+                      if(obj.is_has_school_class==1 && obj.is_class_director==1 && obj.is_regular==1 && obj.is_has_xhb_class==0){
+                        this.$router.push({path:'/CLNewTeacher',query:{}})
+                      }
+                      //6
+                      if(obj.is_has_school_class==1 && obj.is_class_director==1 && obj.is_regular==1 && obj.is_has_xhb_class==1){
+                        this.$router.push({path:'/CLYchooseClass',query:{}})
+                      }
+                      //7
+                      if(obj.is_has_school_class==1 && obj.is_class_director==1 && obj.is_regular==0 && obj.is_has_xhb_class==0){
+                        this.$router.push({path:'/CLNewTeacher',query:{}})
+                      }
+                  }
                   if(res.data.error_response){
-                    if(res.data.error_response.code=218){
+                    console.log('error_response');
+                    if(res.data.error_response.code==218){//姓名不存在
                         this.title = this.errTitle   // 跳转之前 将title值覆盖
                         this.$router.push({path:'/overCount',query:{username:this.userName,title:this.title,helpMessage:this.helpMessage}})
-                      }
-                    }else if(res.data.error_response.code=210){
-
+                      }else if(res.data.error_response.code==219){//已经认证过
+                        console.log('已经认证过');
+                        this.reVolidate = true;
                     }
+                  }
                   
             // 姓名不存在的用户
             //        if(res[0].id == 1){  // 姓名不存在
