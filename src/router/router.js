@@ -25,7 +25,7 @@ const router = new VueRouter({
             component:Menu 
         },
         {  // 输入手机号
-            path:'/menu',
+            path:'/menu/:tcode',
             name:'menu',
             component:Menu
         },

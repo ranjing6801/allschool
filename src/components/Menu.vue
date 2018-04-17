@@ -40,11 +40,9 @@
 </template>
 
 <script>
-// import imgSrc from  '../../static/images/logo.jpg'
 import VolidateCode from './VolidateCode'
 import $ from 'jquery'
 
-// import api from '../api/api'
   export default {
     name:'myMenu',
     meataInfo:{
@@ -52,7 +50,7 @@ import $ from 'jquery'
     },
     data(){
       return {
-        title:'',  // 扫码进来后的标题
+        title:'',
         imgSrc:'',
         tip:true,
         phone:'',
@@ -60,7 +58,7 @@ import $ from 'jquery'
         isRightNumber:false,
         count:null,
         isCodeFailShow:false,
-        telNum:false,    // 控制手机号码输入框 右边的 x
+        telNum:false,// 控制手机号码输入框 右边的 x
       }
     },
     watch:{ // 监听phone
@@ -69,11 +67,6 @@ import $ from 'jquery'
         }
     },
     methods:{
-      // ! 
-      rightNumberTip(){
-        
-      },
-      //  x
       clearTel(){
         this.phone = '';
         this.telNum = false;
@@ -93,7 +86,6 @@ import $ from 'jquery'
           }
           if(this.phone.length == 13){
             this.btn = false;
-
           }else{
             this.btn = true;
             this.isRightNumber = false;
@@ -102,8 +94,8 @@ import $ from 'jquery'
         }
       },
       telPromise(){  // 获取验证码
-            console.log('点击提交按钮');
-            //请求数据之前 要判断手机号是否合法
+          console.log('点击提交按钮');
+          //请求数据之前 要判断手机号是否合法
           let myphone = this.phone.split(' ').join('');
           if(!(/^1[3|4|5|7|8][0-9]\d{4,8}$/.test(myphone))) {
               this.isRightNumber = true;
@@ -112,38 +104,48 @@ import $ from 'jquery'
               $('.rightPhone').html('请填写正确的手机号码');
               return;
           }
-          
+          console.log('手机号:',myphone);
+
           this.axios.post('/h5/index/checkPhoneNumber',{
-                  phone:'18616253090',
+                  phone: myphone,
                 })
               .then(res => {
-                console.log('resPhone=',res);
-                  // console.log(res[0].id)         
-                  // if(res[0].id == 1){   // 提示 该手机号已经加入其他学校
-                  //       this.isRightNumber = true;
-                  //       $('.input').addClass('red');
-                  //       $('.rightPhone').html('该手机号已经加入其他学校');
+                console.log('checkPhoneNumber:',res);
+                if(res.data.response){
+                  sessionStorage.setItem("phone",myphone);   // 将电话号码存储在 本地
+                  sessionStorage.setItem("myphone",myphone);   // 将电话号码存储在 本地
+                  this.$router.push({name:'VolidateCode',query:{title:this.title,phone:this.phone}});
+                }
+                if(res.data.error_response){
+                      this.isRightNumber = true;
+                      $('.input').addClass('red');
+                      $('.rightPhone').html(res.data.error_response.msg);
+                }
+                // if(res[0].id == 1){   // 提示 该手机号已经加入其他学校 15122222222
+                //       this.isRightNumber = true;
+                //       $('.input').addClass('red');
+                //       $('.rightPhone').html('该手机号已经加入其他学校');
 
-                  // }else if(res[0].id==2){ // 手机号码验证错误
-                  //       this.isRightNumber = true;
-                  //       $('.input').addClass('red');
-                  //       $('.rightPhone').html('请填写正确的手机号码');
+                // }else if(res[0].id==2){ // 手机号码验证错误
+                //       this.isRightNumber = true;
+                //       $('.input').addClass('red');
+                //       $('.rightPhone').html('请填写正确的手机号码');
 
-                  // }else if(res[0].id==3){
-                  //       // 验证码发送失败
-                  //       this.isCodeFailShow = true;
+                // }else if(res[0].id==3){
+                //       // 验证码发送失败
+                //       this.isCodeFailShow = true;
 
-                  // }else{
-                  //   //手机号码验证成功  跳转 到验证码界面
-                          //  localStorage.setItem("phone",this.phone); 
-                  //       sessionStorage.setItem("phone",this.phone);   // 将电话号码存储在 本地 
-                  //       this.$router.push({name:'VolidateCode',query:{title:this.title,phone:this.phone}});
+                // }else{
+                //   //手机号码验证成功  跳转 到验证码界面
+                        //  localStorage.setItem("phone",this.phone); 
+                //       sessionStorage.setItem("phone",this.phone);   // 将电话号码存储在 本地 
+                //       this.$router.push({name:'VolidateCode',query:{title:this.title,phone:this.phone}});
 
-                  // }
+                // }
               })
               .catch(err => {
-                alert('请求错误');
-                console.log('errPhone=',err);
+                console.log('请求错误');
+                console.log('errPhone:',err);
                 // 手机号码验证错误
                 //this.isRightNumber = true;
               });
@@ -160,12 +162,14 @@ import $ from 'jquery'
       document.title = "输入手机号";
       this.axios.get('/h5/index/index?tcode='+ 16695090)
           .then(res => {
-            // console.log('res=',res.data.response.school_info);
+          //console.log('res:',res.data.response.school_info);
             this.imgSrc = res.data.response.school_info.school_img;
             this.title = res.data.response.school_info.school_name;
+            sessionStorage.setItem("imgSrc",this.imgSrc);
+            sessionStorage.setItem("title",this.title);
           })
           .catch(err => {
-            console.log('err=',err);
+            console.log('err:',err);
           })
     }
   }
