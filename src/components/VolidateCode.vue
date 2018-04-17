@@ -113,14 +113,14 @@ export default {
               this.ShowNumber();
             }
             if(res.data.error_response){
-              if(res.data.error_response.code=213){
+              if(res.data.error_response.code==213){
                 this.reNum = true;
                 this.isCodeFail = true;
-              }else if(res.data.error_response.code=210){
+              }else if(res.data.error_response.code==210){
                  console.log("验证码发送次数已达上限");
                  this.$router.push({path:'/overCount',query:{title:this.codeOverTime,helpMessage:this.helpMessage}});
                 }
-              }
+            }
           })
           .catch(err => {
             console.log('err:',err);
