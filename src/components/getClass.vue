@@ -134,12 +134,8 @@ export default {
       }    
     },
     methods:{
-        getClassListData(){  // 请求数据
-            
-        },
         getClassPromise(){ //  确认   
-            /*
-                1.第一种情况: 如果该班级没有被其他的班主任认证    点击确认跳转到 前面 班主任列表查询页
+            /*  1.第一种情况: 如果该班级没有被其他的班主任认证    点击确认跳转到 前面 班主任列表查询页
                 2.第二种情况:如果在认证某一个班级的时候,他已经被其他老师认证过了,会提示弹窗
                 3.第三种情况:就是 班级认证完了,创建班级 
             */
@@ -172,7 +168,8 @@ export default {
           
           console.log('obj=',obj.pid);
           this.$store.state.res2[obj.pid].isbgShow = false;
-          this.$store.state.res1[obj.pid].symbol = false;   
+          this.$store.state.res1[obj.pid].symbol = false;
+          this.$store.state.res1[obj.pid].className = '的对应班级';   
         }
     },
     mounted(){
@@ -180,7 +177,6 @@ export default {
         this.getClassId = this.$route.query.userId;
         console.log(this.$route.query.userId);
     }
-  
 }
 
 </script>

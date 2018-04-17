@@ -3,7 +3,7 @@
   <!--  head 部分 -->
     <div class="head">
         <div class="left">
-            < img :src="imgSrc">
+            <img :src="imgSrc">
         </div>
         <div class="right">
             <span>{{ title }}</span>

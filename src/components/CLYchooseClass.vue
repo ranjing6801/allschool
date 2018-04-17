@@ -1,36 +1,28 @@
 <template>
-    <!-- 班主任 有班级 并选择班级认证 -->
   <div id="clychooseClass">
         <p class="leadTitle">您是{{ num }}个班级班主任, 请选择:</p>
-        
-        <!--   展示已经认证好了的班级  -->
-        <!-- <ul>
-            <li v-for="(item,index) in HClass" :key="index"  class="havenList" @click="getDetail" > 
-              <div  class="wrap">
-                  <p class="classTitle"> {{ item.name }}</p>  
-                  <p class="vBg"></p>
-                  <p class="classContent">阳光中队</p>
-              </div> 
-              <div class="over">
-                <img src='/static/images/over.png'>
-              </div>  
-              <div class="moreInfo">
-                
-              </div>
-            </li>
-        </ul> -->
-        
-         <!--  展示还没有认证的班级  -->
         <ul>
-            <li v-if="classListShow" v-for="item in classList" :key="item.index" 
+         <!--  展示还没有认证的班级  -->
+            <li v-if="item.symbol" v-for="item in classList" :key="item.index" 
+                    class="classList" @click="getDetail(item.classId)">
+                <span class="className"> {{ item.name }}</span> 
+                <p v-if="item.symbol" class="vBg"></p>
+                <span class="classTeam"> {{ item.className}}</span>   
+                <div class="over" v-if="item.symbol">
+                    <img src='/static/images/over.png'>
+                </div> 
+                <span  class="more"></span>
+            </li>
+
+            <li v-if="!item.symbol" v-for="item in classList" :key="item.index" 
                     class="classList" @click="getMore(item.classId)">
-             <span class="className"> {{ item.name }}</span> 
-             <p v-if="item.symbol" class="vBg"></p>
-             <span class="classTeam"> {{ item.className}}</span>   
-             <div class="over" v-if="item.symbol">
-                <img src='/static/images/over.png'>
-              </div> 
-             <span  class="more"></span>
+                <span class="className"> {{ item.name }}</span> 
+                <p v-if="item.symbol" class="vBg"></p>
+                <span class="classTeam"> {{ item.className}}</span>   
+                <div class="over" v-if="item.symbol">
+                    <img src='/static/images/over.png'>
+                </div> 
+                <span  class="more"></span>
             </li>
         </ul>
 
@@ -55,18 +47,38 @@ export default {
     },
     computed:{
       classList(){
-        return  this.$store.state.res1;
+        // return  this.$store.state.res1;
       }
     },
     methods:{
+        getClassList(){
+            this.axios.post('/h5/index/getXhbClass',{
+                    user_token:'58aac1fc0cf2e2b008585f7b'
+                })
+                .then(res => {
+                    console.log('res=',res);
+                    if(res.data.response){
+                        // this.xhbClass = res.data.response.xhbClass
+                    }
+                    if(res.data.error_response){
+                        if(res.data.error_response.code=201){
+                            console.log('msg=',res.data.error_response.code);
+                        }
+                    }
+                })
+                .catch(err => {
+                    console.log('err=',err);
+                })
+
+        },
         getMore(id){             // 跳转到getClass组件
             console.log("userID=",id);
             this.$router.push({ path:'/getClass',query:{userId:id}});
         },
-        getDetail(){             //  认证完成之后点击展示 绑定的班级详细信息 
-            alert("获取班级详细信息!");
-            console.log(this.CLYTogetClassId);
-            this.$router.push({path:'/getClass',query:{CLYTogetClassId:this.CLYTogetClassId}});
+        getDetail(passId){             //  认证完成之后点击展示 绑定的班级详细信息 
+            console.log("passId=",passId);
+            
+            this.$router.push({path:'/getClass',query:{userId:passId}});
             
         },
         classRefer(){  // 班级确认
@@ -84,6 +96,7 @@ export default {
     },
     mounted(){
         document.title = "认证班级";
+        this.getClassList();
         // 认证班级按钮的显示隐藏
         var result = this.$store.state.res1.every(function(el){
             if(el.symbol){
