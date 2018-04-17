@@ -29,10 +29,7 @@
 </div>
 </template>
 <script>
-import imgSrc from  '../../static/images/logo.jpg'
-import axios from 'axios'
 import $ from 'jquery'
-import api from '../api/api'
 import overCount from './overCount'
 import AuthenticationOk from './AuthenticationOk'
 import NewAuthenticationOk from './NewAuthenticationOk' 
@@ -46,8 +43,8 @@ export default {
     },
     data(){
         return {
-            title:null,
-            imgSrc:imgSrc,
+            title:sessionStorage.getItem('title'),
+            imgSrc:sessionStorage.getItem('imgSrc'),
             userName:'',
             dis:false,
             errTitle:'您填写的教师姓名不存在',
@@ -71,12 +68,24 @@ export default {
           this.reVolidate = false;
         },
         NamePromise(){ // 姓名验证 
-            this.axios.post('/h5/index/getuserdetail',{
+            this.axios.post('/h5/index/getUserDetail',{
                     name:this.userName,
-                    phone:localStorage.getItem('phone')
+                    phone:sessionStorage.getItem('phone')
                 })
                .then( res => {
-                   console.log('res=',res);
+                   console.log('getUserDetail:',res);
+                  if(res.data.response){
+                      
+                    }
+                  if(res.data.error_response){
+                    if(res.data.error_response.code=218){
+                        this.title = this.errTitle   // 跳转之前 将title值覆盖
+                        this.$router.push({path:'/overCount',query:{username:this.userName,title:this.title,helpMessage:this.helpMessage}})
+                      }
+                    }else if(res.data.error_response.code=210){
+
+                    }
+                  
             // 姓名不存在的用户
             //        if(res[0].id == 1){  // 姓名不存在
             //             //alert("姓名不存在")
@@ -129,8 +138,7 @@ export default {
         }
     },
     mounted(){
-        document.title = "填写姓名"
-        this.title = this.$route.query.title;
+        document.title = "填写姓名";
     }
 }
 </script>
