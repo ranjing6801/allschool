@@ -80,6 +80,18 @@ export default {
         },
         HiddenSaveModal(){
             this.isSave = false;
+        },
+        createClass(){
+            this.axios.post('/h5/index/getUserDetail',{
+                user_token:'',
+                teacher_id:''
+            })
+            .then(res => {
+                console.log('res=',res);
+            })
+            .catch(err => {
+                console.log('err=',err);
+            })
         }
     },
     mounted(){

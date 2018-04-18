@@ -52,6 +52,7 @@ export default {
             num:1,
             reVolidate:false, // 用户重复认证弹窗
             
+            
         }
     },
     methods:{
@@ -80,13 +81,32 @@ export default {
             console.log('输入的姓名是:',this.userName);
             console.log('您的手机号是:',sessionStorage.getItem('phone'));
             this.axios.post('/h5/index/getUserDetail',{
-                    name:this.userName,
-                    phone:sessionStorage.getItem('phone')
+                    name:'user1',
+                    phone:'14444441120'
+                    // name:this.userName,
+                    // phone:sessionStorage.getItem('phone')
                 })
                .then( res => {
                   console.log('getUserDetail:',res);
                   if(res.data.response){
-                    var obj = res.data.response;
+                        var obj = res.data.response;
+                        sessionStorage.setItem('teacher_id',obj.teacher_id);  // 保存teacher_id
+                        sessionStorage.setItem('user_token',obj.user_token);   // 保存user_token
+                        this.$store.state.res1 = obj.school_class;
+                        this.$store.state.res2 = obj.xhb_class;
+
+                        for(var i = 0; i<this.$store.state.res1.length; i++){
+                             this.$store.state.res1[i].symbol = '';
+                             this.$store.state.res1[i].teamId = '';
+                             this.$store.state.res1[i].name = '的对应班级';  
+                             this.$store.state.res1[i].xhb_class_token = '';  
+                         }
+                         for(var i = 0; i<this.$store.state.res2.length; i++){
+                             this.$store.state.res2[i].teamShow = '';
+                         }
+                         console.log('res1=',this.$store.state.res1);
+                         console.log('res2=',this.$store.state.res2);
+
                       //1
                       if(obj.is_has_school_class==0 && obj.is_regular==1){
                         this.$router.push({path:'/PassOk',query:{}})
@@ -108,8 +128,8 @@ export default {
                         this.$router.push({path:'/CLNewTeacher',query:{}})
                       }
                       //6
-                      if(obj.is_has_school_class==1 && obj.is_class_director==1 && obj.is_regular==1 && obj.is_has_xhb_class==1){
-                        this.$router.push({path:'/CLYchooseClass',query:{}})
+                      if(obj.is_has_school_class==1 && obj.is_class_director==1 && obj.is_regular==1 && obj.is_has_xhb_class==1){            
+                         this.$router.push({path:'/CLYchooseClass',query:{}})
                       }
                       //7
                       if(obj.is_has_school_class==1 && obj.is_class_director==1 && obj.is_regular==0 && obj.is_has_xhb_class==0){
@@ -118,8 +138,10 @@ export default {
                   }
                   if(res.data.error_response){
                     console.log('error_response');
+                    // sessionStorage.setItem('school_id',res.data.error_response.school_id);
                     if(res.data.error_response.code==218){//姓名不存在
-                        this.title = this.errTitle   // 跳转之前 将title值覆盖
+                        this.title = this.errTitle;   // 跳转之前 将title值覆盖
+                        sessionStorage.setItem('keyword',res.data.error_response.keyword);
                         this.$router.push({path:'/overCount',query:{username:this.userName,title:this.title,helpMessage:this.helpMessage}})
                       }else if(res.data.error_response.code==219){//已经认证过
                         console.log('已经认证过');

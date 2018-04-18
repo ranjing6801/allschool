@@ -57,12 +57,12 @@ export default {
         getContent(){   // 提交反馈信息 
           if(this.user&&this.cur&&this.reback){
             this.axios.post('/h5/index/questionBack',{
-                user_name:'',  //老师姓名 
-                is_director:'',//是否班主任
-                school_id:'',  // 学校id
-                phone:'',      //手机号
-                keyword:'',    // 关键字
-                detail:''      // 问题详情
+                user_name:this.user,                        //老师姓名 
+                is_director:'',                             //是否班主任
+                school_id:'',                               // 学校id
+                phone:sessionStorage.getItem('phone'),      //手机号
+                keyword:'',                                 // 关键字
+                detail:this.reback                          // 问题详情
             })
             .then(res => {
               console.log('res=',res);

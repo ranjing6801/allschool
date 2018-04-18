@@ -1,81 +1,64 @@
 <template>
   <div id="getClass">
-    
-    <!-- 已经认证完成的班级  可以取消对应列表 -->
-    <!-- <ul>
-      <p class="leadTitle">您是 {{ num }} 个班级班主任, 请选择:</p>
-      <li  class="dataList" v-show="dataListShow" v-for="(item,index) in itemList" :key="index">
-          <div class="vipLogo">
-            <img src="/static/images/vip.png" >
-          </div>
-
-          <div class="teamClass">
-            <p class="teamTitle">一年级8班 已对应</p>
-            <p class="sun">{{ item.teamName }}</p>
-          </div>
-
-          <div class="cancle" @click="cancle">
-            <img src="/static/images/cancle.png">
-          </div>
-      </li>
-    </ul> -->
-
-    <!--  班级列表页 -->
     <ul>
-      <li class="checkList" v-if="checkList" v-for="(option,index) in optionList" :key="index">
-        <div class="checkbox-group" v-if="!option.isbgShow">
-          <input type="radio" :id="option.Members"  name="classChoose" :value="option.pid"  v-model="team"  @change="change" />
-          <label :for="option.Members"></label>
+  <!--  已经认证的班级列表页 -->      
+      <li class="checkList box" v-if="option.vip" v-for="(option,index) in optionList" :key="option.index" @click="getId(index)">
+        <div class="checkbox-group box"  v-if="!option.vip">
+          <input type="radio" :id="option.code"  name="classChoose" :value="option.id"  v-model="team"  @change="change" />
+          <label :for="option.code"></label>
         </div>
-        <div class="vipLogo" v-if="option.isbgShow">
+        
+        <div class="vipLogo" v-if="option.vip">
             <img src="/static/images/vip.png" >
         </div>
-
-        <div class="right" v-if="!option.isbgShow">
-          <div class="logo"  v-if="!option.isbgShow">
-              <img src="/static/images/logo.jpg" alt="" >
-          </div>
-
-          <div class="title">
-   <!--  没有认证完成的班级 -->
-              <p class="className" v-if="!option.isbgShow">   
-                <span class="classTitle">{{ option.teamName }}</span>
-              </p>
-              <p class="classNumber" v-if="!option.isbgShow">
-                  <span class="classNum common"></span> 
-                  <span class="banjiNumber">{{ option.banjiNumber }}</span>
-                  <span class="classCreater common"></span> 
-                  <span class="created">{{ option.banjichuangjianzhe }}</span>
-                  <span class="classMembers common"></span>
-                  <span>{{ option.Members }}</span>
-              </p>
-          </div> 
-        </div> 
-
-   <!--  已经认证完成的班级 -->
-        <div class="right" v-if="option.isbgShow">
-          <div class="logo"  v-if="!option.isbgShow">
-              <img src="/static/images/logo.jpg" alt="" >
-          </div>
-
+        <div class="right">
           <div class="title passTitle">
-              <div class="teamClass" v-if="option.isbgShow">
-                <p class="teamTitle">{{ option.teamShow}} 已对应</p>
+              <div class="teamClass">
+                <p class="teamTitle">{{ option.teamShow  | teacherName}} 已对应</p>
               </div>
-              <p class="className" v-if="option.isbgShow">
-                <span class="classTitle">{{ option.teamName }}</span>
+              <p class="className">
+                <span class="classTitle">{{ option.name }}</span>
               </p>
-              <div class="cancle" @click="cancle(option)">
+              <div class="cancle" @click="cancle(index)">
                 <img src="/static/images/cancle.png">
               </div>
           </div> 
         </div> 
       </li>
-    </ul>
 
+
+<!--  没有认证的班级列表页 -->
+      <li class="checkList box2" v-if="!option.vip"  v-for="(option,index) in optionList" :key="option.index" @click="getId(index)">
+        <div class="checkbox-group" v-if="!option.vip" >
+          <input type="radio" :id="option.code"  name="classChoose" :value="option.id"  v-model="team"  @change="change" />
+          <label :for="option.code"></label>
+        </div>
+        <div class="vipLogo" v-if="option.vip" >
+            <img src="/static/images/vip.png" >
+        </div>
+        <div class="right">
+          <div class="logo" v-if="!option.vip">
+              <img :src="option.badgeId" alt="" >
+          </div>
+          <div class="title">
+              <p class="className">   
+                <span class="classTitle">{{ option.name  }}</span>
+              </p>
+              <p class="classNumber">
+                  <span class="classNum common"></span> 
+                  <span class="banjiNumber">{{ option.code }}</span>
+                  <span class="classCreater common"></span> 
+                  <span class="created">{{ option.teacherName | teacherName}}</span>
+                  <span class="classMembers common"></span>
+                  <span>{{ option.membersCount }}</span>
+              </p>
+          </div> 
+        </div> 
+      </li>  
+    </ul>
     <!--  创建班级去认证 -->
     <ul>
-      <li class="checkList" v-if="checkList">
+      <li class="checkList">
           <div class="checkbox-group">
               <input type="radio" name="classChoose" value="4" id="value" v-model="team" @change="change">
               <label for="value"></label>
@@ -101,7 +84,6 @@
 
 import axios from 'axios'
 import $ from 'jquery'
-import api from '../api/api'
 import ReCertification from './ReCertification'
 
 export default {
@@ -111,10 +93,8 @@ export default {
     },
     data(){
         return {
+            logoSrc:'',
             getClassId:'',  // 接收从CLYchooseClass 组件传过来的id
-            value:'',
-            num:3,
-            itemList:[],  // 展示已经认证过的班级
             create:'',  // 选中  创建班级
             team:'',    // 检测是否 有选择一个班级
             dis:true,    // 按钮disabled属性
@@ -123,38 +103,84 @@ export default {
             classTitle:'一年级二班',
             classUser:'王宇娟' ,
             accountReplace:'您是否要顶替Ta,成为该班级班主任',
-            dataListShow:true,  // 展示点击取消 已经认证好的班级
-            checkList:true,     // 已经认证过的班级列表
+            valueId:''
         }
     },
     computed:{
       optionList(){
-        console.log("optionList=",this.$store.state.res2);
-        return  this.$store.state.res2
+        // console.log("optionList=",this.$store.state.res2);
+        return  this.$store.state.res2;
       }    
     },
+    filters:{
+      sliceValue(val){
+        console.log(typeof val);
+         if(val.length >= 10){
+            return val.slice(0,5) + '...'+val.slice(5,11);
+         } 
+      },
+      teacherName(value){
+        if(value.length >= 6){
+            return value.slice(0,2) + '...'+value.slice(2,5);
+         }
+      }
+    },
     methods:{
+        getXHBclass(){
+          // this.axios.post('/h5/index/getXhbClass',{
+          //         user_token:sessionStorage.getItem('user_token')
+          //     })
+          //     .then(res => {
+          //       // console.log('getXhbClass=',res);
+          //         // console.log('this.getClassId=',this.getClassId);
+          //       var object = res.data.response;
+          //       this.logoSrc = object.badgeId;
+          //       this.$store.state.res2 = res.data.response.xhb_class;
+                
+                  
+          //       console.log('res2=',this.$store.state.res2);
+          //     })
+          //     .catch(err => {
+          //       console.log('getXhbClass=',err);
+          //     })
+        },
+        getId(idvalue){
+            // console.log('idvalue=',idvalue);
+            this.idvalue = idvalue;
+        },
         getClassPromise(){ //  确认   
-            /*  1.第一种情况: 如果该班级没有被其他的班主任认证    点击确认跳转到 前面 班主任列表查询页
+            /*
+                1.第一种情况: 如果该班级没有被其他的班主任认证    点击确认跳转到 前面 班主任列表查询页
                 2.第二种情况:如果在认证某一个班级的时候,他已经被其他老师认证过了,会提示弹窗
-                3.第三种情况:就是 班级认证完了,创建班级 
+                3.第三种情况:就是班级认证完了,创建班级 
             */
                 if(this.team == '4'){
                     alert('班主任创建班级');
                     this.$router.push({path:'/ClNewTeacher'});
                 }else{
                   // 选择班级认证
-                    this.$store.state.res1[this.getClassId].teamId = this.team;
-                    this.$store.state.res1[this.getClassId].className = this.$store.state.res2[this.team].teamName;
-                    this.$store.state.res2[this.team].teamShow = this.$store.state.res1[this.team].name;
-                    console.log('$store.teamShow=',this.$store.state.res1[this.team].name);
-                    this.$store.state.res1[this.getClassId].symbol = true;
-                    this.$store.state.res2[this.getClassId].isbgShow = true;
-                    this.$router.push({path:'/CLYchooseClass'});
+                        this.axios.post('/h5/index/isClassBind',{
+                              xhb_class_token:this.$store.state.res2[this.idvalue].id
+                            })
+                            .then(res => {
+                                console.log('res=',res);
+                                this.$store.state.res1[this.getClassId].teamId = this.idvalue;
+                                this.$store.state.res1[this.getClassId].name = this.$store.state.res2[this.idvalue].name;
+                                this.$store.state.res1[this.getClassId].xhb_class_token = this.$store.state.res2[this.idvalue].id;
+                                this.$store.state.res1[this.getClassId].symbol = true;
+                                this.$store.state.res2[this.idvalue].teamShow = this.$store.state.res1[this.getClassId].class_name;
+                                this.$store.state.res2[this.idvalue].vip = true;
+                                console.log('res2=',this.$store.state.res2);
+                                console.log('res1=',this.$store.state.res1);
+                           
+                                this.$router.push({path:'/CLYchooseClass'});
+                            })
+                            .catch(err => {
+                                console.log('err=',err);
+                            })   
                 }
         },
         change(){ // 单选框change事件
-            console.log('this.team:',this.team);
             if(this.team+1){
                 this.dis = false;
                 $(".referClass").addClass('active');
@@ -163,20 +189,20 @@ export default {
         ReCertificationShow(){  // 关闭被顶替的弹窗
             this.isReCertificationShow = false;
         },
-        cancle(obj){
+        cancle(index){
           // alert("取消已经认证过的班级,重新认证");
-          
-          console.log('obj=',obj.pid);
-          this.$store.state.res2[obj.pid].isbgShow = false;
-          this.$store.state.res1[obj.pid].symbol = false;
-          this.$store.state.res1[obj.pid].className = '的对应班级';   
+          this.$store.state.res2[index].vip = false;
+          this.$store.state.res1[index].symbol = false;  
+          this.$store.state.res1[index].name = '的对应班级';
         }
     },
     mounted(){
         document.title = '选择班级';
         this.getClassId = this.$route.query.userId;
-        console.log(this.$route.query.userId);
+        // this.getXHBclass();
+        // console.log('getClassId=',this.$route.query.userId);
     }
+  
 }
 
 </script>

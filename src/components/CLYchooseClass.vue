@@ -2,30 +2,28 @@
   <div id="clychooseClass">
         <p class="leadTitle">您是{{ num }}个班级班主任, 请选择:</p>
         <ul>
-         <!--  展示还没有认证的班级  -->
-            <li v-if="item.symbol" v-for="item in classList" :key="item.index" 
-                    class="classList" @click="getDetail(item.classId)">
-                <span class="className"> {{ item.name }}</span> 
+        <!--  已经认证完成的班级 -->
+            <li v-if="item.symbol" v-for="(item,index) in classList" :key="item.index" class="classList" @click="getDetail(index)">
+                <span class="className"> {{ item.class_name }}</span> 
                 <p v-if="item.symbol" class="vBg"></p>
-                <span class="classTeam"> {{ item.className}}</span>   
+                <span class="classTeam"> {{ item.name}}</span>   
                 <div class="over" v-if="item.symbol">
                     <img src='/static/images/over.png'>
                 </div> 
                 <span  class="more"></span>
             </li>
 
-            <li v-if="!item.symbol" v-for="item in classList" :key="item.index" 
-                    class="classList" @click="getMore(item.classId)">
-                <span class="className"> {{ item.name }}</span> 
+             <!--  展示还没有认证的班级  -->
+            <li v-if="!item.symbol" v-for="(item,index) in classList" :key="item.index" class="classList" @click="getMore(index)">
+                <span class="className"> {{ item.class_name }}</span> 
                 <p v-if="item.symbol" class="vBg"></p>
-                <span class="classTeam"> {{ item.className}}</span>   
+                <span class="classTeam"> {{ item.name}}</span>   
                 <div class="over" v-if="item.symbol">
                     <img src='/static/images/over.png'>
                 </div> 
                 <span  class="more"></span>
             </li>
         </ul>
-
       <button :class="!dis?'referBtn':''"  class="referName" :disabled="dis"  @click="classRefer">认证班级</button>
   </div>
 </template>
@@ -34,7 +32,7 @@ export default {
     name:'clychooseClass',
     data(){
         return {
-            num:3,       // 数量
+            num:'',       // 数量
            // classList:[],        // 所有班级列表
             // HavenClass:[],       // 保存从getClass跳转过来的已经认证好的班级
             dis:true,            // 按钮样式
@@ -43,60 +41,52 @@ export default {
             id:1,                // 接收从userName 组件传过来的userId
             CLYTogetClassId:'',  // 接收从getClass 传过来的认证好了的班级id
             classListShow:true,
+            arr:[],
+            bindClass:{
+              class_id:'',
+              xhb_class_token:''
+            }
         }
     },
     computed:{
       classList(){
-        // return  this.$store.state.res1;
+            // console.log('this.$store.state.res1=',this.$store.state.res1);
+        return  this.$store.state.res1;
       }
     },
     methods:{
-        getClassList(){
-            this.axios.post('/h5/index/getXhbClass',{
-                    user_token:'58aac1fc0cf2e2b008585f7b'
-                })
-                .then(res => {
-                    console.log('res=',res);
-                    if(res.data.response){
-                        // this.xhbClass = res.data.response.xhbClass
-                    }
-                    if(res.data.error_response){
-                        if(res.data.error_response.code=201){
-                            console.log('msg=',res.data.error_response.code);
-                        }
-                    }
-                })
-                .catch(err => {
-                    console.log('err=',err);
-                })
-
-        },
-        getMore(id){             // 跳转到getClass组件
+        getMore(id){             
+          // 跳转到getClass组件
             console.log("userID=",id);
             this.$router.push({ path:'/getClass',query:{userId:id}});
         },
-        getDetail(passId){             //  认证完成之后点击展示 绑定的班级详细信息 
-            console.log("passId=",passId);
-            
+        getDetail(passId){             //认证完成之后点击展示 绑定的班级详细信息 
+            // console.log("passId=",passId);
             this.$router.push({path:'/getClass',query:{userId:passId}});
-            
         },
         classRefer(){  // 班级确认
-             // 这里判断是否所有的班级都认证了,如果都认证了,按钮的状态为可点击,否则是不可点击状态
-             // 如果都认证完成了,跳转到认证成功
-          
+            // for(var i = 0; i<this.$store.state.res1.length; i++){
+            //     this.bindClass.class_id = this.$store.state.res1[i].class_id;
+            //     this.bindClass.xhb_class_token = this.$store.state.res1[i].xhb_class_token;
+            // }
+              // console.log(this.bindClass);
+              console.log('this.$store.state.res1=',this.$store.state.res1);
+             this.axios.post('/h5/index/bindClass',{
+                    bind_class:this.$store.state.res1
+                  })
+                  .then(res => {
+                    console.log('res=',res);
+                  })
+                  .catch(err => {
+                    console.log('err=',err);
+                  })
 
-          if(1){  // 老用户 跳转到认证组件
-              this.$router.push({path:'/PassOk'});
-          }
-          else{ // 新用户跳转到有弹窗的组件
-             this.$router.push({path:'/NewAuthenticationOk'});
-          }
+        
         }
     },
     mounted(){
         document.title = "认证班级";
-        this.getClassList();
+        this.num = this.$store.state.res1.length;
         // 认证班级按钮的显示隐藏
         var result = this.$store.state.res1.every(function(el){
             if(el.symbol){
