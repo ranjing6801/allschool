@@ -41,7 +41,7 @@ export default {
     methods:{
         openSmallDesk(){
             // 打开晓黑板
-            alert("打开晓黑板")
+            window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=org.xinkb.blackboard.android&g_f=991653';
         }
     },
     created() {
