@@ -109,15 +109,20 @@ export default {
           })
           .then(res => {
             console.log('sendMessageCode:',res);
+
+            this.ShowNumber();  //临时打开测试
+
             if(res.data.response){
-              this.ShowNumber();
+                this.ShowNumber();
             }
             if(res.data.error_response){
+              sessionStorage.setItem('school_id',res.data.error_response.school_id);
               if(res.data.error_response.code==213){
                 this.reNum = true;
                 this.isCodeFail = true;
               }else if(res.data.error_response.code==210){
                  console.log("验证码发送次数已达上限");
+                 sessionStorage.setItem('keyword',res.data.error_response.keyword);
                  this.$router.push({path:'/overCount',query:{title:this.codeOverTime,helpMessage:this.helpMessage}});
                 }
             }
@@ -197,6 +202,10 @@ export default {
                     if(this.count > 1){
                         this.listenCode = true;
                     }
+                    if(this.count >= 4){ // 每天最多可以获取5次验证码
+                    console.log("验证码发送次数已达上限");
+                    this.$router.push({path:'/overCount',query:{title:this.codeOverTime,helpMessage:this.helpMessage}});
+                    }
                 }
             },1000)
         },
@@ -232,9 +241,10 @@ export default {
                 .then(res => {
                   console.log('checkcode:',res);
                   if(res.data.response){
-                    this.$router.push({path:'/userName',query:{title:this.title}})
+                    this.$router.push({path:'/userName'})
                   }
                   if(res.data.error_response){
+                      sessionStorage.setItem('school_id',res.data.error_response.school_id);
                       $('.VolidateCode').addClass('red');
                       this.isShowCode = true;
                       this.getCodeNum ++ ;

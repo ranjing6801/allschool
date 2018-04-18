@@ -21,8 +21,8 @@
             <li>
               <div class="libox">
                  <p>您是班主任吗?</p>
-                  <span @click="cur=1" :class="cur==1?'hot':''" class="yes">是</span>
-                  <span @click="cur=2" :class="cur==2?'hot':''" class="no">否</span>
+                  <span @click="cur=1" :class="cur===1?'hot':''" class="yes">是</span>
+                  <span @click="cur=2" :class="cur===2?'hot':''" class="no">否</span>
               </div>
             </li>
             <li>
@@ -44,7 +44,7 @@ export default {
     },
     data(){
         return {
-            title:'验证码发送次数已达上限',
+            title:'',
             helpMessage:'请填写反馈信息帮助我们及时解决哦',
             user:'',
             reback:'',
@@ -56,21 +56,29 @@ export default {
     methods:{
         getContent(){   // 提交反馈信息 
           if(this.user&&this.cur&&this.reback){
+            var isDirector = this.cur===1?'1':'0';
+            var obj = {
+                user_name: this.user,   //老师姓名 
+                is_director: isDirector,//是否班主任
+                phone: sessionStorage.getItem('phone'),//手机号
+                keyword: this.title,    // 关键字
+                detail: this.reback
+            };
+            console.log('提交的信息:',obj);
             this.axios.post('/h5/index/questionBack',{
-                user_name:'',  //老师姓名 
-                is_director:'',//是否班主任
-                school_id:'',  // 学校id
-                phone:'',      //手机号
-                keyword:'',    // 关键字
-                detail:''      // 问题详情
+                user_name: this.user,   //老师姓名 
+                is_director: isDirector,//是否班主任
+                phone: sessionStorage.getItem('phone'),//手机号
+                keyword: this.title,    // 关键字
+                detail: this.reback     // 问题详情
             })
             .then(res => {
-              console.log('res=',res);
-              this.$router.push({path:'/AuthenticationOk',query:{}})
+              console.log('questionBack:',res);
+              this.$router.push({path:'/AuthenticationOk'})
 
             })
             .catch(err => {
-              console.log('err=',err);
+              console.log('err:',err);
             })
 
           }else{
