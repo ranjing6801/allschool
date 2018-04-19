@@ -5,23 +5,23 @@
         <!--  已经认证完成的班级 -->
             <li v-if="item.symbol" v-for="(item,index) in classList" :key="item.index" class="classList" @click="getDetail(index)">
                 <span class="className"> {{ item.class_name }}</span> 
-                <p v-if="item.symbol" class="vBg"></p>
+                <img src="/static/images/vip.png" v-if="item.symbol" class="vBg" />
                 <span class="classTeam"> {{ item.name}}</span>   
                 <div class="over" v-if="item.symbol">
                     <img src='/static/images/over.png'>
                 </div> 
-                <span  class="more"></span>
+                <img class="more" src="/static/images/more.png" />
             </li>
 
              <!--  展示还没有认证的班级  -->
             <li v-if="!item.symbol" v-for="(item,index) in classList" :key="item.index" class="classList" @click="getMore(index)">
                 <span class="className"> {{ item.class_name }}</span> 
-                <p v-if="item.symbol" class="vBg"></p>
+                <img src="/static/images/vip.png" v-if="item.symbol" class="vBg" />
                 <span class="classTeam"> {{ item.name}}</span>   
                 <div class="over" v-if="item.symbol">
                     <img src='/static/images/over.png'>
                 </div> 
-                <span  class="more"></span>
+                <img class="more" src="/static/images/more.png" />
             </li>
         </ul>
       <button :class="!dis?'referBtn':''"  class="referName" :disabled="dis"  @click="classRefer">认证班级</button>
@@ -151,24 +151,20 @@ export default {
   display: inline-block;
   width:0.64rem;
   height: 0.64rem;
-  background-size: 0.64rem 0.64rem;
-  background: url('../../static/images/vip.png') no-repeat center;
 
 }
 
 #clychooseClass  .over {
   position: absolute;
   right: 0.8107rem;
-  width:1.6587rem;
-  height: 1.8667rem ;
+  width: 1.6587rem;
+  height: 1.8667rem;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 #clychooseClass .over img{
-  display: inline-block;
-  margin-top: 0.1333rem;
-  margin-left: 84.1.1307rem;
+  width: 1.3067rem;
 }
 
 
@@ -214,26 +210,23 @@ export default {
   position: absolute;
   top: 0.7467rem;
   left: 8.5867rem;
-  display: inline-block;
   width: 0.2133rem;
   height: 0.3733rem;
-  line-height: 0.4533rem;
-  background-size:0.2133rem  0.3733rem;
-  background:url('../../static/images/more.png') no-repeat center;
 }
 
 #clychooseClass .referName {
   width: 9.2rem;
   height: 1.28rem;
-  margin-left: 0.4rem;
+  bottom: 0.8rem;
+  border: none;
   position: fixed;
-  bottom: 60px;
-  border-radius: 0.0533rem;
-  background: #AAAAAA;
-  font-family: PingFangSC-Regular;
-  font-size: 0.4533rem;
   color: #000000;
+  background: #AAAAAA;
+  margin-left: 0.4rem;
+  font-size: 0.4533rem;
   line-height: 0.4533rem;
+  border-radius: 0.0533rem;
+  font-family: PingFangSC-Regular;
 }
 
 #clychooseClass .referBtn{

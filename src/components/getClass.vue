@@ -16,11 +16,12 @@
               <div class="teamClass">
                 <p class="teamTitle">{{ option.teamShow  | teacherName}} 已对应</p>
               </div>
-              <p class="className">
+              <p class="className1">
                 <span class="classTitle">{{ option.name }}</span>
               </p>
               <div class="cancle" @click="cancle(index)">
-                <img src="/static/images/cancle.png">
+                <img src="/static/images/ic.png" />
+                <span>取消对应</span>
               </div>
           </div> 
         </div> 
@@ -45,11 +46,11 @@
                 <span class="classTitle">{{ option.name  }}</span>
               </p>
               <p class="classNumber">
-                  <span class="classNum common"></span> 
+                  <img src="/static/images/classNum.png" class="classNum common" /> 
                   <span class="banjiNumber">{{ option.code }}</span>
-                  <span class="classCreater common"></span> 
+                  <img src="/static/images/classCreater.png" class="classCreater common" /> 
                   <span class="created">{{ option.teacherName | teacherName}}</span>
-                  <span class="classMembers common"></span>
+                  <img src="/static/images/classMembers.png" class="classMembers common" />
                   <span>{{ option.membersCount }}</span>
               </p>
           </div> 
@@ -249,15 +250,25 @@ export default {
 }
 
 #getClass .cancle {
-    position: absolute;
-    top: 0.6133rem;
-    right: -0.6rem;
-    justify-content: center;
-    display: flex;
-    align-items: center;
+  position: absolute;
+  top: 0.6133rem;
+  right: -0.6rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2.16rem;
+  height: 0.64rem;
+  border: 1px solid #aaa;
+  border-radius: 2.6667rem;
 }
 #getClass .cancle img {
-  width: 2.16rem;
+  width: 0.3rem;
+  margin-right: 0.1067rem;
+}
+#getClass .cancle span {
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: #AAAAAA;
 }
 
 /* 已经认证完成的班级列表样式 end*/
@@ -348,7 +359,6 @@ export default {
   font-family: PingFangSC-Regular;
   font-size: 0.4533rem;
   color: #FFFFFF;
-  line-height: 0.4533rem;
   margin-left: 0.1333rem;
   position: absolute;
   top: 0;
@@ -359,9 +369,19 @@ export default {
   font-family: PingFangSC-Regular;
   font-size: 0.4533rem;
   color: #FFFFFF;
-  line-height: 0.4533rem;
   height: 0.4533rem;
+  line-height: 0.4533rem;
   margin-top: 0.3733rem;
+  margin-bottom: 0.2667rem;
+}
+#getClass .className1 {
+  font-family: PingFangSC-Regular;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+  height: 0.4533rem;
+  line-height: 0.4533rem;
+  margin-top: 0.2667rem;
+  margin-bottom: 0.2667rem;
 }
 #getClass  .passTitle{
     position: absolute;
@@ -374,14 +394,13 @@ export default {
   font-family: PingFangSC-Regular;
   font-size: 0.4533rem;
   color: #FFFFFF;
-  line-height: 0.4533rem;
-  /*margin-top: 0.3733rem;*/
-
 }
 
 .classNumber {
-  margin-top: 0.2667rem;
   height:0.3733rem;
+  line-height: 0.3733rem;
+  display: flex;
+  align-items: center;
 }
 .banjiNumber{
   margin-right: 0.3467rem;
@@ -391,32 +410,19 @@ export default {
   font-family: PingFangSC-Light;
   font-size: 0.3733rem;
   color: #888888;
-  line-height: 0.3733rem;
 }
 
 .common {
   height: 0.32rem;
   width: 0.32rem;
   font-family: PingFangSC-Light;
-  font-size: 0.3733rem;
   color: #888888;
-  line-height: 0.3733rem;
+  margin-right: 0.1067rem;
   display: inline-block;
-  background-size: 0.32rem 0.32rem;
-}
-.classNum {
-  background: url('../../static/images/classNum.png') no-repeat center;
-}
-.classCreater {
-  background: url('../../static/images/classCreater.png') no-repeat center;
 }
 .created {
   margin-right: 0.4rem;
 }
-.classMembers {
-  background: url('../../static/images/classMembers.png') no-repeat center;
-}
-
 #getClass .creatClass {
   width: 100%;
   position: relative;
@@ -426,7 +432,6 @@ export default {
   font-family: PingFangSC-Regular;
   font-size: 0.4533rem;
   color: #FFFFFF;
-  line-height: 0.4533rem;
 }
 .textCreate {
     position: absolute;
@@ -445,7 +450,6 @@ export default {
   font-family: PingFangSC-Regular;
   font-size: 0.4533rem;
   color: #000000;
-  line-height: 0.4533rem;
   border: none;
 }
 #getClass .active {
