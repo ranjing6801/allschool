@@ -15,7 +15,7 @@
             <li class="userName">
                 <div class="libox1">
                   <p>您的姓名</p>
-                  <input maxlength="20" @change="txt" class="username" type="text" v-model="user"> 
+                  <input maxlength="20" class="username" type="text" v-model="user"> 
                 </div>
             </li>
             <li>
@@ -84,11 +84,6 @@ export default {
           }else{
             console.log('请输入完整的信息...');
           }
-        },
-        txt() {
-          console.log('this.user:',this.user);
-          console.log('this.cur:',this.cur);
-          console.log('this.reback:',this.reback);
         }
     },
     mounted(){
