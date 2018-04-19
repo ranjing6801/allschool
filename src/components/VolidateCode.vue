@@ -1,12 +1,12 @@
 <template>
     <div id="volidateCode">
         <div class="head">
-            <div class="left">
-                <img :src="imgSrc">
-            </div>
-            <div class="right">
-                {{ title }} 
-            </div>
+          <div class="left">
+              <img :src="imgSrc">
+          </div>
+          <div :class="isHeight?'height1':'height2'" class="right">
+              <span>{{ title }}</span>
+          </div>
         </div>
         <div class="content">
             <p class="tip" v-if="YZM">短信验证码已发送至 {{ number | value }} </p>
@@ -93,7 +93,7 @@ export default {
                 dis:true,
                 getCodeNum:0,   // 记录获取验证码次数, 到达10次 就进入反馈界面
                 isCodeFailShow:false,  // 语音验证码
-
+                isHeight:false,
         }
     },
     filters:{ // 过滤
@@ -284,10 +284,11 @@ export default {
         // this.getVolidateCode();
     },
     mounted(){
-        this.YZM = true
-        document.title = "填写验证码"
-        this.title = this.$route.query.title
-        this.number = this.$route.query.phone
+        this.YZM = true;
+        document.title = "填写验证码";
+        this.title = this.$route.query.title;
+        this.title.length > 14 ? this.isHeight=false : this.isHeight=true;
+        this.number = this.$route.query.phone;
 
         if(sessionStorage.getItem('myphone')){
             this.ShowNumber();
@@ -323,7 +324,6 @@ export default {
   display: block;
 
 }
-
 .head .right {
   height: 1.44rem;
   width: 7.8667rem;
@@ -332,6 +332,11 @@ export default {
   font-family: PingFangSC-Regular;
   font-size: 0.4533rem;
   color: #FFFFFF;
+}
+.height1{
+  line-height: 1.44rem;
+}
+.height2{
   line-height: 0.6933rem;
 }
 /*   head end*/

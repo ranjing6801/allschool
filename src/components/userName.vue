@@ -5,8 +5,8 @@
         <div class="left">
             <img :src="imgSrc">
         </div>
-        <div class="right">
-            {{ title }}
+        <div :class="isHeight?'height1':'height2'" class="right">
+            <span>{{ title }}</span>
         </div>
     </div>
     <div class="contentUser">
@@ -51,8 +51,7 @@ export default {
             helpMessage:'您的反馈信息可以帮助我们及时更正哦',
             num:1,
             reVolidate:false, // 用户重复认证弹窗
-            
-            
+            isHeight:false,
         }
     },
     methods:{
@@ -208,6 +207,8 @@ export default {
     },
     mounted(){
         document.title = "填写姓名";
+        this.title = sessionStorage.getItem('title');
+        this.title.length > 14 ? this.isHeight=false : this.isHeight=true;
     }
 }
 </script>
@@ -244,8 +245,12 @@ export default {
   font-family: PingFangSC-Regular;
   font-size: 0.4533rem;
   color: #FFFFFF;
+}
+.height1{
+  line-height: 1.44rem;
+}
+.height2{
   line-height: 0.6933rem;
-  text-indent: -0.1067rem;
 }
 
 .contentUser {

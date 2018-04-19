@@ -5,7 +5,7 @@
         <div class="left">
             <img :src="imgSrc">
         </div>
-        <div class="right">
+        <div :class="isHeight?'height1':'height2'" class="right">
             <span>{{ title }}</span>
         </div>
     </div>
@@ -59,6 +59,7 @@ import $ from 'jquery'
         count:null,
         isCodeFailShow:false,
         telNum:false,// 控制手机号码输入框 右边的 x
+        isHeight:false,
       }
     },
     watch:{ // 监听phone
@@ -145,6 +146,7 @@ import $ from 'jquery'
               })
               .catch(err => {
                 console.log('请求错误');
+                this.isCodeFailShow = true;
                 console.log('errPhone:',err);
                 // 手机号码验证错误
                 //this.isRightNumber = true;
@@ -165,6 +167,7 @@ import $ from 'jquery'
           //console.log('res:',res.data.response.school_info);
             this.imgSrc = res.data.response.school_info.school_img;
             this.title = res.data.response.school_info.school_name;
+            this.title.length > 14 ? this.isHeight=false : this.isHeight=true;
             sessionStorage.setItem("imgSrc",this.imgSrc);
             sessionStorage.setItem("title",this.title);
           })
@@ -185,6 +188,7 @@ button{
   margin-top:0.5333rem;
   margin-left:0.4rem;
   display: flex;
+  justify-content: center;
   background: #363636;
 }
 .head .left{
@@ -210,6 +214,11 @@ button{
   font-family: PingFangSC-Regular;
   font-size: 0.4533rem;
   color: #FFFFFF;
+}
+.height1{
+  line-height: 1.44rem;
+}
+.height2{
   line-height: 0.6933rem;
 }
 /*   head end*/
