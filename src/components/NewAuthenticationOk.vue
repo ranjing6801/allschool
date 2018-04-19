@@ -93,7 +93,7 @@ export default {
       function pushHistory() {  
           var state = {  
               title: "",  
-              url: "/Menu"  
+              url: ""  
           };  
           window.history.pushState(state, state.title, state.url);  
       }

@@ -2,7 +2,7 @@
   <div id="ReCertification">
         <p class="content">{{ accountTile}}</p>
         <p class=" title">{{ classTitle }}</p>
-        <p class="saveTip">已被 <span class="name">{{ classUser }}</span>   老师认证过</p>
+        <p class="saveTip">已被  <span class="name">{{ classUser }}</span>   老师认证过</p>
         <p class="replace">{{ accountReplace }}</p>
         <button class="Btn Btn-left" @click="giveUp">取消</button>
         <button class="Btn Btn-rigth" @click="Replace">顶替Ta</button>
@@ -25,7 +25,8 @@ export default {
         },
         Replace(){  // 顶替Ta
             // 请求接口
-            alert("顶替Ta")
+            alert("顶替Ta");
+            console.log('res1=',this.$store.state.res1);
         }
     }
 }
@@ -68,7 +69,7 @@ export default {
 #ReCertification .saveTip  .name {
   font-family: PingFangSC-Regular;
   font-size: 0.4533rem;
-  color: #000000;
+  color:#fff;
   line-height: 0.6933rem;
 }
 

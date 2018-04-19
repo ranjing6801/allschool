@@ -61,12 +61,25 @@ export default {
         },
         forbiddenReback(){
           this.reVolidate = true;
+        },
+        createClass(){
+          this.axios.post('/h5/index/createXhbClass',{
+                user_token:sessionStorage.getItem('user_token'),
+                teacher_id:sessionStorage.getItem('teacher_id')
+              })
+              .then(res => {
+                  console.log('res=',res);
+              })
+              .catch(err => {
+                  console.log('err=',err);
+              })
         }
     },
     created() {
         document.title = "反馈成功";
     },
     mounted() {
+        this.createClass();
       //判断手机类型
         var ua = navigator.userAgent.toLowerCase();
 
@@ -93,7 +106,7 @@ export default {
         function pushHistory() {  
             var state = {  
                 title: "",  
-                url: "/Menu"  
+                url: ""  
             };  
             window.history.pushState(state, state.title, state.url);  
         }
