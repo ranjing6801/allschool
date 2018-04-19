@@ -91,18 +91,23 @@ export default {
                         var obj = res.data.response;
                         sessionStorage.setItem('teacher_id',obj.teacher_id);  // 保存teacher_id
                         sessionStorage.setItem('user_token',obj.user_token);   // 保存user_token
+                        //sessionStorage.setItem('password',obj.account.password); // 保存密码
                         this.$store.state.res1 = obj.school_class;
                         this.$store.state.res2 = obj.xhb_class;
 
-                        for(var i = 0; i<this.$store.state.res1.length; i++){
-                             this.$store.state.res1[i].symbol = '';
-                             this.$store.state.res1[i].teamId = '';
-                             this.$store.state.res1[i].name = '的对应班级';  
-                             this.$store.state.res1[i].xhb_class_token = '';  
-                         }
-                         for(var i = 0; i<this.$store.state.res2.length; i++){
-                             this.$store.state.res2[i].teamShow = '';
-                         }
+                        if(res.data.response.school_class){
+                          for(var i = 0; i<this.$store.state.res1.length; i++){
+                              this.$store.state.res1[i].symbol = '';
+                              this.$store.state.res1[i].teamId = '';
+                              this.$store.state.res1[i].name = '的对应班级';  
+                              this.$store.state.res1[i].xhb_class_token = '';  
+                          }
+                        }
+                        if(res.data.response.xhb_class){
+                          for(var i = 0; i<this.$store.state.res2.length; i++){
+                              this.$store.state.res2[i].teamShow = '';
+                          }
+                        }
                          console.log('res1=',this.$store.state.res1);
                          console.log('res2=',this.$store.state.res2);
 
@@ -195,6 +200,7 @@ export default {
 
                })
                .catch(err => {
+                 alert('getUserDetail 请求失败!');
                    console.log('err=',err);
                })
         }

@@ -82,12 +82,12 @@ export default {
             this.isSave = false;
         },
         createClass(){
-            this.axios.post('/h5/index/getUserDetail',{
-                user_token:'',
-                teacher_id:''
+            this.axios.post('/h5/index/createXhbClass',{
+                user_token:sessionStorage.getItem('user_token'),
+                teacher_id:sessionStorage.getItem('teacher_id')
             })
             .then(res => {
-                console.log('res=',res);
+                console.log('createXhbClass=',res);
             })
             .catch(err => {
                 console.log('err=',err);
@@ -96,6 +96,7 @@ export default {
     },
     mounted(){
         document.title = "创建班级并认证";
+        this.createClass();
     }
 }
 </script>

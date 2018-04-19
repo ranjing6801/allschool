@@ -65,19 +65,29 @@ export default {
             this.$router.push({path:'/getClass',query:{userId:passId}});
         },
         classRefer(){  // 班级确认
-            // for(var i = 0; i<this.$store.state.res1.length; i++){
-            //     this.bindClass.class_id = this.$store.state.res1[i].class_id;
-            //     this.bindClass.xhb_class_token = this.$store.state.res1[i].xhb_class_token;
-            // }
-              // console.log(this.bindClass);
-              console.log('this.$store.state.res1=',this.$store.state.res1);
-             this.axios.post('/h5/index/bindClass',{
-                    bind_class:this.$store.state.res1
+            for(var i = 0; i<this.$store.state.res1.length; i++){
+                this.bindClass.class_id = this.$store.state.res1[i].class_id;
+                this.bindClass.xhb_class_token = this.$store.state.res1[i].xhb_class_token;
+                this.arr.push(this.bindClass);
+            }
+              // console.log('json=',JSON.stringify(this.arr));
+
+              this.axios.post('/h5/index/bindClass',{
+                    bind_class:JSON.stringify(this.arr)
                   })
                   .then(res => {
                     console.log('res=',res);
+                    if(res.data.response){
+                      console.log('res1=',this.$store.state.res1);
+                        alert(res.data.response.msg);
+                        this.$router.push({path:'/PassOk'});
+                    }
+                    if(res.data.error_response){
+                        alert(res.data.error_response.msg);
+                    }
                   })
                   .catch(err => {
+                    alert('请求失败!')
                     console.log('err=',err);
                   })
 

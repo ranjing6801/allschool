@@ -72,10 +72,14 @@
     <!--  顶替弹窗 -->
     <div class="modalShow" v-if="isReCertificationShow" @click="ReCertificationShow" >
         <div class="modal">
-            <ReCertification :accountTile="accountTile" :classTitle="classTitle" 
-                :classUser="classUser" :accountReplace="accountReplace"
-                     @ReCertification="ReCertificationShow">
-            </ReCertification>
+            <div id="ReCertification">
+                <p class="content">{{ accountTile}}</p>
+                <p class=" titleClass">{{ classTitle }}</p>
+                <p class="saveTip"><span>已被</span>  <span class="name">{{ classUser }}</span><span>老师认证过</span></p>
+                <p class="replace">{{ accountReplace }}</p>
+                <button class="Btn Btn-left" @click="giveUp">取消</button>
+                <button class="Btn Btn-rigth" @click="Replace">顶替Ta</button>
+            </div>
         </div>
     </div>
     <button class="referClass" :disabled="dis"  @click="getClassPromise" >确认</button>
@@ -102,7 +106,7 @@ export default {
             isReCertificationShow:false,  // 重新认证 班级已经被人认证了  顶替弹窗
             accountTile:'重新验证该班级',
             classTitle:'一年级二班',
-            classUser:'王宇娟' ,
+            classUser:'张老师' ,
             accountReplace:'您是否要顶替Ta,成为该班级班主任',
             valueId:''
         }
@@ -127,24 +131,6 @@ export default {
       }
     },
     methods:{
-        getXHBclass(){
-          // this.axios.post('/h5/index/getXhbClass',{
-          //         user_token:sessionStorage.getItem('user_token')
-          //     })
-          //     .then(res => {
-          //       // console.log('getXhbClass=',res);
-          //         // console.log('this.getClassId=',this.getClassId);
-          //       var object = res.data.response;
-          //       this.logoSrc = object.badgeId;
-          //       this.$store.state.res2 = res.data.response.xhb_class;
-                
-                  
-          //       console.log('res2=',this.$store.state.res2);
-          //     })
-          //     .catch(err => {
-          //       console.log('getXhbClass=',err);
-          //     })
-        },
         getId(idvalue){
             // console.log('idvalue=',idvalue);
             this.idvalue = idvalue;
@@ -164,17 +150,24 @@ export default {
                               xhb_class_token:this.$store.state.res2[this.idvalue].id
                             })
                             .then(res => {
-                                console.log('res=',res);
-                                this.$store.state.res1[this.getClassId].teamId = this.idvalue;
-                                this.$store.state.res1[this.getClassId].name = this.$store.state.res2[this.idvalue].name;
-                                this.$store.state.res1[this.getClassId].xhb_class_token = this.$store.state.res2[this.idvalue].id;
-                                this.$store.state.res1[this.getClassId].symbol = true;
-                                this.$store.state.res2[this.idvalue].teamShow = this.$store.state.res1[this.getClassId].class_name;
-                                this.$store.state.res2[this.idvalue].vip = true;
-                                console.log('res2=',this.$store.state.res2);
-                                console.log('res1=',this.$store.state.res1);
-                           
-                                this.$router.push({path:'/CLYchooseClass'});
+                                // console.log('res=',res);
+                                if(res.data.response){
+                                  this.$store.state.res1[this.getClassId].teamId = this.idvalue;
+                                  this.$store.state.res1[this.getClassId].name = this.$store.state.res2[this.idvalue].name;
+                                  this.$store.state.res1[this.getClassId].xhb_class_token = this.$store.state.res2[this.idvalue].id;
+                                  this.$store.state.res1[this.getClassId].symbol = true;
+                                  this.$store.state.res2[this.idvalue].teamShow = this.$store.state.res1[this.getClassId].class_name;
+                                  this.$store.state.res2[this.idvalue].vip = true;
+                                  console.log('res2=',this.$store.state.res2);
+                                  console.log('res1=',this.$store.state.res1);
+                                  this.$router.push({path:'/CLYchooseClass'});
+                                }
+                                // 该班级已经被其他老师绑定
+                                if(res.data.error_response){
+                                   alert('该班级已经被其他老师绑定');
+                                    this.isReCertificationShow = true
+                                    this.classUser = res.data.error_response.teacher_name;
+                                }
                             })
                             .catch(err => {
                                 console.log('err=',err);
@@ -195,12 +188,19 @@ export default {
           this.$store.state.res2[index].vip = false;
           this.$store.state.res1[index].symbol = false;  
           this.$store.state.res1[index].name = '的对应班级';
+        },
+        giveUp(){  // 取消
+            // 弹窗隐藏
+            this.isReCertificationShow = false;
+        },
+        Replace(){  // 顶替Ta
+            alert("顶替Ta");
+            console.log('res1=',this.$store.state.res1);
         }
     },
     mounted(){
         document.title = '选择班级';
         this.getClassId = this.$route.query.userId;
-        // this.getXHBclass();
         // console.log('getClassId=',this.$route.query.userId);
     }
   
@@ -258,7 +258,6 @@ export default {
 }
 
 /* 已经认证完成的班级列表样式 end*/
-
 
 #getClass .checkList {
   width: 9.2rem;
@@ -465,6 +464,78 @@ export default {
   background: #2B2B2B;
   border: 0.0533rem solid #BBAB71;
   border-radius: 0.2667rem;
+}
+
+
+/* 顶替弹窗样式*/
+#ReCertification {
+    width: 8.9333rem;
+    height: 6.16rem;
+}
+
+
+#ReCertification .content {
+  font-family: PingFangSC-Light;
+  font-size: 0.5333rem;
+  color: #FFFFFF;
+  line-height: 0.5333rem;
+  text-align: center;
+  margin-top: 0.5333rem;
+}
+#ReCertification .titleClass {
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+  line-height: 0.6933rem;
+  text-align: center;
+  margin-top:0.5333rem;
+}
+
+
+#ReCertification .saveTip {
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+  line-height: 0.6933rem;
+  text-align: center;
+}
+
+#ReCertification .saveTip  .name {
+  font-family: PingFangSC-Regular;
+  font-size: 0.4533rem;
+  color:#fff;
+  line-height: 0.6933rem;
+}
+
+#ReCertification .replace {
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+  line-height: 0.6933rem;
+  text-align: center;
+}
+/**/
+#ReCertification .Btn {
+    width: 4.0rem;
+    height: 1.28rem;
+    background: #2B2B2B;
+    font-family: PingFangSC-Regular;
+    font-size: 0.4533rem;
+    color: #F8E71C;
+    line-height: 0.4533rem;
+    border-radius: 0.0533rem;
+    border: none;
+    margin-top:0.6667rem;
+}
+
+#ReCertification .Btn-left{
+   margin-left: 0.4rem;
+}
+#ReCertification .Btn-rigth{
+  
+  background:#F8E71C;
+  color: #000000;
+  margin-right: 0.4rem;
 }
 </style>
 
