@@ -107,13 +107,19 @@ export default {
             classTitle:'一年级二班',
             classUser:'张老师' ,
             accountReplace:'您是否要顶替Ta,成为该班级班主任',
-            valueId:''
+            valueId:'',
+            xhb_class_token:''
         }
     },
     computed:{
       optionList(){
-        // console.log("optionList=",this.$store.state.res2);
-        return  this.$store.state.res2;
+          // console.log('this.$store.state.res1=',this.$store.state.res1);
+          // console.log('this.$store.state.res1=',JSON.parse(localStorage.getItem('this.$store.state.res1')));
+          if(this.$store.state.res2.length){
+            return  this.$store.state.res2;
+          }else {
+            return JSON.parse(localStorage.getItem('this.$store.state.res2'));
+          }
       }    
     },
     filters:{
@@ -145,8 +151,14 @@ export default {
                     this.$router.push({path:'/ClNewTeacher'});
                 }else{
                   // 选择班级认证
-                        this.axios.post('/h5/index/isClassBind',{
-                              xhb_class_token:this.$store.state.res2[this.idvalue].id
+                          if(this.$store.state.res2.length){
+                              this.xhb_class_token = this.$store.state.res2[this.idvalue].id
+                          }else {
+                              this.xhb_class_token = JSON.parse(localStorage.getItem('this.$store.state.res2'))[this.idvalue].id;
+                          }
+
+                          this.axios.post('/h5/index/isClassBind',{
+                              xhb_class_token:this.xhb_class_token
                             })
                             .then(res => {
                                 // console.log('res=',res);
@@ -195,6 +207,8 @@ export default {
         Replace(){  // 顶替Ta
             alert("顶替Ta");
             console.log('res1=',this.$store.state.res1);
+            console.log('res1顶替 =',JSON.parse(localStorage.getItem('this.$store.state.res1')));
+            this.$router.push({path:'/CLYchooseClass'});
         }
     },
     mounted(){

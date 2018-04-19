@@ -22,8 +22,11 @@ export default {
             this.$emit("changeIsSaveModal")
         },
         saveOk(){
-          // 区分老用户 和新用户
-            this.$router.push({path:'/passOk'})
+            if(sessionStorage.getItem('is_regular')){  // 老用户
+                this.$router.push({path:'/passOk'})
+            }else{  // 新用户
+                this.$router.push({path:'/NewAuthenticationOk'})
+            }
         }
     }
 }

@@ -51,7 +51,12 @@ export default {
     computed:{
       classList(){
             // console.log('this.$store.state.res1=',this.$store.state.res1);
-        return  this.$store.state.res1;
+            // console.log('this.$store.state.res1=',JSON.parse(localStorage.getItem('this.$store.state.res1')));
+            if(this.$store.state.res1.length){
+              return  this.$store.state.res1;
+            }else {
+              return JSON.parse(localStorage.getItem('this.$store.state.res1'));
+            }
       }
     },
     methods:{
@@ -96,18 +101,34 @@ export default {
     },
     mounted(){
         document.title = "认证班级";
-        this.num = this.$store.state.res1.length;
+        // 判断num 
+        if(this.$store.state.res1.length){
+            this.num = this.$store.state.res1.length 
+        }else{
+          this.num = JSON.parse(localStorage.getItem('this.$store.state.res1')).length;
+        }
+
+
         // 认证班级按钮的显示隐藏
-        var result = this.$store.state.res1.every(function(el){
-            if(el.symbol){
-               return true;
-            }  
-        });
+        var result;
+        if(this.$store.state.res1.length){
+            result = this.$store.state.res1.every(function(el){
+                if(el.symbol){
+                  return true;
+                }  
+            });
+        }else {
+          var resultObj = JSON.parse(localStorage.getItem('this.$store.state.res1'));
+            result = resultObj.every(function(el){
+                if(el.symbol){
+                  return true;
+                }  
+            });
+        }
+
         if(result){
           this.dis = false;
         }
-        
-        
     }
 }
 </script>
@@ -125,8 +146,6 @@ export default {
   margin-left: 0.4rem;
   position: relative;
 }
-
-
 
 #clychooseClass .vBg {
   display: inline-block;

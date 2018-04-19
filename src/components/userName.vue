@@ -68,20 +68,20 @@ export default {
           this.reVolidate = false;
         },
         NamePromise(){ // 姓名验证 
-          // 1 无整校班级 — 老用户 - 认证成功：打开晓黑板
-          // 2 无整校班级 — 新用户 - 认证成功：打开晓黑板（账号密码）
+          // 1 无整校班级 — 老用户 - 认证成功：打开晓黑板        user1/14444441120
+          // 2 无整校班级 — 新用户 - 认证成功：打开晓黑板（账号密码）   user7 /14444441132 加 
 
-          // 3 有整校班级 — 非班主任 — 老用户 - 认证成功：打开晓黑板
-          // 4 有整校班级 — 非班主任 — 新用户 - 认证成功：打开晓黑板（账号密码）
+          // 3 有整校班级 — 非班主任 — 老用户 - 认证成功：打开晓黑板     user2 /14444441121
+          // 4 有整校班级 — 非班主任 — 新用户 - 认证成功：打开晓黑板（账号密码）   user8 /14444441133 加
 
-          // 5 有整校班级 — 班主任 — 老用户 — 无晓黑板班级 - 创建班级 - 生成二维码 - 认证成功：打开晓黑板
-          // 6 有整校班级 — 班主任 — 老用户 — 有晓黑板班级 - 认证班级/创建班级 - 认证成功：打开晓黑板
-          // 7 有整校班级 — 班主任 — 新用户 — 无晓黑板班级 - 创建班级 - 生成二维码 - 认证成功：打开晓黑板
+          // 5 有整校班级 — 班主任 — 老用户 — 无晓黑板班级 - 创建班级 - 生成二维码 - 认证成功：打开晓黑板   user5/14444441125
+          // 6 有整校班级 — 班主任 — 老用户 — 有晓黑板班级 - 认证班级/创建班级 - 认证成功：打开晓黑板       user3/ 14444441122
+          // 7 有整校班级 — 班主任 — 新用户 — 无晓黑板班级 - 创建班级 - 生成二维码 - 认证成功：打开晓黑板  user6 / 14444441134  加
             console.log('输入的姓名是:',this.userName);
             console.log('您的手机号是:',sessionStorage.getItem('phone'));
             this.axios.post('/h5/index/getUserDetail',{
-                    name:'user1',
-                    phone:'14444441120'
+                    name:'user3',
+                    phone:'14444441122'
                     // name:this.userName,
                     // phone:sessionStorage.getItem('phone')
                 })
@@ -91,9 +91,10 @@ export default {
                         var obj = res.data.response;
                         sessionStorage.setItem('teacher_id',obj.teacher_id);  // 保存teacher_id
                         sessionStorage.setItem('user_token',obj.user_token);   // 保存user_token
-                        //sessionStorage.setItem('password',obj.account.password); // 保存密码
+                        sessionStorage.setItem('is_regular',obj.is_regular);   // 记录老用户还是新用户
                         this.$store.state.res1 = obj.school_class;
                         this.$store.state.res2 = obj.xhb_class;
+                        
 
                         if(res.data.response.school_class){
                           for(var i = 0; i<this.$store.state.res1.length; i++){
@@ -110,7 +111,8 @@ export default {
                         }
                          console.log('res1=',this.$store.state.res1);
                          console.log('res2=',this.$store.state.res2);
-
+                        localStorage.setItem('this.$store.state.res1',JSON.stringify(this.$store.state.res1));
+                        localStorage.setItem('this.$store.state.res2',JSON.stringify(this.$store.state.res2));
                       //1
                       if(obj.is_has_school_class==0 && obj.is_regular==1){
                         this.$router.push({path:'/PassOk',query:{}})
