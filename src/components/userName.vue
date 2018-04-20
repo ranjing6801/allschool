@@ -69,14 +69,14 @@ export default {
         },
         NamePromise(){ // 姓名验证 
           // 1 无整校班级 — 老用户 - 认证成功：打开晓黑板        user1/14444441120
-          // 2 无整校班级 — 新用户 - 认证成功：打开晓黑板（账号密码）   user7 /14444441132 加 
+          // 2 无整校班级 — 新用户 - 认证成功：打开晓黑板（账号密码）   user7 /14444441141 加 
 
           // 3 有整校班级 — 非班主任 — 老用户 - 认证成功：打开晓黑板     user2 /14444441121
-          // 4 有整校班级 — 非班主任 — 新用户 - 认证成功：打开晓黑板（账号密码）   user8 /14444441133 加
+          // 4 有整校班级 — 非班主任 — 新用户 - 认证成功：打开晓黑板（账号密码）   user8 /14444441152 加
 
           // 5 有整校班级 — 班主任 — 老用户 — 无晓黑板班级 - 创建班级 - 生成二维码 - 认证成功：打开晓黑板   user5/14444441125
           // 6 有整校班级 — 班主任 — 老用户 — 有晓黑板班级 - 认证班级/创建班级 - 认证成功：打开晓黑板       user3/ 14444441122
-          // 7 有整校班级 — 班主任 — 新用户 — 无晓黑板班级 - 创建班级 - 生成二维码 - 认证成功：打开晓黑板  user6 / 14444441134  加
+          // 7 有整校班级 — 班主任 — 新用户 — 无晓黑板班级 - 创建班级 - 生成二维码 - 认证成功：打开晓黑板  user6 / 14444441163  加
             console.log('输入的姓名是:',this.userName);
             console.log('您的手机号是:',sessionStorage.getItem('phone'));
             this.axios.post('/h5/index/getUserDetail',{
@@ -88,6 +88,7 @@ export default {
                .then( res => {
                   console.log('getUserDetail:',res);
                   if(res.data.response){
+                    console.log('res.data.response.xhb_class.length=',res.data.response.xhb_class);
                         var obj = res.data.response;
                         sessionStorage.setItem('teacher_id',obj.teacher_id);  // 保存teacher_id
                         sessionStorage.setItem('user_token',obj.user_token);   // 保存user_token

@@ -13,7 +13,7 @@
                 <img class="more" src="/static/images/more.png" />
             </li>
 
-             <!--  展示还没有认证的班级  -->
+             <!-- 没有认证的班级  -->
             <li v-if="!item.symbol" v-for="(item,index) in classList" :key="item.index" class="classList" @click="getMore(index)">
                 <span class="className"> {{ item.class_name }}</span> 
                 <img src="/static/images/vip.png" v-if="item.symbol" class="vBg" />
@@ -78,7 +78,10 @@ export default {
               // console.log('json=',JSON.stringify(this.arr));
 
               this.axios.post('/h5/index/bindClass',{
-                    bind_class:JSON.stringify(this.arr)
+                    bind_class:JSON.stringify(this.arr),
+                    teacher_id:sessionStorage.getItem('teacher_id'),
+                    phone:sessionStorage.getItem('phone'),
+                    user_token:sessionStorage.getItem('user_token')
                   })
                   .then(res => {
                     console.log('res=',res);
@@ -95,19 +98,17 @@ export default {
                     alert('请求失败!')
                     console.log('err=',err);
                   })
-
-        
         }
     },
     mounted(){
         document.title = "认证班级";
         // 判断num 
         if(this.$store.state.res1.length){
-            this.num = this.$store.state.res1.length 
-        }else{
+            this.num = this.$store.state.res1.length;
+        }
+        else{
           this.num = JSON.parse(localStorage.getItem('this.$store.state.res1')).length;
         }
-
 
         // 认证班级按钮的显示隐藏
         var result;

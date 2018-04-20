@@ -27,7 +27,7 @@
         </div> 
       </li>
 
-
+      
 <!--  没有认证的班级列表页 -->
       <li class="checkList box2" v-if="!option.vip"  v-for="(option,index) in optionList" :key="option.index" @click="getId(index)">
         <div class="checkbox-group" v-if="!option.vip" >
@@ -114,11 +114,11 @@ export default {
     },
     computed:{
       optionList(){
-          // console.log('this.$store.state.res1=',this.$store.state.res1);
-          // console.log('this.$store.state.res1=',JSON.parse(localStorage.getItem('this.$store.state.res1')));
-          if(this.$store.state.res2.length){
+        if(this.$store.state.res2.length){
+          console.log('this.$store.state.res1=',this.$store.state.res2);
             return  this.$store.state.res2;
           }else {
+          // console.log('this.$store.state.res1=',JSON.parse(localStorage.getItem('this.$store.state.res2')));
             return JSON.parse(localStorage.getItem('this.$store.state.res2'));
           }
       }    
@@ -149,7 +149,9 @@ export default {
             */
                 if(this.team == '4'){
                     alert('班主任创建班级');
-                    this.$router.push({path:'/ClNewTeacher'});
+                    // 班主任 有晓黑板班级 再去创建班级 跳转组件
+                    //  请求接口 周日 来加班
+                    this.$router.push({path:'/createClass'});
                 }else{
                   // 选择班级认证
                           if(this.$store.state.res2.length){
@@ -162,7 +164,7 @@ export default {
                               xhb_class_token:this.xhb_class_token
                             })
                             .then(res => {
-                                // console.log('res=',res);
+                                // console.log('isClassBindres=',res);
                                 if(res.data.response){
                                   this.$store.state.res1[this.getClassId].teamId = this.idvalue;
                                   this.$store.state.res1[this.getClassId].name = this.$store.state.res2[this.idvalue].name;
@@ -170,8 +172,11 @@ export default {
                                   this.$store.state.res1[this.getClassId].symbol = true;
                                   this.$store.state.res2[this.idvalue].teamShow = this.$store.state.res1[this.getClassId].class_name;
                                   this.$store.state.res2[this.idvalue].vip = true;
-                                  console.log('res2=',this.$store.state.res2);
-                                  console.log('res1=',this.$store.state.res1);
+                                  // console.log('res2=',this.$store.state.res2);
+                                  // console.log('res1=',this.$store.state.res1);
+                                  localStorage.setItem('this.$store.state.res2',JSON.stringify(this.$store.state.res2));
+                                  localStorage.setItem('this.$store.state.res1',JSON.stringify(this.$store.state.res1));
+
                                   this.$router.push({path:'/CLYchooseClass'});
                                 }
                                 // 该班级已经被其他老师绑定
@@ -182,7 +187,7 @@ export default {
                                 }
                             })
                             .catch(err => {
-                                console.log('err=',err);
+                                console.log('isClassBinderr=',err);
                             })   
                 }
         },
@@ -207,8 +212,22 @@ export default {
         },
         Replace(){  // 顶替Ta
             alert("顶替Ta");
-            console.log('res1=',this.$store.state.res1);
-            console.log('res1顶替 =',JSON.parse(localStorage.getItem('this.$store.state.res1')));
+            console.log('this.idvalue=',thid.idvalue);
+            // console.log('res1=',this.$store.state.res1);
+            // console.log('res1顶替 =',JSON.parse(localStorage.getItem('this.$store.state.res1')));
+
+      //  顶替
+
+            this.$store.state.res1[this.getClassId].teamId = this.idvalue;
+            this.$store.state.res1[this.getClassId].name = this.$store.state.res2[this.idvalue].name;
+            this.$store.state.res1[this.getClassId].xhb_class_token = this.$store.state.res2[this.idvalue].id;
+            this.$store.state.res1[this.getClassId].symbol = true;
+            this.$store.state.res2[this.idvalue].teamShow = this.$store.state.res1[this.getClassId].class_name;
+            this.$store.state.res2[this.idvalue].vip = true;
+            
+            localStorage.setItem('this.$store.state.res2',JSON.stringify(this.$store.state.res2));
+            localStorage.setItem('this.$store.state.res1',JSON.stringify(this.$store.state.res1));
+
             this.$router.push({path:'/CLYchooseClass'});
         }
     },

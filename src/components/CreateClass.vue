@@ -2,22 +2,21 @@
 	<!--  班主任 认证完班级之后  再创建的班级  -->
 	<div id="createClass">
         <div class="classContent">
-            <P>已为您创建以下晓黑板班级:</P>
-            <ul >
+            <P class="create">已为您创建以下晓黑板班级:</P>
+            <ul>
                 <li class="classList">
                     <div class="left">
-                        <p >{{clName}} </p>
-                        
-                            <img :src="secImg">
-                        
-                        <p class="bot">{{clNum}}: {{clNumber}} 人</p>
+                        <img :src="secImg">
                     </div>
                     <div class="right">
                         <img :src="zhiwenImg" alt="">
                         <p class="save">长按保存二维码</p>
-                        <p class="saveSecond">用于发送给家长</p>
-                        <p class="last">邀请他们进班</p>
+                        <p class="saveSecond">
+                          <span>用于发送给家长</span>
+                          <span>邀请他们进班</span>
+                        </p>
                     </div>
+                    <img class="myimg" :src="secImg" alt="">
                 </li>
             </ul>
         </div>
@@ -26,35 +25,27 @@
         <!--  完成认证 确认保存二维码 弹窗 -->
         <div class="modalShow" v-if="isSave" @click="HiddenSaveModal" >
             <div class="modal">
-                <CLcreateOkModal :saveTitle="saveTitle" :saveContent="saveContent" :saveTip="saveTip"
-                	 @changeIsSaveModal="HiddenSaveModal">
-                </CLcreateOkModal>
+                <saveModal  @changeIsSaveModal="HiddenSaveModal"></saveModal>
             </div>
         </div>
     </div> 
 </template>
 
 <script>
-import secImg from  '../../static/images/secImg.jpg'
+
 import zhiwenImg from  '../../static/images/zhiwen.png'
-import CLcreateOkModal from './CLcreateOkModal'
+import saveModal from './saveModal'
 
 export default {
 	name:'createClass',
 	components:{
-		CLcreateOkModal    
+		saveModal    
 	},
     data(){
         return {
-            clName:'一年级一班',
-            secImg:secImg,
+            secImg:'',
             zhiwenImg:zhiwenImg,
-            clNum:'小二班',
-            clNumber:'45',
             isSave:false,
-            saveTitle:'确认已保存',
-            saveContent:'请确保您已保存二维码',
-            saveTip:'将用于发送给家长,邀请他们进班',
         }
     },
     methods:{
@@ -79,121 +70,172 @@ export default {
 #createClass .classContent {
   width: 100%;
   height: 100%;
-  padding: 30px;
-  font-size: 16px;
   box-sizing: border-box;
 }
 
-#createClass .classContent .title {
-  padding-left: 30px;
-  margin-bottom: 10px;
+#createClass .classContent  p{
+  font-family: PingFangSC-Light;
+  font-size: 0.3733rem;
+  color: #AAAAAA;
+  line-height: 0.3733rem;
+  margin-top: 0.5333rem;
+  margin-left: 0.5333rem;
+  
 }
 
 #createClass .classContent .classList {
-  list-style: none;
   margin-bottom: 20px;
-  width: 100%;
-  height: 100%;
-  border: 1px solid #ccc;
-  border-radius: 15px;
-  float: left;
-  margin-top: 10px;
+  width: 9.2rem;
+  height: 4.7467rem;
+  background: #FFFFFF;
+  border-radius: 0.0533rem;
+  margin-top: 0.5333rem;
+  margin-left: 0.4rem;
+  margin-bottom: 0.5333rem;
+  position: relative;
 }
 
 #createClass .classContent .classList .left {
-  width: 44%;
-  float: left;
-  padding-left: 30px;
+  width: 9.2rem;
+  height: 4.7467rem;
+  position: absolute;
+  z-index: 5;
 }
 
 #createClass .classContent .classList .left img {
-  width: 80%;
-  height: 100%;
+  height: 2.6667rem;
+  width: 2.6667rem;
   display: block;
-  margin-top: 5px;
-  margin-right: 10%;
-  padding-right: 20px;
-  border-right: 1px solid #ddd;
+  padding-top: 0.5067rem;
+  margin-left: 0.96rem;
 }
 
-#createClass .classContent .classList .left p {
-  font-size: 16px;
-  font-weight: 600;
-  margin-top: 10px;
-  padding-left: 10px;
-}
-
-#createClass .classContent .classList .left .bot {
-  margin-bottom: 10px;
+.line {
+    height: 2.6667rem;
+    width: 0.0267rem;
+    display: block;
+    position: absolute;
+    top: 1.04rem;
+    left: 4.5867rem;
+    background: #F8F8F8;
 }
 
 #createClass .classContent .classList .right {
-  float: left;
-  width: 40%;
-  margin-top: 20px;
-  margin-left: 10px;
-  color: #ccc;
+  width: 9.2rem;
+  height: 4.7467rem;
 }
 
 #createClass .classContent .classList .right img {
-  width: 60%;
-  height: 73%;
-  margin-top: 0.13333rem;
+  width: 1.2533rem;
+  height: 1.3333rem;
+  padding-left: 6.2667rem;
+  padding-top: 0.9333rem;
   display: block;
-  margin-left: 20%;
+
 }
 
 #createClass .classContent .classList .right .save {
-  font-size: 16px;
+  font-family: PingFangSC-Light;
+  font-size: 0.3733rem;
+  color: #000000;
+  line-height: 0.3733rem;
   text-align: center;
+  margin-left: 5.6rem;
+  margin-top: 0.2667rem;
+  width: 2.6133rem;
+  height: 0.3733rem;
 }
 
 #createClass .classContent .classList .right .saveSecond {
-  font-size: 14px;
+  width: 1.8667rem;
+  height: 0.7467rem;
   text-align: center;
+  margin-left: 5.9733rem;
+  margin-top: 0.16rem;
+  font-family: PingFangSC-Light;
+  font-size: 0.2667rem;
+  color: #AAAAAA;
+  line-height: 0.3733rem;
 }
 
 #createClass .classContent .classList .right .last {
   text-align: center;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 #createClass .referOk {
-  width: 80%;
+  width: 9.2rem;
+  height: 1.28rem;
   text-align: center;
-  margin-left: 10%;
-  margin-top: 100px;
-  border-radius: 25px;
-  background: rgba(0, 0, 0, 0.5);
-  color: orangered;
-  position: fixed;
-  bottom: 120px;
+  margin-left: 0.4rem;
+  margin-top: 2.0rem;
+  border-radius: 0.0533rem;
+  background: #F8E71C;
+  font-family: PingFangSC-Regular;
+  font-size: 0.4533rem;
+  color: #000000;
+  line-height: 0.4533rem;
+  border:none;
 }
 
 #createClass .modalShow {
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   margin: auto;
+  z-index: 100;
 }
 
 #createClass .modalShow .modal {
-  width: 90%;
-  height: 45%;
-  margin-left: 5%;
-  margin-right: 5%;
+  width: 8.9333rem;
+  height: 5.4667rem;
+  margin-left: 0.5333rem;
+  margin-right: 0.5333rem;
   position: absolute;
+  top: 4.8267rem;
+  left: 0;
+}
+.classList{
+  position: relative;
+}
+.myimg{
+  position: absolute;
+  right: 0.8rem;
+  top: 0.5rem;
+  opacity: 0.01;
+  z-index: 9;
+}
+
+
+
+
+
+/**/
+#CLNewTeacher .modalShow {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   margin: auto;
-  background: #fff;
+  z-index: 100;
 }
 
+#CLNewTeacher .modalShow .modal {
+  width: 8.9333rem;
+  height: 5.4667rem;
+  margin-left: 0.5333rem;
+  margin-right: 0.5333rem;
+  position: absolute;
+  top: 4.8267rem;
+  left: 0;
+}
 </style>

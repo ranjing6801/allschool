@@ -3,9 +3,9 @@
         <div class="classContent">
             <P class="create">已为您创建以下晓黑板班级:</P>
             <ul>
-                <li class="classList">
+                <li class="classList" >
                     <div class="left">
-                        <img :src="secImg">
+                        <img :src="secImg0">
                     </div>
                     <div class="right">
                         <img :src="zhiwenImg" alt="">
@@ -15,7 +15,21 @@
                           <span>邀请他们进班</span>
                         </p>
                     </div>
-                    <img class="myimg" :src="secImg" alt="">
+                    <img class="myimg" :src="secImg0" alt="">
+                </li>
+                <li class="classList" >
+                    <div class="left">
+                        <img :src="secImg1">
+                    </div>
+                    <div class="right">
+                        <img :src="zhiwenImg" alt="">
+                        <p class="save">长按保存二维码</p>
+                        <p class="saveSecond">
+                          <span>用于发送给家长</span>
+                          <span>邀请他们进班</span>
+                        </p>
+                    </div>
+                    <img class="myimg" :src="secImg1" alt="">
                 </li>
             </ul>
         </div>
@@ -32,7 +46,6 @@
 </template>
 
 <script>
-    // import secImg from  '../../static/images/secImg.jpg'
     import zhiwenImg from  '../../static/images/zhiwen.png'
     import saveModal from './saveModal'
 export default {
@@ -42,15 +55,10 @@ export default {
     },
     data(){
         return {
-            clName:'一年级一班',
             zhiwenImg:zhiwenImg,
-            clNum:'班级号',
-            clNumber:'460540',
             isSave:false,
-            secImg:''
-            // saveTitle:'确认已保存',
-            // saveContent:'请确保您已保存二维码,将用于发送给家长,邀请他们进班'
-            // // saveTip:'将用于发送给家长,邀请他们进班',
+            secImg0:'',
+            secImg1:''
         }
     },
     methods:{
@@ -67,7 +75,8 @@ export default {
             })
             .then(res => {
                 console.log('createXhbClass=',res);
-                this.secImg =res.data.response.qrcode_url[0]
+                this.secImg0 =res.data.response.qrcode_url[0];
+                this.secImg1 =res.data.response.qrcode_url[1]
                 console.log('this.secImg=',res.data.response.qrcode_url[1]);
             })
             .catch(err => {
@@ -119,13 +128,9 @@ export default {
 }
 
 #CLNewTeacher .classContent .classList .left img {
- /* height: 3.6267rem;
-   width: 2.6667rem; */
-  height: 2.6667rem;
-  width: 2.6667rem;
+  height: 4.7467rem;
+  width: 4.5867rem;
   display: block;
-  padding-top: 0.5067rem;
-  margin-left: 0.96rem;
 }
 
 .line {
@@ -222,11 +227,14 @@ export default {
   position: relative;
 }
 .myimg{
-  position: absolute;
-  right: 0.8rem;
-  top: 0.5rem;
-  opacity: 0.01;
-  z-index: 9;
+    height: 4.7467rem;
+    width: 4.5867rem;
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    opacity: 0.01;
+    z-index: 9;
 }
 
 
