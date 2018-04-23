@@ -158,7 +158,8 @@ export default {
             }
         },
         codeNumber(){//禁止输入非数字
-          this.reCredNum = this.reCredNum.replace(/[^\d]/g,'');
+          console.log('暂时不限制格式..');
+          // this.reCredNum = this.reCredNum.replace(/[^\d]/g,'');
         },
         getListenCode(){  // 获取语音验证码
             this.isCodeFailShow = true;
