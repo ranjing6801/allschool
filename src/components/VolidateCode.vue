@@ -29,7 +29,7 @@
             
             <!--  div  占位符 -->
             <!-- <div v-show="!listenCode" class="listencode"></div> -->
-            <span class="volidateNum"  v-show="isTimer">{{ time }} s</span>
+            <span class="volidateNum"  v-show="isTimer">{{ time }}s</span>
             <button :class="!dis ? 'referBtn': '' " :disabled="dis" class="referCode"   @click="codePromise" >提交</button>
         </div>
         
@@ -52,7 +52,7 @@
         <div class="pushfail">
             <div id="codeFailModal" >
               <p class="title">验证码发送失败</p>
-              <p class="content-p">验证码发送失败, 请稍后重试</p>
+              <p class="content-p">验证码发送失败,  请稍后重试</p>
               <div class="btn" @click="codeFailHidden">我知道啦</div>
             </div>
         </div>
@@ -86,7 +86,7 @@ export default {
                 count:0,
                 listenCode:false,
                 isShowCode:false,
-                isCodeFail:false,   // 验证码发送错误
+                isCodeFail:false,   // 验证码发送失败
                 codeOverTime:'验证码发送次数已达上限',
                 helpMessage:'您填写的信息可以帮助我们及时更正哦',
                 txt:'验证码累计错误已达上线',
@@ -148,6 +148,7 @@ export default {
             else{
                 $('.VolidateCode').removeClass('hot');
             }
+            
             if(this.reCredNum.length == 4 ){  
                 this.dis = false;
             }

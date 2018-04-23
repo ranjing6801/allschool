@@ -2,16 +2,11 @@
     <div id="CLNewTeacher">
         <div class="classContent">
             <P class="create">已为您创建以下晓黑板班级:</P>
-            <ul >
-                <li class="classList">
+            <ul>
+                <li class="classList" >
                     <div class="left">
-                        <!-- <p >{{clName}} </p> -->
-                            <img :src="secImg">
-                            <!-- <div class="line"></div> -->
-                        <!-- <p class="bot">{{clNum}}: {{clNumber}}</p> -->
+                        <img :src="secImg0">
                     </div>
-                  
-
                     <div class="right">
                         <img :src="zhiwenImg" alt="">
                         <p class="save">长按保存二维码</p>
@@ -20,24 +15,22 @@
                           <span>邀请他们进班</span>
                         </p>
                     </div>
-
-                    <img class="myimg" src="/static/images/secImg.jpg" alt="">
+                    <img class="myimg" :src="secImg0" alt="">
                 </li>
-                <!-- <li class="classList">
+                <li class="classList" >
                     <div class="left">
-                        <p >{{clName}} </p>
-                        
-                            <img :src="secImg">
-                        
-                        <p class="bot">{{clNum}}: {{clNumber}}</p>
+                        <img :src="secImg1">
                     </div>
                     <div class="right">
                         <img :src="zhiwenImg" alt="">
                         <p class="save">长按保存二维码</p>
-                        <p class="saveSecond">用于发送给家长</p>
-                        <p class="last">邀请他们进班</p>
+                        <p class="saveSecond">
+                          <span>用于发送给家长</span>
+                          <span>邀请他们进班</span>
+                        </p>
                     </div>
-                </li> -->
+                    <img class="myimg" :src="secImg1" alt="">
+                </li>
             </ul>
         </div>
 
@@ -53,7 +46,6 @@
 </template>
 
 <script>
-    import secImg from  '../../static/images/secImg.jpg'
     import zhiwenImg from  '../../static/images/zhiwen.png'
     import saveModal from './saveModal'
 export default {
@@ -63,15 +55,10 @@ export default {
     },
     data(){
         return {
-            clName:'一年级一班',
-            secImg:secImg,
             zhiwenImg:zhiwenImg,
-            clNum:'班级号',
-            clNumber:'460540',
             isSave:false,
-            // saveTitle:'确认已保存',
-            // saveContent:'请确保您已保存二维码,将用于发送给家长,邀请他们进班'
-            // // saveTip:'将用于发送给家长,邀请他们进班',
+            secImg0:'',
+            secImg1:''
         }
     },
     methods:{
@@ -88,6 +75,9 @@ export default {
             })
             .then(res => {
                 console.log('createXhbClass=',res);
+                this.secImg0 =res.data.response.qrcode_url[0];
+                this.secImg1 =res.data.response.qrcode_url[1]
+                console.log('this.secImg=',res.data.response.qrcode_url[1]);
             })
             .catch(err => {
                 console.log('err=',err);
@@ -118,11 +108,6 @@ export default {
   
 }
 
-/*#CLNewTeacher .classContent .title {
-  padding-left: 30px;
-  margin-bottom: 10px;
-}*/
-
 #CLNewTeacher .classContent .classList {
   margin-bottom: 20px;
   width: 9.2rem;
@@ -140,16 +125,12 @@ export default {
   height: 4.7467rem;
   position: absolute;
   z-index: 5;
-
-
 }
 
 #CLNewTeacher .classContent .classList .left img {
-  height: 3.6267rem;
-  width: 2.6667rem;
+  height: 4.7467rem;
+  width: 4.5867rem;
   display: block;
-  padding-top: 0.5067rem;
-  margin-left: 0.96rem;
 }
 
 .line {
@@ -161,21 +142,10 @@ export default {
     left: 4.5867rem;
     background: #F8F8F8;
 }
-/*#CLNewTeacher .classContent .classList .left p {
-  font-size: 16px;
-  font-weight: 600;
-  margin-top: 10px;
-  padding-left: 10px;
-}*/
 
-/*#CLNewTeacher .classContent .classList .left .bot {
-  margin-bottom: 10px;
-}
-*/
 #CLNewTeacher .classContent .classList .right {
   width: 9.2rem;
   height: 4.7467rem;
-  /*background: #ccc;*/
 }
 
 #CLNewTeacher .classContent .classList .right img {
@@ -228,6 +198,7 @@ export default {
   font-size: 0.4533rem;
   color: #000000;
   line-height: 0.4533rem;
+  border:none;
 }
 
 #CLNewTeacher .modalShow {
@@ -256,11 +227,14 @@ export default {
   position: relative;
 }
 .myimg{
-  position: absolute;
-  right: 0.8rem;
-  top: 0.5rem;
-  opacity: 0.01;
-  z-index: 9;
+    height: 4.7467rem;
+    width: 4.5867rem;
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    opacity: 0.01;
+    z-index: 9;
 }
 
 

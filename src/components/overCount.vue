@@ -217,6 +217,7 @@ input{
   font-family: PingFangSC-Regular;
   font-size: 0.4533rem;
   color: #000;
+  margin-top: 0.8rem;
 }
 .active{
   background: #F8E71C;

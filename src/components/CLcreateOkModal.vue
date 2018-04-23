@@ -1,9 +1,9 @@
 <template>
     <!--   创建班级完成  确认保存二维码弹窗 -->
     <div id="CLcreateOkModal"  @click="know">
-        <h5 class="title">{{ saveTitle}}</h5>
-        <p class="content">{{ saveContent }}</p>
-        <p class="saveTip">{{ saveTip }}</p>
+        <h5 class="title">确认已保存</h5>
+        <p class="content">请确保您已保存二维码</p>
+        <p class="saveTip">将用于发送给家长,邀请他们进班</p>
         <div class="saveBtn">
             <div class="btn btnLeft" @click="know">去保存</div>
             <div class="btn" @click="NewClcreated">保存好了</div>
@@ -19,20 +19,20 @@ export default {
 
         }
     },
-    props:{
-        saveTitle:{
-            type:String,
-            default:''
-        },
-        saveContent:{
-            type:String,
-            default:''
-        },
-        saveTip:{
-            type:String,
-            default:''
-        }
-    },
+    // props:{
+    //     saveTitle:{
+    //         type:String,
+    //         default:''
+    //     },
+    //     saveContent:{
+    //         type:String,
+    //         default:''
+    //     },
+    //     saveTip:{
+    //         type:String,
+    //         default:''
+    //     }
+    // },
     methods:{
         know(){
             this.$emit("changeIsSaveModal")
@@ -46,8 +46,6 @@ export default {
 </script>
 
 <style scoped>
-/*@import  '../assets/css/variables.scss';
-@import  '../assets/css/CLcreateOkModal.css';*/
 
 #CLcreateOkModal .title {
   font-size: 18px;

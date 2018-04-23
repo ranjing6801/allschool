@@ -13,7 +13,7 @@
                 <img class="more" src="/static/images/more.png" />
             </li>
 
-             <!--  展示还没有认证的班级  -->
+             <!-- 没有认证的班级  -->
             <li v-if="!item.symbol" v-for="(item,index) in classList" :key="item.index" class="classList" @click="getMore(index)">
                 <span class="className"> {{ item.class_name }}</span> 
                 <img src="/static/images/vip.png" v-if="item.symbol" class="vBg" />
@@ -51,7 +51,12 @@ export default {
     computed:{
       classList(){
             // console.log('this.$store.state.res1=',this.$store.state.res1);
-        return  this.$store.state.res1;
+            // console.log('this.$store.state.res1=',JSON.parse(localStorage.getItem('this.$store.state.res1')));
+            if(this.$store.state.res1.length){
+              return  this.$store.state.res1;
+            }else {
+              return JSON.parse(localStorage.getItem('this.$store.state.res1'));
+            }
       }
     },
     methods:{
@@ -61,7 +66,7 @@ export default {
             this.$router.push({ path:'/getClass',query:{userId:id}});
         },
         getDetail(passId){             //认证完成之后点击展示 绑定的班级详细信息 
-            // console.log("passId=",passId);
+
             this.$router.push({path:'/getClass',query:{userId:passId}});
         },
         classRefer(){  // 班级确认
@@ -72,8 +77,11 @@ export default {
             }
               // console.log('json=',JSON.stringify(this.arr));
 
-              this.axios.post('/h5/index/bindClass',{
-                    bind_class:JSON.stringify(this.arr)
+              this.axios.post('/h5/index/bindClass',{ 
+                    bind_class : JSON.stringify(this.arr),
+                    teacher_id : sessionStorage.getItem('teacher_id'),
+                    phone : sessionStorage.getItem('phone'),
+                    user_token : sessionStorage.getItem('user_token')
                   })
                   .then(res => {
                     console.log('res=',res);
@@ -90,24 +98,38 @@ export default {
                     alert('请求失败!')
                     console.log('err=',err);
                   })
-
-        
         }
     },
     mounted(){
         document.title = "认证班级";
-        this.num = this.$store.state.res1.length;
+        // 判断num 
+        if(this.$store.state.res1.length){
+            this.num = this.$store.state.res1.length;
+        }
+        else{
+          this.num = JSON.parse(localStorage.getItem('this.$store.state.res1')).length;
+        }
+
         // 认证班级按钮的显示隐藏
-        var result = this.$store.state.res1.every(function(el){
-            if(el.symbol){
-               return true;
-            }  
-        });
+        var result;
+        if(this.$store.state.res1.length){
+            result = this.$store.state.res1.every(function(el){
+                if(el.symbol){
+                  return true;
+                }  
+            });
+        }else {
+          var resultObj = JSON.parse(localStorage.getItem('this.$store.state.res1'));
+            result = resultObj.every(function(el){
+                if(el.symbol){
+                  return true;
+                }  
+            });
+        }
+
         if(result){
           this.dis = false;
         }
-        
-        
     }
 }
 </script>
@@ -125,8 +147,6 @@ export default {
   margin-left: 0.4rem;
   position: relative;
 }
-
-
 
 #clychooseClass .vBg {
   display: inline-block;

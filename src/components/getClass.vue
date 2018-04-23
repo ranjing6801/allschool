@@ -27,7 +27,7 @@
         </div> 
       </li>
 
-
+      
 <!--  没有认证的班级列表页 -->
       <li class="checkList box2" v-if="!option.vip"  v-for="(option,index) in optionList" :key="option.index" @click="getId(index)">
         <div class="checkbox-group" v-if="!option.vip" >
@@ -99,7 +99,7 @@ export default {
     data(){
         return {
             logoSrc:'',
-            getClassId:'',  // 接收从CLYchooseClass 组件传过来的id
+            getClassId:'',  // 接收从CLYchooseClass传过来的 整校班级id
             create:'',  // 选中  创建班级
             team:'',    // 检测是否 有选择一个班级
             dis:true,    // 按钮disabled属性
@@ -108,13 +108,20 @@ export default {
             classTitle:'一年级二班',
             classUser:'张老师' ,
             accountReplace:'您是否要顶替Ta,成为该班级班主任',
-            valueId:''
+            valueId:'',
+            xhb_class_token:''
         }
     },
     computed:{
       optionList(){
-        // console.log("optionList=",this.$store.state.res2);
-        return  this.$store.state.res2;
+        if(this.$store.state.res2.length){
+          console.log('this.$store.state.res1=',this.$store.state.res1);
+          console.log('this.$store.state.res2=',this.$store.state.res2);
+            return  this.$store.state.res2;
+          }else {
+          // console.log('this.$store.state.res1=',JSON.parse(localStorage.getItem('this.$store.state.res2')));
+            return JSON.parse(localStorage.getItem('this.$store.state.res2'));
+          }
       }    
     },
     filters:{
@@ -143,14 +150,22 @@ export default {
             */
                 if(this.team == '4'){
                     alert('班主任创建班级');
-                    this.$router.push({path:'/ClNewTeacher'});
+                    // 班主任 有晓黑板班级 再去创建班级 跳转组件
+                    //  请求接口 周日 来加班
+                    this.$router.push({path:'/createClass',query:{index:this.getClassId}});
                 }else{
                   // 选择班级认证
-                        this.axios.post('/h5/index/isClassBind',{
-                              xhb_class_token:this.$store.state.res2[this.idvalue].id
+                          if(this.$store.state.res2.length){
+                              this.xhb_class_token = this.$store.state.res2[this.idvalue].id
+                          }else {
+                              this.xhb_class_token = JSON.parse(localStorage.getItem('this.$store.state.res2'))[this.idvalue].id;
+                          }
+
+                          this.axios.post('/h5/index/isClassBind',{
+                              xhb_class_token:this.xhb_class_token
                             })
                             .then(res => {
-                                // console.log('res=',res);
+                                // console.log('isClassBindres=',res);
                                 if(res.data.response){
                                   this.$store.state.res1[this.getClassId].teamId = this.idvalue;
                                   this.$store.state.res1[this.getClassId].name = this.$store.state.res2[this.idvalue].name;
@@ -158,8 +173,11 @@ export default {
                                   this.$store.state.res1[this.getClassId].symbol = true;
                                   this.$store.state.res2[this.idvalue].teamShow = this.$store.state.res1[this.getClassId].class_name;
                                   this.$store.state.res2[this.idvalue].vip = true;
-                                  console.log('res2=',this.$store.state.res2);
-                                  console.log('res1=',this.$store.state.res1);
+                                  // console.log('res2=',this.$store.state.res2);
+                                  // console.log('res1=',this.$store.state.res1);
+                                  localStorage.setItem('this.$store.state.res2',JSON.stringify(this.$store.state.res2));
+                                  localStorage.setItem('this.$store.state.res1',JSON.stringify(this.$store.state.res1));
+
                                   this.$router.push({path:'/CLYchooseClass'});
                                 }
                                 // 该班级已经被其他老师绑定
@@ -170,7 +188,7 @@ export default {
                                 }
                             })
                             .catch(err => {
-                                console.log('err=',err);
+                                console.log('isClassBinderr=',err);
                             })   
                 }
         },
@@ -195,12 +213,29 @@ export default {
         },
         Replace(){  // 顶替Ta
             alert("顶替Ta");
-            console.log('res1=',this.$store.state.res1);
+            console.log('this.idvalue=',thid.idvalue);
+            // console.log('res1=',this.$store.state.res1);
+            // console.log('res1顶替 =',JSON.parse(localStorage.getItem('this.$store.state.res1')));
+
+      //  顶替
+
+            this.$store.state.res1[this.getClassId].teamId = this.idvalue;
+            this.$store.state.res1[this.getClassId].name = this.$store.state.res2[this.idvalue].name;
+            this.$store.state.res1[this.getClassId].xhb_class_token = this.$store.state.res2[this.idvalue].id;
+            this.$store.state.res1[this.getClassId].symbol = true;
+            this.$store.state.res2[this.idvalue].teamShow = this.$store.state.res1[this.getClassId].class_name;
+            this.$store.state.res2[this.idvalue].vip = true;
+            
+            localStorage.setItem('this.$store.state.res2',JSON.stringify(this.$store.state.res2));
+            localStorage.setItem('this.$store.state.res1',JSON.stringify(this.$store.state.res1));
+
+            this.$router.push({path:'/CLYchooseClass'});
         }
     },
     mounted(){
         document.title = '选择班级';
         this.getClassId = this.$route.query.userId;
+        console.log('res2=',this.$store.state.res2);
         // console.log('getClassId=',this.$route.query.userId);
     }
   
@@ -425,12 +460,12 @@ export default {
     top: 0.72rem;
 }
 
-#getClass .referClass {
+ .referClass {
   width: 9.2rem;
   height: 1.28rem;
   margin-left: 0.4rem;
-  position: fixed;
-  bottom: 0.8rem;
+  margin-top: 4.4rem;
+  margin-bottom: 60px;
   border-radius: 0.0533rem;
   background: #AAAAAA;
   font-family: PingFangSC-Regular;
