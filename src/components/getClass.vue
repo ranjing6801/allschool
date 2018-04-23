@@ -99,7 +99,7 @@ export default {
     data(){
         return {
             logoSrc:'',
-            getClassId:'',  // 接收从CLYchooseClass 组件传过来的id
+            getClassId:'',  // 接收从CLYchooseClass传过来的 整校班级id
             create:'',  // 选中  创建班级
             team:'',    // 检测是否 有选择一个班级
             dis:true,    // 按钮disabled属性
@@ -115,7 +115,8 @@ export default {
     computed:{
       optionList(){
         if(this.$store.state.res2.length){
-          console.log('this.$store.state.res1=',this.$store.state.res2);
+          console.log('this.$store.state.res1=',this.$store.state.res1);
+          console.log('this.$store.state.res2=',this.$store.state.res2);
             return  this.$store.state.res2;
           }else {
           // console.log('this.$store.state.res1=',JSON.parse(localStorage.getItem('this.$store.state.res2')));
@@ -151,7 +152,7 @@ export default {
                     alert('班主任创建班级');
                     // 班主任 有晓黑板班级 再去创建班级 跳转组件
                     //  请求接口 周日 来加班
-                    this.$router.push({path:'/createClass'});
+                    this.$router.push({path:'/createClass',query:{index:this.getClassId}});
                 }else{
                   // 选择班级认证
                           if(this.$store.state.res2.length){
@@ -234,6 +235,7 @@ export default {
     mounted(){
         document.title = '选择班级';
         this.getClassId = this.$route.query.userId;
+        console.log('res2=',this.$store.state.res2);
         // console.log('getClassId=',this.$route.query.userId);
     }
   
@@ -458,12 +460,12 @@ export default {
     top: 0.72rem;
 }
 
-#getClass .referClass {
+ .referClass {
   width: 9.2rem;
   height: 1.28rem;
   margin-left: 0.4rem;
-  position: fixed;
-  bottom: 0.8rem;
+  margin-top: 4.4rem;
+  margin-bottom: 60px;
   border-radius: 0.0533rem;
   background: #AAAAAA;
   font-family: PingFangSC-Regular;

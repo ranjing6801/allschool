@@ -64,8 +64,8 @@ export default {
           isAND: false,
           onOff: false,
           reVolidate:false,
-          account: '13661552121',
-          password: '552121'
+          account: '',
+          password: ''
         }
     },
     methods:{
@@ -88,8 +88,8 @@ export default {
     },
     mounted() {
       //判断手机类型
-      // this.account = sessionStorage.getItem('myphone');
-      // this.password = sessionStorage.getItem('myphone').slice(6,12);
+      this.account = sessionStorage.getItem('phone');
+      this.password = sessionStorage.getItem('phone').slice(6,12);
       var ua = navigator.userAgent.toLowerCase();
 
       if(/android/.test(ua)){

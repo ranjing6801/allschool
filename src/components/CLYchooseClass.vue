@@ -66,7 +66,7 @@ export default {
             this.$router.push({ path:'/getClass',query:{userId:id}});
         },
         getDetail(passId){             //认证完成之后点击展示 绑定的班级详细信息 
-            // console.log("passId=",passId);
+
             this.$router.push({path:'/getClass',query:{userId:passId}});
         },
         classRefer(){  // 班级确认
@@ -77,11 +77,11 @@ export default {
             }
               // console.log('json=',JSON.stringify(this.arr));
 
-              this.axios.post('/h5/index/bindClass',{
-                    bind_class:JSON.stringify(this.arr),
-                    teacher_id:sessionStorage.getItem('teacher_id'),
-                    phone:sessionStorage.getItem('phone'),
-                    user_token:sessionStorage.getItem('user_token')
+              this.axios.post('/h5/index/bindClass',{ 
+                    bind_class : JSON.stringify(this.arr),
+                    teacher_id : sessionStorage.getItem('teacher_id'),
+                    phone : sessionStorage.getItem('phone'),
+                    user_token : sessionStorage.getItem('user_token')
                   })
                   .then(res => {
                     console.log('res=',res);

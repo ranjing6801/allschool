@@ -6,7 +6,7 @@
             <ul>
                 <li class="classList">
                     <div class="left">
-                        <img :src="secImg">
+                        <img :src="createSecImg">
                     </div>
                     <div class="right">
                         <img :src="zhiwenImg" alt="">
@@ -16,7 +16,7 @@
                           <span>邀请他们进班</span>
                         </p>
                     </div>
-                    <img class="myimg" :src="secImg" alt="">
+                    <img class="myimg" :src="createSecImg" alt="">
                 </li>
             </ul>
         </div>
@@ -43,9 +43,10 @@ export default {
 	},
     data(){
         return {
-            secImg:'',
+            createSecImg:'',
             zhiwenImg:zhiwenImg,
             isSave:false,
+            indexValue:'',  // [点击创建班级认证 ]  记录 班主任 有班级 创建晓黑板班级的时候  传过来的 整校班级的id 
         }
     },
     methods:{
@@ -56,10 +57,33 @@ export default {
             this.isSave = false
             //  创建完班级之后 跳转到班主任 班级的列表页
            	// this.$router.push({name:'CLYchooseClass'})
-        }
+        },
+        directorCreateClass(){  // 班主任 有班级创建
+
+        },
+        createClassData(){  // 班主任 有小黑板班级 老用户 创建班级认证
+              
+              this.axios.post('/h5/index/createSingleXhbClass',{
+                      user_token:sessionStorage.getItem('user_token'),
+                      class_name:this.$store.state.res1[this.indexValue].class_name
+                  })
+                  .then(res => {
+                      console.log('createSingleXhbClass=',res);
+                      this.createSecImg = res.data.response.qrcode_url;
+                      this.$store.state.res2.push(res.data.response.xhb_class);    // 将创建完的班级push到res2 中
+                      localStorage.setItem('this.$store.state.res2',this.$store.state.res2);  // 本地存储同步保存
+                      console.log(' 创建晓黑板班级完成之后的res2 =',this.$store.state.res2);
+                  })
+                  .catch(err => {
+                      console.log('err=',err);
+                  })  
+        } 
     },
     mounted(){
-        document.title = "创建班级"
+        document.title = "创建班级";
+        this.indexValue = this.$route.query.index;
+        console.log('this.indexValue=',this.indexValue);
+        this.createClassData();
     }
 }
 
@@ -103,11 +127,10 @@ export default {
 }
 
 #createClass .classContent .classList .left img {
-  height: 2.6667rem;
-  width: 2.6667rem;
+  height: 4.7467rem;
+  width: 4.5867rem;
   display: block;
-  padding-top: 0.5067rem;
-  margin-left: 0.96rem;
+
 }
 
 .line {
@@ -204,9 +227,11 @@ export default {
   position: relative;
 }
 .myimg{
+  height: 4.7467rem;
+  width: 4.5867rem;
   position: absolute;
-  right: 0.8rem;
-  top: 0.5rem;
+  right: 0;
+  top: 0;
   opacity: 0.01;
   z-index: 9;
 }

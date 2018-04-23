@@ -76,12 +76,12 @@ export default {
 
           // 5 有整校班级 — 班主任 — 老用户 — 无晓黑板班级 - 创建班级 - 生成二维码 - 认证成功：打开晓黑板   user5/14444441125
           // 6 有整校班级 — 班主任 — 老用户 — 有晓黑板班级 - 认证班级/创建班级 - 认证成功：打开晓黑板       user3/ 14444441122
-          // 7 有整校班级 — 班主任 — 新用户 — 无晓黑板班级 - 创建班级 - 生成二维码 - 认证成功：打开晓黑板  user6 / 14444441163  加
+          // 7 有整校班级 — 班主任 — 新用户 — 无晓黑板班级 - 创建班级 - 生成二维码 - 认证成功：打开晓黑板  user6 / 144442241171  加
             console.log('输入的姓名是:',this.userName);
             console.log('您的手机号是:',sessionStorage.getItem('phone'));
             this.axios.post('/h5/index/getUserDetail',{
-                    name:'user3',
-                    phone:'14444441122'
+                    name:'user7',
+                    phone:'14444441143'
                     // name:this.userName,
                     // phone:sessionStorage.getItem('phone')
                 })
