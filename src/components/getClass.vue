@@ -1,7 +1,43 @@
 <template>
   <div id="getClass">
-    <ul>
-  <!--  已经认证的班级列表页 -->      
+    <div class="box">
+      <ul class="bind">
+        <li v-for="item,index in list" v-show="item.isOver">
+          <div class="bind-div">
+            <img class="vip" src="/static/images/vip.png" />
+            <div class="cont"><p class="p-top">{{item.class_name}} 已对应</p><p class="p-bot">{{item.className}}</p></div>
+            <div class="cancle"><img src="/static/images/ic.png" /><span @click="unbind(index)">取消对应</span></div>
+          </div>
+        </li>
+      </ul>
+
+      <ul class="unbind">
+        <li v-for="item,index in list2" v-show="!item.hadBind">
+          <div class="unbind-div">
+            <div @click="handleCheck($event,index)" class="left"></div>
+            <img class="logo" src="/static/images/logo.jpg" />
+            <div class="right">
+              <p class="p1">{{item.title}}</p>
+              <p class="p2">
+                <img src="/static/images/p1.png" /><span>{{item.code}}</span>
+                <img src="/static/images/p2.png" /><span>{{item.teacherName|teacherName}}</span>
+                <img src="/static/images/p3.png" /><span>{{item.membersCount}}</span>
+              </p>
+            </div>
+          </div>
+        </li>
+      </ul> 
+
+      <div class="create">
+        <div @click="handleCreateCheck($event)" class="left"></div>
+        <div class="txt">创建新班级去认证</div>
+      </div>
+    </div>
+
+    <button @click="bindBtn" :class="!ischeck||flag?'active':''" class="referClass" :disabled="ischeck">确认</button>
+
+
+<!-- <ul>
       <li class="checkList box" v-if="option.vip" v-for="(option,index) in optionList" :key="option.index" @click="getId(index)">
         <div class="checkbox-group box"  v-if="!option.vip">
           <input type="radio" :id="option.code"  name="classChoose" :value="option.id"  v-model="team"  @change="change" />
@@ -25,11 +61,11 @@
               </div>
           </div> 
         </div> 
-      </li>
+      </li> -->
 
       
 <!--  没有认证的班级列表页 -->
-      <li class="checkList box2" v-if="!option.vip"  v-for="(option,index) in optionList" :key="option.index" @click="getId(index)">
+      <!-- <li class="checkList box2" v-if="!option.vip"  v-for="(option,index) in optionList" :key="option.index" @click="getId(index)">
         <div class="checkbox-group" v-if="!option.vip" >
           <input type="radio" :id="option.code"  name="classChoose" :value="option.id"  v-model="team"  @change="change" />
           <label :for="option.code"></label>
@@ -56,9 +92,9 @@
           </div> 
         </div> 
       </li>  
-    </ul>
+    </ul> -->
     <!--  创建班级去认证 -->
-    <ul>
+    <!-- <ul>
       <li class="checkList">
           <div class="checkbox-group">
               <input type="radio" name="classChoose" value="4" id="value" v-model="team" @change="change">
@@ -68,9 +104,9 @@
               <label for="create" class="createClass">创建新班级认证</label>
           </div>
       </li>
-    </ul> 
+    </ul>  -->
     <!--  顶替弹窗 -->
-    <div class="modalShow" v-if="isReCertificationShow" @click="ReCertificationShow" >
+     <div class="modalShow" v-if="isReCertificationShow" @click="ReCertificationShow" >
         <div class="modal">
             <div id="ReCertification">
                 <p class="content">{{ accountTile}}</p>
@@ -82,7 +118,7 @@
             </div>
         </div>
     </div>
-    <button class="referClass" :disabled="dis"  @click="getClassPromise" >确认</button>
+    <!-- <button class="referClass" :disabled="dis"  @click="getClassPromise" >确认</button> -->
   </div>
 </template>
 <script>
@@ -102,39 +138,54 @@ export default {
             getClassId:'',  // 接收从CLYchooseClass传过来的 整校班级id
             create:'',  // 选中  创建班级
             team:'',    // 检测是否 有选择一个班级
-            dis:true,    // 按钮disabled属性
             isReCertificationShow:false,  // 重新认证 班级已经被人认证了  顶替弹窗
             accountTile:'重新验证该班级',
             classTitle:'一年级二班',
             classUser:'张老师' ,
             accountReplace:'您是否要顶替Ta,成为该班级班主任',
             valueId:'',
-            xhb_class_token:''
+            xhb_class_token:'',
+            num: 3,
+            txt: '',
+            dis: false,
+            isbind: true,
+            ischeck: true,
+            hasbind: null,
+            index:'',
+            list:[],
+            list2:[],
+            flag: null,
+            cur: null,
         }
     },
     computed:{
-      optionList(){
-        if(this.$store.state.res2.length){
-          console.log('this.$store.state.res1=',this.$store.state.res1);
-          console.log('this.$store.state.res2=',this.$store.state.res2);
-            return  this.$store.state.res2;
-          }else {
-          // console.log('this.$store.state.res1=',JSON.parse(localStorage.getItem('this.$store.state.res2')));
-            return JSON.parse(localStorage.getItem('this.$store.state.res2'));
-          }
-      }    
+      classList() {
+          return this.$store.getters.getRes1;
+      },
+      classList2() {
+          return this.$store.getters.getRes2;
+      },
+      // optionList(){
+      //   if(this.$store.state.res2.length){
+      //     console.log('this.$store.state.res1=',this.$store.state.res1);
+      //     console.log('this.$store.state.res2=',this.$store.state.res2);
+      //       return  this.$store.state.res2;
+      //     }else {
+      //     // console.log('this.$store.state.res1=',JSON.parse(localStorage.getItem('this.$store.state.res2')));
+      //       return JSON.parse(localStorage.getItem('this.$store.state.res2'));
+      //     }
+      // }    
     },
     filters:{
-      sliceValue(val){
-        console.log(typeof val);
-         if(val.length >= 10){
-            return val.slice(0,5) + '...'+val.slice(5,11);
-         } 
+      sliceValue(value){
+         if(value.length >= 10){
+            return value.slice(0,5) + '...'+value.slice(5,11);
+         }return value
       },
       teacherName(value){
         if(value.length >= 6){
             return value.slice(0,2) + '...'+value.slice(2,5);
-         }
+         }return value
       }
     },
     methods:{
@@ -142,7 +193,7 @@ export default {
             // console.log('idvalue=',idvalue);
             this.idvalue = idvalue;
         },
-        getClassPromise(){ //  确认   
+        getClassPromise(){ //  确认按钮  
             /*
                 1.第一种情况: 如果该班级没有被其他的班主任认证    点击确认跳转到 前面 班主任列表查询页
                 2.第二种情况:如果在认证某一个班级的时候,他已经被其他老师认证过了,会提示弹窗
@@ -217,8 +268,6 @@ export default {
             // console.log('res1=',this.$store.state.res1);
             // console.log('res1顶替 =',JSON.parse(localStorage.getItem('this.$store.state.res1')));
 
-      //  顶替
-
             this.$store.state.res1[this.getClassId].teamId = this.idvalue;
             this.$store.state.res1[this.getClassId].name = this.$store.state.res2[this.idvalue].name;
             this.$store.state.res1[this.getClassId].xhb_class_token = this.$store.state.res2[this.idvalue].id;
@@ -230,71 +279,103 @@ export default {
             localStorage.setItem('this.$store.state.res1',JSON.stringify(this.$store.state.res1));
 
             this.$router.push({path:'/CLYchooseClass'});
-        }
+        },
+      handleCheck(e,i) {  //选择班级按钮
+        var el = e.currentTarget;
+        $('.left').removeClass('no-bor');
+        $(el).addClass('no-bor');
+        this.ischeck = false;
+
+        var p = $(el).parent().find('.p1').html();
+        console.log('选择了:',p);
+        this.txt = p;
+      },
+      handleCreateCheck(e) {  //创建新班级按钮
+        var el = e.currentTarget;
+        $('.left').removeClass('no-bor');
+        $(el).addClass('no-bor');
+        this.ischeck = false;
+      },
+      unbind(i) {  //取消对应按钮
+        console.log('解绑...');
+        var str = sessionStorage.getItem(i);
+        console.log('str:',str);
+        var item = this.list2.find( (datum)=>datum.title==str );
+        console.log('item:',item);
+        var data = {index1:i,index2:item.index};
+
+        this.$store.commit('unbindClass',data);
+
+        // this.$set(data,list[data.index1].isOver,false);
+        // this.$set(data,list2[data.index2].hadBind,false);
+        // this.$set(data,list[data.index1].className,'的对应班级');
+
+        // this.list[data.index1].isOver = false;
+        // this.list2[data.index2].hadBind = false;
+        // this.list[data.index1].className = '的对应班级';
+
+        //this.$store.dispatch('unbindClass2',data);
+      },
+      bindBtn() {  //确认按钮
+
+        var oIndex = this.index;
+        var detail = this.txt;
+        
+        var obj = {index:oIndex,detail:detail,sta:true};
+
+        sessionStorage.setItem(oIndex,detail);//保存当前对应的状态
+
+        this.$store.commit('setClass',obj); //更改store的数据
+        this.$router.push({ path:'/CLYchooseClass',query:{index:this.index} }); //跳回去的时候保存这次的序号
+      }
     },
-    mounted(){
+    created() {
+        this.list = this.$store.state.res1; //获取数据
+        this.list2 = this.$store.state.res2; //获取数据
+
+        this.index = this.$route.query.index;
+        
+        this.$route.query.flag?this.flag=true:this.flag=false;
+
+         if(this.flag){
+          var str = this.$route.query.txt;
+          var item = this.list2.find( (datum)=>datum.title==str );
+          var obj = {index1: this.index,index2: item.index};
+          this.$store.commit('resetClass',obj);//先解绑
+      }
+    },
+    mounted() {
         document.title = '选择班级';
-        this.getClassId = this.$route.query.userId;
-        console.log('res2=',this.$store.state.res2);
-        // console.log('getClassId=',this.$route.query.userId);
-    }
+        var oindex = this.index;
+        var mytxt = this.$route.query.txt;
+
+        if(this.$route.query.flag=='yes'){ // 找到上次绑定班级的默认选项
+          console.log('修改上次已经绑定过的班级');
+          var l = $('.p1').length;
+          var temp = 0;
+          for(var i=0;i<l;i++){
+            if($('.p1').eq(i).html()==mytxt){
+              temp=i;
+            }
+          }
+          $('.p1').eq(temp).parent().prev().prev().addClass('no-bor');
+          this.txt = mytxt;
+          this.ischeck = false;
+        }
+    } 
   
 }
 
 </script>
 
 <style scoped>
-/* 已经认证完成的班级列表样式 start*/
-#getClass .vipLogo {
-  width: 1.3067rem;
-  height: 1.8667rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
- 
+/* new css 2018 4-20 */
+
+.box {
+  min-height: 14.0rem;
 }
 
-#getClass .vipLogo img{
-  width: 0.64rem;
-  height: 0.64rem;
-  display: block;
-}
-
-
-#getClass .teamTitle {
-  width: 3.1467rem;
-  font-family: PingFangSC-Regular;
-  font-size: 0.3733rem;
-  color: #888888;
-  line-height: 0.4533rem;
-  margin-top: 0.3467rem;
-}
-
-#getClass .cancle {
-  position: absolute;
-  top: 0.6133rem;
-  right: -0.6rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 2.16rem;
-  height: 0.64rem;
-  border: 1px solid #aaa;
-  border-radius: 2.6667rem;
-}
-#getClass .cancle img {
-  width: 0.3rem;
-  margin-right: 0.1067rem;
-}
-#getClass .cancle span {
-  font-family: PingFangSC-Regular;
-  font-size: 12px;
-  color: #AAAAAA;
-}
-
-/* 已经认证完成的班级列表样式 end*/
-
-#getClass .checkList {
+.bind li {
   width: 9.2rem;
   height: 1.8667rem;
   background: #363636;
@@ -304,273 +385,158 @@ export default {
   position: relative;
 }
 
-
-/* 选择班级修饰input[type=radio]*/
-
-#getClass .checkList .checkbox-group {
-  width: 1.3067rem;
-  height: 1.8667rem;
-}
-
-.checkbox-group input {
-  display: none;
-  opacity: 0;
-}
-
-.checkbox-group input[type=radio]+label {
-  display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  -ms-flex-align: center;
-  display: block;
-  height: 1.8667rem;
-}
-
-.checkbox-group input[type=radio]+label:before {
-  width: 0.64rem;
-  height: 0.64rem;
-  display: inline-block;
-  line-height: 0.64rem;
-  content: '';
-  background: rgba(43,43,43,0.30);
-  margin-left: 0.4rem;
-  margin-right: 0.2667rem;
-  margin-top: 0.64rem;
-  color: #000;
-  border: 1px solid #FFFFFF;
-  border-radius: 50%;
-}
-
-.checkbox-group input[type=radio]:checked+label:before {
-  content: '';
-  background:url('../../static/images/radio.png') no-repeat center;
-  background-size: 0.64rem 0.64rem;
-  border-radius: 50%;
-  border: 1px solid transparent;
-}
-
-
-#getClass .checkList .right {
-  height: 1.8667rem;
-  width: 7.8933rem;
-  position: absolute;
-  top: 0px;
-  right: 0;
-  height: 100px;
-  height: 1.8667rem;
-  margin-left: 0.1333rem;
-}
-
-#getClass .logo {
-  width: 1.3333rem;
-  height: 1.8667rem;
-  margin-right: 6.56rem;
-}
-.logo img {
-    width: 1.3333rem;
-    height: 1.3333rem;
-    display: block;
-    margin-top: 0.2667rem;
-    border-radius: 0.2667rem;
-}
-
-#getClass  .title {
-  height: 1.8667rem;
-  width: 6.2667rem;
-  font-family: PingFangSC-Regular;
-  font-size: 0.4533rem;
-  color: #FFFFFF;
-  margin-left: 0.1333rem;
-  position: absolute;
-  top: 0;
-  left:1.4533rem;
-}
-
-#getClass .className {
-  font-family: PingFangSC-Regular;
-  font-size: 0.4533rem;
-  color: #FFFFFF;
-  height: 0.4533rem;
-  line-height: 0.4533rem;
-  margin-top: 0.3733rem;
-  margin-bottom: 0.2667rem;
-}
-#getClass .className1 {
-  font-family: PingFangSC-Regular;
-  font-size: 0.4533rem;
-  color: #FFFFFF;
-  height: 0.4533rem;
-  line-height: 0.4533rem;
-  margin-top: 0.2667rem;
-  margin-bottom: 0.2667rem;
-}
-#getClass  .passTitle{
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-#getClass  .classTitle {
-  display: inline-block;
-  font-family: PingFangSC-Regular;
-  font-size: 0.4533rem;
-  color: #FFFFFF;
-}
-
-.classNumber {
-  height:0.3733rem;
-  line-height: 0.3733rem;
+.bind-div {
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
 }
-.banjiNumber{
-  margin-right: 0.3467rem;
 
+.vip{
+  width: 0.64rem;
+  margin-left: 0.4rem;
+  margin-right: 0.2667rem;
 }
-#getClass  .classNumber span {
-  font-family: PingFangSC-Light;
+
+.cont {
+  margin-right: 1.2rem;
+}
+
+.p-top {
+  color: #888;
+  width: 3.4rem;
   font-size: 0.3733rem;
-  color: #888888;
+  margin-bottom: 0.2667rem;
+  font-family: PingFangSC-Regular;
 }
 
-.common {
-  height: 0.32rem;
-  width: 0.32rem;
-  font-family: PingFangSC-Light;
-  color: #888888;
-  margin-right: 0.1067rem;
-  display: inline-block;
+.p-bot {
+  color: #fff;
+  font-size: 0.4533rem;
+  font-family: PingFangSC-Regular;
 }
-.created {
+
+.cancle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2.16rem;
+  height: 0.64rem;
   margin-right: 0.4rem;
+  border: 1px solid #aaa;
+  border-radius: 2.6667rem;
 }
-#getClass .creatClass {
-  width: 100%;
+
+.cancle img {
+  width: 0.3rem;
+  margin-right: 0.1067rem;
+}
+
+.cancle span {
+  color: #AAA;
+  font-size: 0.32rem;
+  font-family: PingFangSC-Regular;
+}
+
+.unbind li {
+  width: 9.2rem;
+  height: 1.8667rem;
+  background: #363636;
+  margin-left: 0.4rem;
+  margin-top: 0.5333rem;
+  border-radius: 0.0533rem;
   position: relative;
 }
 
-.createClass {
-  font-family: PingFangSC-Regular;
-  font-size: 0.4533rem;
-  color: #FFFFFF;
-}
-.textCreate {
-    position: absolute;
-    left: 1.44rem;
-    top: 0.72rem;
+.unbind-div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
 
- .referClass {
+.left {
+  width: 0.64rem;
+  height: 0.64rem;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  margin-left: 0.4rem;
+  margin-right: 0.2667rem;
+}
+
+.left img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.logo{
+  width: 1.3333rem;
+  height: 1.3333rem;
+  margin-right: 0.2667rem;
+  border-radius: 0.0533rem;
+}
+
+.p1 {
+  color: #fff;
+  font-size: 0.4533rem;
+  margin-bottom: 0.2667rem;
+  font-family: PingFangSC-Regular;
+}
+
+.p2 img {
+  width: 0.2667rem;
+  margin-right: 0.1067rem;
+}
+
+.p2 span {
+  color: #888;
+  font-size: 0.3733rem;
+  margin-right: 0.4rem;
+  font-family: PingFangSC-Light;
+}
+
+.create {
+  width: 9.2rem;
+  height: 1.8667rem;
+  display: flex;
+  align-items: center;
+  background: #363636;
+  margin-left: 0.4rem;
+  margin-top: 0.5333rem;
+  border-radius: 0.0533rem;
+  margin-bottom: 1rem;
+}
+
+.txt {
+  color: #fff;
+  font-size: 0.4533rem;
+  margin-left: 0.14rem;
+  font-family: PingFangSC-Regular;
+}
+
+.referClass {
   width: 9.2rem;
   height: 1.28rem;
   margin-left: 0.4rem;
-  margin-top: 4.4rem;
-  margin-bottom: 60px;
+  margin-bottom: 0.8rem;
   border-radius: 0.0533rem;
   background: #AAAAAA;
-  font-family: PingFangSC-Regular;
   font-size: 0.4533rem;
   color: #000000;
   border: none;
+  font-family: PingFangSC-Regular;
 }
-#getClass .active {
+
+.active {
   background: #F8E71C;
 }
 
-#getClass .modalShow {
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
+.no-bor {
+  border: 1px solid transparent;
+  background:url('../../static/images/radio.png') no-repeat center;
+  background-size: cover;
 }
-
-#getClass .modalShow .modal {
-  width: 8.9333rem;
-  height: 6.16rem;
-  margin-left: 0.5333rem;
-  margin-right:0.5333rem;
-  position: absolute;
-  top: 4.48rem;
-  background: #2B2B2B;
-  border: 0.0533rem solid #BBAB71;
-  border-radius: 0.2667rem;
-}
-
-
-/* 顶替弹窗样式*/
-#ReCertification {
-    width: 8.9333rem;
-    height: 6.16rem;
-}
-
-
-#ReCertification .content {
-  font-family: PingFangSC-Light;
-  font-size: 0.5333rem;
-  color: #FFFFFF;
-  line-height: 0.5333rem;
-  text-align: center;
-  margin-top: 0.5333rem;
-}
-#ReCertification .titleClass {
-  font-family: PingFangSC-Light;
-  font-size: 0.4533rem;
-  color: #FFFFFF;
-  line-height: 0.6933rem;
-  text-align: center;
-  margin-top:0.5333rem;
-}
-
-
-#ReCertification .saveTip {
-  font-family: PingFangSC-Light;
-  font-size: 0.4533rem;
-  color: #FFFFFF;
-  line-height: 0.6933rem;
-  text-align: center;
-}
-
-#ReCertification .saveTip  .name {
-  font-family: PingFangSC-Regular;
-  font-size: 0.4533rem;
-  color:#fff;
-  line-height: 0.6933rem;
-}
-
-#ReCertification .replace {
-  font-family: PingFangSC-Light;
-  font-size: 0.4533rem;
-  color: #FFFFFF;
-  line-height: 0.6933rem;
-  text-align: center;
-}
-/**/
-#ReCertification .Btn {
-    width: 4.0rem;
-    height: 1.28rem;
-    background: #2B2B2B;
-    font-family: PingFangSC-Regular;
-    font-size: 0.4533rem;
-    color: #F8E71C;
-    line-height: 0.4533rem;
-    border-radius: 0.0533rem;
-    border: none;
-    margin-top:0.6667rem;
-}
-
-#ReCertification .Btn-left{
-   margin-left: 0.4rem;
-}
-#ReCertification .Btn-rigth{
-  
-  background:#F8E71C;
-  color: #000000;
-  margin-right: 0.4rem;
-}
+/* new css end */
 </style>
 

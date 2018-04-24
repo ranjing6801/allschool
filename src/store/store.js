@@ -44,15 +44,49 @@ export const store = new Vuex.Store({
               isbgShow:'',
               teamShow:'3'
             }
-          ]
+        ],
+      classList: [
+            {name:'一年级1班',className:'的对应班级',isOver:false,title:'超人1号',num1:12305,person:'王静怡1',num2: '32人',index:0},
+            {name:'一年级2班',className:'的对应班级',isOver:false,title:'超人2号',num1:12306,person:'王静怡2',num2: '28人',index:1},
+            {name:'一年级3班',className:'的对应班级',isOver:false,title:'超人3号',num1:12307,person:'王静怡3',num2: '27人',index:2}
+        ],
+      classList2: [
+            {name:'一年级1班',className:'的对应班级',isOver:false,hadBind:false,title:'超人1号',code:12305,teacherName:'王静怡1',membersCount: '32人',index:0},
+            {name:'一年级2班',className:'的对应班级',isOver:false,hadBind:false,title:'超人2号',code:12306,teacherName:'王静怡2',membersCount: '28人',index:1},
+            {name:'一年级3班',className:'的对应班级',isOver:false,hadBind:false,title:'超人3号',code:12307,teacherName:'王静怡3',membersCount: '27人',index:2}
+        ],
     },
     getters:{
-
+      getRes1 (state, getters) {
+        return state.res1;
+      },
+      getRes2 (state, getters) {
+        return state.res2;
+      },
     },
     mutations:{
-
+      setClass(state,opt) {
+        state.res1[opt.index].isOver = opt.sta;
+        state.res1[opt.index].className = opt.detail;
+        var myindex = state.res2.find( (datum)=>datum.title==opt.detail );
+        state.res2[myindex.index].hadBind = true;
+      },
+      resetClass(state,opt) {
+        state.res1[opt.index1].isOver = false;
+        state.res2[opt.index2].hadBind = false;
+        state.res1[opt.index1].className = '的对应班级';
+      },
+      unbindClass(state,opt) {
+        state.res1[opt.index1].isOver = false;
+        state.res2[opt.index2].hadBind = false;
+        state.res1[opt.index1].className = '的对应班级';
+      }
     },
     actions:{
-
+      unbindClass2({commit},opt){
+        let index1 = opt.index1;
+        let index2 = opt.index2; 
+        commit('unbindClass',{index1,index2});
+      }
     }
 })
