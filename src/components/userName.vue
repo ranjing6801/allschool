@@ -36,7 +36,9 @@ import NewAuthenticationOk from './NewAuthenticationOk'
 import CLNewTeacher from './CLNewTeacher' 
 
 
-export default {
+
+
+export default {  
     name:'userName',
     components:{
         overCount,AuthenticationOk,NewAuthenticationOk,CLNewTeacher
@@ -69,7 +71,7 @@ export default {
         },
         NamePromise(){ // 姓名验证 
           // 1 无整校班级 — 老用户 - 认证成功：打开晓黑板        user1/14444441120
-          // 2 无整校班级 — 新用户 - 认证成功：打开晓黑板（账号密码）   user7 /14444441141 加 
+          // 2 无整校班级 — 新用户 - 认证成功：打开晓黑板（账号密码）   user7 /14444441143 加 
 
           // 3 有整校班级 — 非班主任 — 老用户 - 认证成功：打开晓黑板     user2 /14444441121
           // 4 有整校班级 — 非班主任 — 新用户 - 认证成功：打开晓黑板（账号密码）   user8 /14444441152 加

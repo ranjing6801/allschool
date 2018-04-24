@@ -2,7 +2,7 @@
   <div id="getClass">
     <div class="box">
       <ul class="bind">
-        <li v-for="item,index in list" v-show="item.isOver">
+        <li v-for="(item,index) in list"  :key="item.index" v-show="item.isOver">
           <div class="bind-div">
             <img class="vip" src="/static/images/vip.png" />
             <div class="cont"><p class="p-top">{{item.class_name}} 已对应</p><p class="p-bot">{{item.className}}</p></div>
@@ -12,7 +12,7 @@
       </ul>
 
       <ul class="unbind">
-        <li v-for="item,index in list2" v-show="!item.hadBind">
+        <li v-for="(item,index) in list2" :key="item.index" v-show="!item.hadBind">
           <div class="unbind-div">
             <div @click="handleCheck($event,index)" class="left"></div>
             <img class="logo" src="/static/images/logo.jpg" />

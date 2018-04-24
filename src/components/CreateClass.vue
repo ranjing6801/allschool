@@ -4,23 +4,23 @@
         <div class="classContent">
             <P class="create">已为您创建以下晓黑板班级:</P>
             <ul>
-                <li class="classList">
+                <li class="classList" v-for="item in this.imgArr" :key=item.index>
                     <div class="left">
-                        <img :src="createSecImg">
+                        <img :src="item.src">
                     </div>
                     <div class="right">
-                        <img :src="zhiwenImg" alt="">
-                        <p class="save">长按保存二维码</p>
-                        <p class="saveSecond">
-                          <span>用于发送给家长</span>
-                          <span>邀请他们进班</span>
-                        </p>
+                      <img :src="zhiwenImg">
+                      <p class="save">长按保存二维码</p>
+                      <p class="first saveSecond">用于发送给家长</p>
+                      <p class="last saveSecond">邀请他们进班</p>
                     </div>
-                    <img class="myimg" :src="createSecImg" alt="">
+                    <img class="myimg" :src="item.src">
+                     <!-- 二维码图片分割线 -->
+                    <div class="line"></div>
                 </li>
             </ul>
         </div>
-        <button class="referOk"  @click="overRefer" >完成认证</button>
+        <button class="referOk"  @click="overRefer" >确认</button>
 
         <!--  完成认证 确认保存二维码 弹窗 -->
         <div class="modalShow" v-if="isSave" @click="HiddenSaveModal" >
@@ -47,32 +47,32 @@ export default {
             zhiwenImg:zhiwenImg,
             isSave:false,
             indexValue:'',  // [点击创建班级认证 ]  记录 班主任 有班级 创建晓黑板班级的时候  传过来的 整校班级的id 
+            imgSrc:{
+                src:''
+            },
+            imgArr:[],
         }
     },
     methods:{
         overRefer(){  // 认证完成
-            this.isSave = true
+            this.isSave = true;
         },
         HiddenSaveModal(){
-            this.isSave = false
+            this.isSave = false;
             //  创建完班级之后 跳转到班主任 班级的列表页
-           	// this.$router.push({name:'CLYchooseClass'})
-        },
-        directorCreateClass(){  // 班主任 有班级创建
-
+           	this.$router.push({path:'CLYchooseClass'})
         },
         createClassData(){  // 班主任 有小黑板班级 老用户 创建班级认证
-              
               this.axios.post('/h5/index/createSingleXhbClass',{
                       user_token:sessionStorage.getItem('user_token'),
                       class_name:this.$store.state.res1[this.indexValue].class_name
                   })
                   .then(res => {
-                      console.log('createSingleXhbClass=',res);
-                      this.createSecImg = res.data.response.qrcode_url;
-                      this.$store.state.res2.push(res.data.response.xhb_class);    // 将创建完的班级push到res2 中
-                      localStorage.setItem('this.$store.state.res2',this.$store.state.res2);  // 本地存储同步保存
-                      console.log(' 创建晓黑板班级完成之后的res2 =',this.$store.state.res2);
+                        console.log('createSingleXhbClass=',res);
+                        for(var i = 0;i<res.data.response.qrcode_url.length;i++){
+                            this.imgSrc.src = res.data.response.qrcode_url[i];
+                            this.imgArr.push(this.imgSrc);
+                        }
                   })
                   .catch(err => {
                       console.log('err=',err);
@@ -97,14 +97,13 @@ export default {
   box-sizing: border-box;
 }
 
-#createClass .classContent  p{
+#createClass .classContent  .create{
   font-family: PingFangSC-Light;
   font-size: 0.3733rem;
   color: #AAAAAA;
   line-height: 0.3733rem;
   margin-top: 0.5333rem;
   margin-left: 0.5333rem;
-  
 }
 
 #createClass .classContent .classList {
@@ -116,21 +115,21 @@ export default {
   margin-top: 0.5333rem;
   margin-left: 0.4rem;
   margin-bottom: 0.5333rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
 }
 
 #createClass .classContent .classList .left {
-  width: 9.2rem;
+  width: 4.5867rem;
   height: 4.7467rem;
-  position: absolute;
-  z-index: 5;
+  flex: 1;
 }
 
 #createClass .classContent .classList .left img {
   height: 4.7467rem;
   width: 4.5867rem;
-  display: block;
-
 }
 
 .line {
@@ -144,17 +143,19 @@ export default {
 }
 
 #createClass .classContent .classList .right {
-  width: 9.2rem;
+  width: 4.5867rem;
   height: 4.7467rem;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 #createClass .classContent .classList .right img {
   width: 1.2533rem;
   height: 1.3333rem;
-  padding-left: 6.2667rem;
-  padding-top: 0.9333rem;
   display: block;
-
 }
 
 #createClass .classContent .classList .right .save {
@@ -163,28 +164,25 @@ export default {
   color: #000000;
   line-height: 0.3733rem;
   text-align: center;
-  margin-left: 5.6rem;
   margin-top: 0.2667rem;
   width: 2.6133rem;
   height: 0.3733rem;
 }
 
-#createClass .classContent .classList .right .saveSecond {
-  width: 1.8667rem;
-  height: 0.7467rem;
+#createClass  .saveSecond {
+  width: 0.9333rem;
   text-align: center;
-  margin-left: 5.9733rem;
-  margin-top: 0.16rem;
   font-family: PingFangSC-Light;
   font-size: 0.2667rem;
   color: #AAAAAA;
   line-height: 0.3733rem;
 }
 
-#createClass .classContent .classList .right .last {
-  text-align: center;
-  font-size: 12px;
+#createClass  .first {
+  margin-top: 0.16rem;
+  margin-bottom: 0.08rem;
 }
+
 
 #createClass .referOk {
   width: 9.2rem;
@@ -223,9 +221,7 @@ export default {
   top: 4.8267rem;
   left: 0;
 }
-.classList{
-  position: relative;
-}
+
 .myimg{
   height: 4.7467rem;
   width: 4.5867rem;
@@ -236,12 +232,8 @@ export default {
   z-index: 9;
 }
 
-
-
-
-
-/**/
-#CLNewTeacher .modalShow {
+/* 弹窗*/
+#createClass .modalShow {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.7);
@@ -254,7 +246,7 @@ export default {
   z-index: 100;
 }
 
-#CLNewTeacher .modalShow .modal {
+#createClass .modal {
   width: 8.9333rem;
   height: 5.4667rem;
   margin-left: 0.5333rem;

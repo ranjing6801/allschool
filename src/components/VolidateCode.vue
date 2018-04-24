@@ -111,7 +111,7 @@ export default {
             console.log('sendMessageCode:',res);
 
             this.ShowNumber();  //临时打开测试
-
+          
             if(res.data.response){
                 this.ShowNumber();
             }
