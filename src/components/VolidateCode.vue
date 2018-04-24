@@ -158,8 +158,9 @@ export default {
                 $('.VolidateCode').removeClass('red');
             }
         },
-        codeNumber(){//正则匹配输入@字符和数字
-          this.reCredNum = this.reCredNum.replace(/[^\d@]/g,'');
+        codeNumber(){//禁止输入非数字
+          console.log('暂时不限制格式..');
+          // this.reCredNum = this.reCredNum.replace(/[^\d]/g,'');
         },
         getListenCode(){  // 获取语音验证码
             this.isCodeFailShow = true;

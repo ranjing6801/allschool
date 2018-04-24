@@ -77,45 +77,54 @@ export default {
           // 4 有整校班级 — 非班主任 — 新用户 - 认证成功：打开晓黑板（账号密码）   user8 /14444441152 加
 
           // 5 有整校班级 — 班主任 — 老用户 — 无晓黑板班级 - 创建班级 - 生成二维码 - 认证成功：打开晓黑板   user5/14444441125
-          // 6 有整校班级 — 班主任 — 老用户 — 有晓黑板班级 - 认证班级/创建班级 - 认证成功：打开晓黑板       user3/ 14444441122
-          // 7 有整校班级 — 班主任 — 新用户 — 无晓黑板班级 - 创建班级 - 生成二维码 - 认证成功：打开晓黑板  user6 / 14444441190  加
+          // 6 有整校班级 — 班主任 — 老用户 — 有晓黑板班级 - 认证班级/创建班级 - 认证成功：打开晓黑板       user3/ 14444441190
+          // 7 有整校班级 — 班主任 — 新用户 — 无晓黑板班级 - 创建班级 - 生成二维码 - 认证成功：打开晓黑板  user6 / 144442241171  加
             console.log('输入的姓名是:',this.userName);
             console.log('您的手机号是:',sessionStorage.getItem('phone'));
             this.axios.post('/h5/index/getUserDetail',{
                     name:'user3',
-                    phone:'14444441122'
+                    phone:'14444441190'
                     // name:this.userName,
                     // phone:sessionStorage.getItem('phone')
                 })
                .then( res => {
                   console.log('getUserDetail:',res);
                   if(res.data.response){
-                    console.log('res.data.response.xhb_class.length=',res.data.response.xhb_class);
+                    console.log('xhb_class:',res.data.response.xhb_class);
+
                         var obj = res.data.response;
                         sessionStorage.setItem('teacher_id',obj.teacher_id);  // 保存teacher_id
                         sessionStorage.setItem('user_token',obj.user_token);   // 保存user_token
                         sessionStorage.setItem('is_regular',obj.is_regular);   // 记录老用户还是新用户
-                        this.$store.state.res1 = obj.school_class;
-                        this.$store.state.res2 = obj.xhb_class;
-                        
 
-                        if(res.data.response.school_class){
-                          for(var i = 0; i<this.$store.state.res1.length; i++){
-                              this.$store.state.res1[i].symbol = '';
-                              this.$store.state.res1[i].teamId = '';
-                              this.$store.state.res1[i].name = '的对应班级';  
-                              this.$store.state.res1[i].xhb_class_token = '';  
-                          }
-                        }
-                        if(res.data.response.xhb_class){
-                          for(var i = 0; i<this.$store.state.res2.length; i++){
-                              this.$store.state.res2[i].teamShow = '';
-                          }
-                        }
-                         console.log('res1=',this.$store.state.res1);
-                         console.log('res2=',this.$store.state.res2);
+                        this.$store.state.res1 = res.data.response.school_class;
+                        this.$store.state.res2 = res.data.response.xhb_class;
+                        
+                        // if(res.data.response.school_class){
+                        //   for(var i = 0; i<this.$store.state.res1.length; i++){
+                        //       this.$store.state.res1[i].isOver = false;
+                        //       this.$store.state.res1[i].index = i;
+                        //       this.$store.state.res1[i].title = '';
+                        //       this.$store.state.res1[i].className = '的对应班级';
+                        //       this.$store.state.res1[i].name = res.data.response.school_class[i].class_name;
+                        //       this.$store.state.res1[i].xhb_class_token = '';  
+                        //   }
+                        // }
+
+                        // if(res.data.response.xhb_class){
+                        //   for(var i = 0; i<this.$store.state.res2.length; i++){
+                        //       this.$store.state.res2[i].hadBind = false;
+                        //       this.$store.state.res2[i].index = i;
+                        //       this.$store.state.res2[i].title = res.data.response.xhb_class[i].name;
+
+                        //   }
+                        // }
+
+                        console.log('res1:',this.$store.state.res1);
+                        console.log('res2:',this.$store.state.res2);
                         localStorage.setItem('this.$store.state.res1',JSON.stringify(this.$store.state.res1));
                         localStorage.setItem('this.$store.state.res2',JSON.stringify(this.$store.state.res2));
+
                       //1
                       if(obj.is_has_school_class==0 && obj.is_regular==1){
                         this.$router.push({path:'/PassOk',query:{}})
@@ -205,8 +214,7 @@ export default {
 
                })
                .catch(err => {
-                 alert('getUserDetail 请求失败!');
-                   console.log('err=',err);
+                   console.log('err:',err);
                })
         }
     },
