@@ -79,7 +79,7 @@ export default {
         document.title = "反馈成功";
     },
     mounted() {
-        this.createClass();
+        // this.createClass();
       //判断手机类型
         var ua = navigator.userAgent.toLowerCase();
 

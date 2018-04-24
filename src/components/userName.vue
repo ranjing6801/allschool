@@ -36,7 +36,9 @@ import NewAuthenticationOk from './NewAuthenticationOk'
 import CLNewTeacher from './CLNewTeacher' 
 
 
-export default {
+
+
+export default {  
     name:'userName',
     components:{
         overCount,AuthenticationOk,NewAuthenticationOk,CLNewTeacher
@@ -69,19 +71,19 @@ export default {
         },
         NamePromise(){ // 姓名验证 
           // 1 无整校班级 — 老用户 - 认证成功：打开晓黑板        user1/14444441120
-          // 2 无整校班级 — 新用户 - 认证成功：打开晓黑板（账号密码）   user7 /14444441141 加 
+          // 2 无整校班级 — 新用户 - 认证成功：打开晓黑板（账号密码）   user7 /14444441143 加 
 
           // 3 有整校班级 — 非班主任 — 老用户 - 认证成功：打开晓黑板     user2 /14444441121
           // 4 有整校班级 — 非班主任 — 新用户 - 认证成功：打开晓黑板（账号密码）   user8 /14444441152 加
 
           // 5 有整校班级 — 班主任 — 老用户 — 无晓黑板班级 - 创建班级 - 生成二维码 - 认证成功：打开晓黑板   user5/14444441125
           // 6 有整校班级 — 班主任 — 老用户 — 有晓黑板班级 - 认证班级/创建班级 - 认证成功：打开晓黑板       user3/ 14444441122
-          // 7 有整校班级 — 班主任 — 新用户 — 无晓黑板班级 - 创建班级 - 生成二维码 - 认证成功：打开晓黑板  user6 / 144442241171  加
+          // 7 有整校班级 — 班主任 — 新用户 — 无晓黑板班级 - 创建班级 - 生成二维码 - 认证成功：打开晓黑板  user6 / 14444441190  加
             console.log('输入的姓名是:',this.userName);
             console.log('您的手机号是:',sessionStorage.getItem('phone'));
             this.axios.post('/h5/index/getUserDetail',{
-                    name:'user7',
-                    phone:'14444441143'
+                    name:'user3',
+                    phone:'14444441122'
                     // name:this.userName,
                     // phone:sessionStorage.getItem('phone')
                 })

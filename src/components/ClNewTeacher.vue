@@ -3,33 +3,35 @@
         <div class="classContent">
             <P class="create">已为您创建以下晓黑板班级:</P>
             <ul>
-                <li class="classList" >
+                <!-- <li class="classList"  v-for="item in this.imgArr" :key=item.index>
                     <div class="left">
-                        <img :src="secImg0">
+                        <img :src="item.src">
                     </div>
                     <div class="right">
-                        <img :src="zhiwenImg" alt="">
+                        <img :src="zhiwenImg">
                         <p class="save">长按保存二维码</p>
-                        <p class="saveSecond">
-                          <span>用于发送给家长</span>
-                          <span>邀请他们进班</span>
-                        </p>
+                        <p class="first saveSecond">用于发送给家长</p>
+                        <p class="last saveSecond">邀请他们进班</p>
                     </div>
-                    <img class="myimg" :src="secImg0" alt="">
-                </li>
-                <li class="classList" >
+                    <img class="myimg" :src="item.src">
+                     
+                    <div class="line"></div>
+                </li> -->
+
+                <!--   -->
+                <li class="classList">
                     <div class="left">
-                        <img :src="secImg1">
+                        <img :src="secImg">
                     </div>
                     <div class="right">
-                        <img :src="zhiwenImg" alt="">
+                        <img :src="zhiwenImg">
                         <p class="save">长按保存二维码</p>
-                        <p class="saveSecond">
-                          <span>用于发送给家长</span>
-                          <span>邀请他们进班</span>
-                        </p>
+                        <p class="first saveSecond">用于发送给家长</p>
+                        <p class="last saveSecond">邀请他们进班</p>
                     </div>
-                    <img class="myimg" :src="secImg1" alt="">
+                    <img class="myimg" :src="secImg">
+                     <!-- 二维码图片分割线 -->
+                    <div class="line"></div>
                 </li>
             </ul>
         </div>
@@ -47,6 +49,7 @@
 
 <script>
     import zhiwenImg from  '../../static/images/zhiwen.png'
+    import secImg from  '../../static/images/secImg.jpg'
     import saveModal from './saveModal'
 export default {
     name:'CLNewTeacher',
@@ -55,10 +58,15 @@ export default {
     },
     data(){
         return {
+            secImg:secImg,
             zhiwenImg:zhiwenImg,
             isSave:false,
-            secImg0:'',
-            secImg1:''
+            imgSrc:{
+                src:''
+            },
+            imgArr:[],
+            img1:"http://school-dev.xiaoheiban.cn/h5/index/makeQrcode?class_code=942349&class_name=%E5%A4%A7%E5%A9%B6%E7%BA%A7+1+6%E7%8F%AD",
+            img2:"http://school-dev.xiaoheiban.cn/h5/index/makeQrcode?class_code=334897&class_name=%E5%A4%A7%E5%A9%B6%E7%BA%A7+1+7%E7%8F%AD"
         }
     },
     methods:{
@@ -75,18 +83,22 @@ export default {
             })
             .then(res => {
                 console.log('createXhbClass=',res);
-                this.secImg0 =res.data.response.qrcode_url[0];
-                this.secImg1 =res.data.response.qrcode_url[1]
-                console.log('this.secImg=',res.data.response.qrcode_url[1]);
+                for(var i = 0;i<res.data.response.qrcode_url.length;i++){
+                    this.imgSrc.src = res.data.response.qrcode_url[i];
+                    this.imgArr.push(this.imgSrc);
+                }
+                // console.log('this.imgArr=',this.imgArr);
             })
             .catch(err => {
                 console.log('err=',err);
             })
         }
     },
+    created(){
+        this.createClass();
+    },
     mounted(){
         document.title = "创建班级并认证";
-        this.createClass();
     }
 }
 </script>
@@ -98,17 +110,16 @@ export default {
   box-sizing: border-box;
 }
 
-#CLNewTeacher .classContent  p{
+#CLNewTeacher   .create{
   font-family: PingFangSC-Light;
   font-size: 0.3733rem;
   color: #AAAAAA;
   line-height: 0.3733rem;
   margin-top: 0.5333rem;
   margin-left: 0.5333rem;
-  
 }
 
-#CLNewTeacher .classContent .classList {
+#CLNewTeacher  .classList {
   margin-bottom: 20px;
   width: 9.2rem;
   height: 4.7467rem;
@@ -117,20 +128,21 @@ export default {
   margin-top: 0.5333rem;
   margin-left: 0.4rem;
   margin-bottom: 0.5333rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
 }
 
-#CLNewTeacher .classContent .classList .left {
-  width: 9.2rem;
+#CLNewTeacher  .left {
+  width: 4.5867rem;
   height: 4.7467rem;
-  position: absolute;
-  z-index: 5;
+  flex: 1;
 }
 
-#CLNewTeacher .classContent .classList .left img {
+#CLNewTeacher  .left img {
   height: 4.7467rem;
   width: 4.5867rem;
-  display: block;
 }
 
 .line {
@@ -143,48 +155,47 @@ export default {
     background: #F8F8F8;
 }
 
-#CLNewTeacher .classContent .classList .right {
-  width: 9.2rem;
+#CLNewTeacher  .right {
+  width: 4.5867rem;
   height: 4.7467rem;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
-#CLNewTeacher .classContent .classList .right img {
+#CLNewTeacher  .right img {
   width: 1.2533rem;
   height: 1.3333rem;
-  padding-left: 6.2667rem;
-  padding-top: 0.9333rem;
   display: block;
-
 }
 
-#CLNewTeacher .classContent .classList .right .save {
+#CLNewTeacher  .save {
   font-family: PingFangSC-Light;
   font-size: 0.3733rem;
   color: #000000;
   line-height: 0.3733rem;
   text-align: center;
-  margin-left: 5.6rem;
   margin-top: 0.2667rem;
   width: 2.6133rem;
   height: 0.3733rem;
 }
 
-#CLNewTeacher .classContent .classList .right .saveSecond {
-  width: 1.8667rem;
-  height: 0.7467rem;
+#CLNewTeacher  .saveSecond {
   text-align: center;
-  margin-left: 5.9733rem;
-  margin-top: 0.16rem;
   font-family: PingFangSC-Light;
   font-size: 0.2667rem;
   color: #AAAAAA;
   line-height: 0.3733rem;
 }
 
-#CLNewTeacher .classContent .classList .right .last {
-  text-align: center;
-  font-size: 12px;
+#CLNewTeacher  .first {
+  margin-top: 0.16rem;
+  margin-bottom: 0.08rem;
+  
 }
+
 
 #CLNewTeacher .referOk {
   width: 9.2rem;
@@ -222,9 +233,6 @@ export default {
   position: absolute;
   top: 4.8267rem;
   left: 0;
-}
-.classList{
-  position: relative;
 }
 .myimg{
     height: 4.7467rem;

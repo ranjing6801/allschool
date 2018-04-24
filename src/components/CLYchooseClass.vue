@@ -66,7 +66,6 @@ export default {
             this.$router.push({ path:'/getClass',query:{userId:id}});
         },
         getDetail(passId){             //认证完成之后点击展示 绑定的班级详细信息 
-
             this.$router.push({path:'/getClass',query:{userId:passId}});
         },
         classRefer(){  // 班级确认
@@ -74,7 +73,8 @@ export default {
                 this.bindClass.class_id = this.$store.state.res1[i].class_id;
                 this.bindClass.xhb_class_token = this.$store.state.res1[i].xhb_class_token;
                 this.arr.push(this.bindClass);
-            }
+            } 
+            
               // console.log('json=',JSON.stringify(this.arr));
 
               this.axios.post('/h5/index/bindClass',{ 
@@ -152,7 +152,6 @@ export default {
   display: inline-block;
   width:0.64rem;
   height: 0.64rem;
-
 }
 
 #clychooseClass  .over {
