@@ -3,7 +3,7 @@
         <div class="classContent">
             <P class="create">已为您创建以下晓黑板班级:</P>
             <ul>
-                <!-- <li class="classList"  v-for="item in this.imgArr" :key=item.index>
+                <!-- <li class="classList"  v-for="item in imgArr" :key="item.index">
                     <div class="left">
                         <img :src="item.src">
                     </div>
@@ -21,7 +21,7 @@
                 <!--   -->
                 <li class="classList">
                     <div class="left">
-                        <img :src="secImg">
+                        <img :src="img1">
                     </div>
                     <div class="right">
                         <img :src="zhiwenImg">
@@ -29,7 +29,7 @@
                         <p class="first saveSecond">用于发送给家长</p>
                         <p class="last saveSecond">邀请他们进班</p>
                     </div>
-                    <img class="myimg" :src="secImg">
+                    <img class="myimg" :src="img1">
                      <!-- 二维码图片分割线 -->
                     <div class="line"></div>
                 </li>
@@ -65,7 +65,7 @@ export default {
                 src:''
             },
             imgArr:[],
-            img1:"http://school-dev.xiaoheiban.cn/h5/index/makeQrcode?class_code=942349&class_name=%E5%A4%A7%E5%A9%B6%E7%BA%A7+1+6%E7%8F%AD",
+            img1:"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524574592221&di=9c42ed71dd2fa31c0718badd1ee3ab20&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F018e5955490c260000019ae9bffba9.jpg%402o.jpg",
             img2:"http://school-dev.xiaoheiban.cn/h5/index/makeQrcode?class_code=334897&class_name=%E5%A4%A7%E5%A9%B6%E7%BA%A7+1+7%E7%8F%AD"
         }
     },
@@ -84,8 +84,9 @@ export default {
             .then(res => {
                 console.log('createXhbClass=',res);
                 for(var i = 0;i<res.data.response.qrcode_url.length;i++){
-                    this.imgSrc.src = res.data.response.qrcode_url[i];
-                    this.imgArr.push(this.imgSrc);
+                    var obj = {};
+                    obj.src = res.data.response.qrcode_url[i];
+                    this.imgArr.push(obj);
                 }
                 // console.log('this.imgArr=',this.imgArr);
             })
@@ -95,7 +96,8 @@ export default {
         }
     },
     created(){
-        this.createClass();
+        //测试的时候 注释掉
+        //this.createClass();
     },
     mounted(){
         document.title = "创建班级并认证";

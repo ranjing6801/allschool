@@ -2,11 +2,11 @@
 	<!--  班主任 认证完班级之后  再创建的班级  -->
 	<div id="createClass">
         <div class="classContent">
-            <P class="create">已为您创建以下晓黑板班级:</P>
+            <p class="create">已为您创建以下晓黑板班级:</p>
             <ul>
-                <li class="classList" v-for="item in this.imgArr" :key=item.index>
+                <li class="classList">
                     <div class="left">
-                        <img :src="item.src">
+                        <img :src="imgSrc">
                     </div>
                     <div class="right">
                       <img :src="zhiwenImg">
@@ -14,7 +14,7 @@
                       <p class="first saveSecond">用于发送给家长</p>
                       <p class="last saveSecond">邀请他们进班</p>
                     </div>
-                    <img class="myimg" :src="item.src">
+                    <img class="myimg" :src="imgSrc">
                      <!-- 二维码图片分割线 -->
                     <div class="line"></div>
                 </li>
@@ -47,9 +47,7 @@ export default {
             zhiwenImg:zhiwenImg,
             isSave:false,
             indexValue:'',  // [点击创建班级认证 ]  记录 班主任 有班级 创建晓黑板班级的时候  传过来的 整校班级的id 
-            imgSrc:{
-                src:''
-            },
+            imgSrc,
             imgArr:[],
         }
     },
@@ -69,10 +67,12 @@ export default {
                   })
                   .then(res => {
                         console.log('createSingleXhbClass=',res);
-                        for(var i = 0;i<res.data.response.qrcode_url.length;i++){
-                            this.imgSrc.src = res.data.response.qrcode_url[i];
-                            this.imgArr.push(this.imgSrc);
-                        }
+                        this.imgSrc = res.data.response.qrcode_url
+                        // for(var i = 0;i<res.data.response.qrcode_url.length;i++){
+                        //     var obj = {};
+                        //     obj.src = res.data.response.qrcode_url[i];
+                        //     this.imgArr.push(obj);
+                        // }
                   })
                   .catch(err => {
                       console.log('err=',err);
@@ -83,7 +83,8 @@ export default {
         document.title = "创建班级";
         this.indexValue = this.$route.query.index;
         console.log('this.indexValue=',this.indexValue);
-        this.createClassData();
+        
+        //this.createClassData();
     }
 }
 
