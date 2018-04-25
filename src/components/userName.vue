@@ -36,8 +36,6 @@ import NewAuthenticationOk from './NewAuthenticationOk'
 import CLNewTeacher from './CLNewTeacher' 
 
 
-
-
 export default {  
     name:'userName',
     components:{
@@ -77,7 +75,7 @@ export default {
           // 4 有整校班级 — 非班主任 — 新用户 - 认证成功：打开晓黑板（账号密码）   user8 /14444441152 加
 
           // 5 有整校班级 — 班主任 — 老用户 — 无晓黑板班级 - 创建班级 - 生成二维码 - 认证成功：打开晓黑板   user5/14444441125
-          // 6 有整校班级 — 班主任 — 老用户 — 有晓黑板班级 - 认证班级/创建班级 - 认证成功：打开晓黑板       user3/ 14444441190
+          // 6 有整校班级 — 班主任 — 老用户 — 有晓黑板班级 - 认证班级/创建班级 - 认证成功：打开晓黑板       user3/ 14444441122
           // 7 有整校班级 — 班主任 — 新用户 — 无晓黑板班级 - 创建班级 - 生成二维码 - 认证成功：打开晓黑板  user6 / 144442241171  加
             console.log('输入的姓名是:',this.userName);
             console.log('您的手机号是:',sessionStorage.getItem('phone'));
@@ -100,16 +98,11 @@ export default {
                         this.$store.state.res1 = res.data.response.school_class;
                         this.$store.state.res2 = res.data.response.xhb_class;
                         
-                        // if(res.data.response.school_class){
-                        //   for(var i = 0; i<this.$store.state.res1.length; i++){
-                        //       this.$store.state.res1[i].isOver = false;
-                        //       this.$store.state.res1[i].index = i;
-                        //       this.$store.state.res1[i].title = '';
-                        //       this.$store.state.res1[i].className = '的对应班级';
-                        //       this.$store.state.res1[i].name = res.data.response.school_class[i].class_name;
-                        //       this.$store.state.res1[i].xhb_class_token = '';  
-                        //   }
-                        // }
+                        if(res.data.response.school_class){
+                          for(var i = 0; i<this.$store.state.res1.length; i++){
+                              this.$store.state.res1[i].xhb_class_token = '';  
+                          }
+                        }
 
                         // if(res.data.response.xhb_class){
                         //   for(var i = 0; i<this.$store.state.res2.length; i++){

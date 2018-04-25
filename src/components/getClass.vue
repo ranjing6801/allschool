@@ -28,10 +28,25 @@
         </li>
       </ul> 
 
+    <!--  创建班级去认证 -->
       <div class="create">
         <div @click="handleCreateCheck($event)" class="left"></div>
         <div class="txt">创建新班级去认证</div>
       </div>
+    </div>
+
+    <!--  顶替弹窗 -->
+    <div class="modalShow" v-if="isReCertificationShow" @click="ReCertificationShow" >
+        <div class="modal">
+            <div id="ReCertification">
+                <p class="content">{{ accountTile}}</p>
+                <p class=" titleClass">{{ classTitle }}</p>
+                <p class="saveTip"><span>已被</span>  <span class="name">{{ classUser }}</span><span>老师认证过</span></p>
+                <p class="replace">{{ accountReplace }}</p>
+                <button class="Btn Btn-left" @click="giveUp">取消</button>
+                <button class="Btn Btn-rigth" @click="Replace">顶替Ta</button>
+            </div>
+        </div>
     </div>
 
     <button @click="bindBtn" :class="!ischeck||flag?'active':''" class="referClass" :disabled="ischeck">确认</button>
@@ -106,7 +121,7 @@
       </li>
     </ul>  -->
     <!--  顶替弹窗 -->
-     <div class="modalShow" v-if="isReCertificationShow" @click="ReCertificationShow" >
+     <!-- <div class="modalShow" v-if="isReCertificationShow" @click="ReCertificationShow" >
         <div class="modal">
             <div id="ReCertification">
                 <p class="content">{{ accountTile}}</p>
@@ -117,7 +132,7 @@
                 <button class="Btn Btn-rigth" @click="Replace">顶替Ta</button>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- <button class="referClass" :disabled="dis"  @click="getClassPromise" >确认</button> -->
   </div>
 </template>
@@ -137,7 +152,7 @@ export default {
             logoSrc:'',
             getClassId:'',  // 接收从CLYchooseClass传过来的 整校班级id
             create:'',  // 选中  创建班级
-            team:'',    // 检测是否 有选择一个班级
+            team:false,    //   
             isReCertificationShow:false,  // 重新认证 班级已经被人认证了  顶替弹窗
             accountTile:'重新验证该班级',
             classTitle:'一年级二班',
@@ -189,10 +204,6 @@ export default {
       }
     },
     methods:{
-        getId(idvalue){
-            // console.log('idvalue=',idvalue);
-            this.idvalue = idvalue;
-        },
         getClassPromise(){ //  确认按钮  
             /*
                 1.第一种情况: 如果该班级没有被其他的班主任认证    点击确认跳转到 前面 班主任列表查询页
@@ -203,7 +214,7 @@ export default {
                     alert('班主任创建班级');
                     // 班主任 有晓黑板班级 再去创建班级 跳转组件
                     //  请求接口 周日 来加班
-                    this.$router.push({path:'/createClass',query:{index:this.getClassId}});
+                    // this.$router.push({path:'/createClass',query:{index:this.getClassId}});
                 }else{
                   // 选择班级认证
                           if(this.$store.state.res2.length){
@@ -265,19 +276,7 @@ export default {
         Replace(){  // 顶替Ta
             alert("顶替Ta");
             console.log('this.idvalue=',thid.idvalue);
-            // console.log('res1=',this.$store.state.res1);
-            // console.log('res1顶替 =',JSON.parse(localStorage.getItem('this.$store.state.res1')));
-
-            this.$store.state.res1[this.getClassId].teamId = this.idvalue;
-            this.$store.state.res1[this.getClassId].name = this.$store.state.res2[this.idvalue].name;
             this.$store.state.res1[this.getClassId].xhb_class_token = this.$store.state.res2[this.idvalue].id;
-            this.$store.state.res1[this.getClassId].symbol = true;
-            this.$store.state.res2[this.idvalue].teamShow = this.$store.state.res1[this.getClassId].class_name;
-            this.$store.state.res2[this.idvalue].vip = true;
-            
-            localStorage.setItem('this.$store.state.res2',JSON.stringify(this.$store.state.res2));
-            localStorage.setItem('this.$store.state.res1',JSON.stringify(this.$store.state.res1));
-
             this.$router.push({path:'/CLYchooseClass'});
         },
       handleCheck(e,i) {  //选择班级按钮
@@ -285,16 +284,21 @@ export default {
         $('.left').removeClass('no-bor');
         $(el).addClass('no-bor');
         this.ischeck = false;
+        this.team = false; 
+        this.valueId = i;
+        console.log('this.valueId:',this.valueId);
 
         var p = $(el).parent().find('.p1').html();
-        console.log('选择了:',p);
+        // console.log('选择了:',p);
         this.txt = p;
       },
-      handleCreateCheck(e) {  //创建新班级按钮
+      handleCreateCheck(e,string) {  //创建新班级按钮
         var el = e.currentTarget;
         $('.left').removeClass('no-bor');
         $(el).addClass('no-bor');
         this.ischeck = false;
+        this.team = true;
+
       },
       unbind(i) {  //取消对应按钮
         console.log('解绑...');
@@ -317,16 +321,48 @@ export default {
         //this.$store.dispatch('unbindClass2',data);
       },
       bindBtn() {  //确认按钮
-
-        var oIndex = this.index;
+        var oIndex = this.index;      // 记录整校班级 index
         var detail = this.txt;
-        
-        var obj = {index:oIndex,detail:detail,sta:true};
+        console.log('oIndex=',oIndex);
+        console.log('this.$store.state.res1=',this.$store.state.res1); 
+        if(this.team){  // 创建晓黑板班级去认证
 
-        sessionStorage.setItem(oIndex,detail);//保存当前对应的状态
+            console.log('this.team=',this.team);
+            this.$router.push({path:'/createClass',query:{index:oIndex}});
+        }
+        else{ //  选择班级去认证
 
-        this.$store.commit('setClass',obj); //更改store的数据
-        this.$router.push({ path:'/CLYchooseClass',query:{index:this.index} }); //跳回去的时候保存这次的序号
+           this.xhb_class_token = this.$store.state.res2[this.valueId].id;
+
+          //  console.log('this.xhb_class_token',this.xhb_class_token);
+          //  console.log('this.$store.state.res2=',this.$store.state.res2);
+          //  console.log('this.$store.state.res1=',this.$store.state.res1); 
+
+           this.axios.post('/h5/index/isClassBind',{
+                    xhb_class_token:this.xhb_class_token
+                }) 
+                .then(res => {
+                    console.log('isClassBind res =',res);
+                    this.$store.state.res1[oIndex].xhb_class_token = this.$store.state.res2[this.valueId].id;
+                    var obj = {index:oIndex,detail:detail,sta:true};
+                    sessionStorage.setItem(oIndex,detail);            //保存当前对应的状态
+                    this.$store.commit('setClass',obj);               //更改store的数据
+                    this.$router.push({ path:'/CLYchooseClass',query:{index:this.index} }); //跳回去的时候保存这次的序号
+
+                    console.log('this.$store.state.res1 数据绑定之后=',this.$store.state.res1); 
+
+                    // 该班级已经被其他老师绑定
+                    if(res.data.error_response){
+                        alert('该班级已经被其他老师绑定');
+                        this.isReCertificationShow = true
+                        this.classUser = res.data.error_response.teacher_name;
+                    }
+                })
+                .catch(err => {
+                  console.log('err=',err);
+                })
+              
+        }
       }
     },
     created() {
@@ -335,7 +371,7 @@ export default {
 
         this.index = this.$route.query.index;
         
-        this.$route.query.flag?this.flag=true:this.flag=false;
+        this.$route.query.flag ? this.flag=true : this.flag=false;
 
          if(this.flag){
           var str = this.$route.query.txt;
