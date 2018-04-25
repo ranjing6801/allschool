@@ -10,6 +10,7 @@
         </div>
         <div class="footer">
             <div class="btn" @click="openSmallDesk">打开晓黑板</div>
+            <p class="tip">如已下载直接在手机中打开</p>
         </div>
       </div>
       <div v-if="isAND" class="android">
@@ -21,12 +22,19 @@
         </div>
         <div class="footer2">
             <div class="btn" @click="openSmallDesk1">打开晓黑板</div>
-        </div>
-        <div class="img">
-            <p><span class="line1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>找对方法，下载更快捷<span class="line2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
-            <img src="/static/images/android.png" alt="">
+            <p class="tip">如已下载直接在手机中打开</p>
         </div>
       </div>
+      
+      <!-- 安卓手机 遮罩层  -->
+
+      <div class="overlay" v-if="mask">
+        <div class="lightbox">
+          <img src="/static/images/arrow.png">
+        </div>
+      </div>
+
+
 
       <!-- 查看密码 -->
       <div class="codeFail" v-if="onOff" @click="closeBox" >
@@ -56,6 +64,7 @@
 </template>
 <script>
 import pwdModal from './pwdModal'
+import $ from 'jquery'
 export default {
     name:'newauthentication',
     data(){
@@ -65,18 +74,18 @@ export default {
           onOff: false,
           reVolidate:false,
           account: '',
-          password: ''
+          password: '',
+          mask:false    // 遮罩层
         }
     },
     methods:{
-        openSmallDesk() {
+        openSmallDesk() {  // ios 
             // 打开晓黑板  http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk
-            //alert('打开晓黑板');
             window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=org.xinkb.blackboard.android&g_f=991653';
         },
-        openSmallDesk1() {
+        openSmallDesk1() { // android
             // 打开晓黑板  http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk
-            //alert('打开晓黑板');
+            this.mask = true;
             window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
         },
         closeBox() {
@@ -87,10 +96,30 @@ export default {
         },
         knowing(){
           this.reVolidate = false;
+        },
+        downLoad(){  // 下载晓黑板 地址
+            // this.axios.post('https://www.xiaoheiban.cn/admin-Apk-findNew')
+            //     .then(res => {
+            //       console.log('res=',res);
+            //     })
+            //     .catch(err => {
+            //       console.log('err=',err);
+            //     })
+
+            // $.ajax({
+            //   type:'get',
+            //   url:'https://www.xiaoheiban.cn/admin-Apk-findNew',
+            //   success(response){
+            //       console.log(response);
+            //   }
+            // })
+
+                
         }
     },
     created(){
-        document.title = "认证成功"
+        document.title = "认证成功";
+        this.downLoad();
     },
     mounted() {
       //判断手机类型
@@ -100,6 +129,7 @@ export default {
       }
       
       var ua = navigator.userAgent.toLowerCase();
+      alert(ua);
 
       if(/android/.test(ua)){
           console.log('android...');
@@ -133,6 +163,27 @@ export default {
 </script>
 
 <style scoped>
+/* 遮罩层*/
+.overlay{
+  position:fixed;
+  top: 0;right: 0;left: 0;bottom: 0;
+  background:rgba(0,0,0,0.7);
+
+}
+.lightbox{
+  position:absolute;
+  z-index:1;
+  width:100%;
+  height: 100%;
+}
+
+.lightbox img{
+  width: 4.5rem;
+  padding-top: 0.4rem;
+  padding-left: 4.2rem;
+}
+/* 遮罩层*/
+
 #newauthentication {
   width: 100%;
   height: 100%;
@@ -153,12 +204,18 @@ export default {
   font-size: 0.4533rem;
   line-height: 1.28rem;
   border-radius: 0.0533rem;
-  margin: 0 auto;
+  margin: 2.4rem auto 0.2667rem ;
   color: #000000;
   background: #F8E71C;
   text-align: center;
   font-family: PingFangSC-Regular;
 }
+.tip{
+  color: #AAAAAA;
+  text-align: center;
+  font-family: PingFangSC-Regular;
+}  
+
 .img{
   text-align: center;
 }
@@ -175,17 +232,16 @@ export default {
 }
 .p-img{
   text-align: center;
+  margin-top: 2.4rem;
 }
 .content .p-img img{
   width: 1.6rem;
   height: 1.6rem;
-  margin-top: 2.4rem;
   margin-bottom: 0.4rem;
 }
 .content2 .p-img img{
   width: 1.6rem;
   height: 1.6rem;
-  margin-top: 0.8rem;
   margin-bottom: 0.4rem;
 }
 .title{
@@ -216,7 +272,7 @@ export default {
   color: #aaa;
   font-size: 0.3733rem;
   line-height: 0.3733rem;
-  margin-bottom: 2.4rem;
+  /*margin-bottom: 2.4rem;*/
   text-align: center;
   font-family: PingFangSC-Light;
 }
@@ -235,7 +291,6 @@ export default {
   color: #aaa;
   font-size: 0.3733rem;
   line-height: 0.3733rem;
-  margin-bottom: 1.3333rem;
   text-align: center;
   font-family: PingFangSC-Light;
 }
@@ -287,7 +342,8 @@ export default {
   border: 0.0533rem solid #BBAB71;
   border-radius: 0.2667rem;
   position: absolute;
-  top: 5.1733rem;
+  /*top:200px;*/
+  top:2.6667rem;
   bottom: 7.84rem;
 }
 

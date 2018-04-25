@@ -8,6 +8,7 @@
         </div>
         <div class="footer">
             <div class="btn" @click="openSmallDesk">打开晓黑板</div>
+            <p class="tip">如已下载直接在手机中打开</p>
         </div>
       </div>
       <div v-if="isAND" class="android">
@@ -18,10 +19,19 @@
         </div>
         <div class="footer2">
             <div class="btn" @click="openSmallDesk1">打开晓黑板</div>
+             <p class="tip">如已下载直接在手机中打开</p>
         </div>
-        <div class="img">
+        <!-- <div class="img">
             <p><span class="line1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>找对方法，下载更快捷<span class="line2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
             <img src="/static/images/android.png" alt="">
+        </div> -->
+      </div>
+       
+      <!-- 安卓手机 遮罩层  -->
+
+      <div class="overlay" v-if="mask">
+        <div class="lightbox">
+          <img src="/static/images/arrow.png">
         </div>
       </div>
 
@@ -38,6 +48,14 @@
               </div>
           </div>
       </div>
+
+       <!-- 安卓手机 遮罩层  -->
+      <div class="overlay" v-if="mask">
+        <div class="lightbox">
+          <img src="/static/images/arrow.png">
+        </div>
+      </div>
+
   </div>
 </template>
 <script>
@@ -47,18 +65,18 @@ export default {
         return{
           isIOS: true,
           isAND: false,
-          reVolidate:false
+          reVolidate:false,
+          mask:false    // 遮罩层
         }
     },
     methods:{
         openSmallDesk() {
             // 打开晓黑板  http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk
-            //alert('打开晓黑板');
             window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=org.xinkb.blackboard.android&g_f=991653';
         },
         openSmallDesk1() {
             // 打开晓黑板  http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk
-            //alert('打开晓黑板');
+            this.mask = true;
             window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
         },
         knowing(){
@@ -120,6 +138,29 @@ export default {
 </script>
 
 <style scoped>
+/* 遮罩层*/
+.overlay{
+  position:fixed;
+  top: 0;right: 0;left: 0;bottom: 0;
+  background:rgba(0,0,0,0.7);
+
+}
+.lightbox{
+  position:absolute;
+  z-index:1;
+  width:100%;
+  height: 100%;
+}
+
+.lightbox img{
+  width: 4.5rem;
+  padding-top: 0.4rem;
+  padding-left: 4.2rem;
+}
+/* 遮罩层*/
+
+
+
 #passOk {
   width: 100%;
   height: 100%;
@@ -133,18 +174,29 @@ export default {
   width: 100%;
   height: 100%;
 }
+
+.footer2 {
+  margin-top: 2.4rem;
+}
+
 .btn {
   width: 9.2rem;
   height: 1.28rem;
   font-size: 0.4533rem;
   line-height: 1.28rem;
   border-radius: 0.0533rem;
-  margin: 0 auto;
+  margin: 0 auto 0.2667rem;
   color: #000000;
   background: #F8E71C;
   text-align: center;
   font-family: PingFangSC-Regular;
 }
+.tip{
+  color: #AAAAAA;
+  text-align: center;
+  font-family: PingFangSC-Regular;
+}  
+
 .img{
   text-align: center;
 }
@@ -161,17 +213,16 @@ export default {
 }
 .p-img{
   text-align: center;
+  margin-top: 2.4rem;
 }
 .content .p-img img{
   width: 1.6rem;
   height: 1.6rem;
-  margin-top: 2.4rem;
   margin-bottom: 0.4rem;
 }
 .content2 .p-img img{
   width: 1.6rem;
   height: 1.6rem;
-  margin-top: 0.8rem;
   margin-bottom: 0.4rem;
 }
 .title{
@@ -194,7 +245,6 @@ export default {
   color: #aaa;
   font-size: 0.3733rem;
   line-height: 0.3733rem;
-  margin-bottom: 1.3333rem;
   text-align: center;
   font-family: PingFangSC-Light;
 }
