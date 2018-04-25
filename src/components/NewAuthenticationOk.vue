@@ -88,8 +88,11 @@ export default {
     },
     mounted() {
       //判断手机类型
-      this.account = sessionStorage.getItem('phone');
-      this.password = sessionStorage.getItem('phone').slice(6,12);
+      if(sessionStorage.getItem('phone')){
+        this.account = sessionStorage.getItem('phone');
+        this.password = sessionStorage.getItem('phone').slice(6,12);
+      }
+      
       var ua = navigator.userAgent.toLowerCase();
 
       if(/android/.test(ua)){
