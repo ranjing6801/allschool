@@ -276,7 +276,7 @@ export default {
         Replace(){  // 顶替Ta
             alert("顶替Ta");
             console.log('this.idvalue=',thid.idvalue);
-            this.$store.state.res1[this.getClassId].xhb_class_token = this.$store.state.res2[this.idvalue].id;
+            // this.$store.state.res1[this.getClassId].xhb_class_token = this.$store.state.res2[this.idvalue].id;
             this.$router.push({path:'/CLYchooseClass'});
         },
       handleCheck(e,i) {  //选择班级按钮
