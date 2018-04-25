@@ -20,7 +20,7 @@
               <p class="p1">{{item.title}}</p>
               <p class="p2">
                 <img src="/static/images/p1.png" /><span>{{item.code}}</span>
-                <img src="/static/images/p2.png" /><span>{{item.teacherName|teacherName}}</span>
+                <img src="/static/images/p2.png" /><span>{{item.teacherName|sliceValue}}</span>
                 <img src="/static/images/p3.png" /><span>{{item.membersCount}}</span>
               </p>
             </div>
@@ -193,13 +193,13 @@ export default {
     },
     filters:{
       sliceValue(value){
-         if(value.length >= 10){
-            return value.slice(0,5) + '...'+value.slice(5,11);
+         if(value.length > 4){
+            return value.slice(0,2) + '...'+value.slice(2,4);
          }return value
       },
       teacherName(value){
-        if(value.length >= 6){
-            return value.slice(0,2) + '...'+value.slice(2,5);
+        if(value.length > 12){
+            return value.slice(0,6) + '...'+value.slice(6,12);
          }return value
       }
     },
@@ -286,6 +286,7 @@ export default {
         this.ischeck = false;
         this.team = false; 
         this.valueId = i;
+        sessionStorage.setItem('valueId',i);
         console.log('this.valueId:',this.valueId);
 
         var p = $(el).parent().find('.p1').html();
@@ -397,6 +398,7 @@ export default {
           $('.p1').eq(temp).parent().prev().prev().addClass('no-bor');
           this.txt = mytxt;
           this.ischeck = false;
+          this.valueId = '' || sessionStorage.getItem('valueId');
         }
     } 
   
@@ -515,6 +517,10 @@ export default {
 
 .p1 {
   color: #fff;
+  width: 5.84rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   font-size: 0.4533rem;
   margin-bottom: 0.2667rem;
   font-family: PingFangSC-Regular;

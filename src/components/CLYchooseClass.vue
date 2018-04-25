@@ -244,11 +244,15 @@ export default {
 }
 
 .classTeam{
-  font-family: PingFangSC-Light;
-  font-size: 0.4533rem;
   color: #AAAAAA;
+  width: 2.8rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 0.4533rem;
   line-height: 0.4533rem;
   margin-left: 0.2133rem;
+  font-family: PingFangSC-Light;
 }
 
 .more {

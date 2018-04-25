@@ -109,11 +109,11 @@ export default {
           })
           .then(res => {
             console.log('sendMessageCode:',res);
-
-            this.ShowNumber();  //临时打开测试
-          
+            //***** 本地打开测试 *****//
+            this.ShowNumber();  
+            //***** 本地打开测试 *****//
             if(res.data.response){
-                this.ShowNumber();
+                //this.ShowNumber();
             }
             if(res.data.error_response){
               sessionStorage.setItem('school_id',res.data.error_response.school_id);
@@ -170,44 +170,28 @@ export default {
             this.YZM = true;
             this.ListenYzm = false;
             this.getVolidateCode();  
-            //  api.myGet("users",{id:'1'})
-    				//    .then(res => {
-            //         this.ShowNumber();
-            //         // this.count++;
-            //         // if(this.count > 0){
-            //         //     console.log('this.count:',this.count);
-            //         //     this.listenCode = true;
-            //         // }
-            //         if(this.count >= 4){ // 每天最多可以获取5次验证码
-            //             console.log("验证码发送次数已达上限");
-            //             this.$router.push({path:'/overCount',query:{title:this.codeOverTime,helpMessage:this.helpMessage}});
-            //         }
-    				//    })
-    				//    .catch(err => {
-      			// 		   // 手机号码验证错误
-      			// 		   console.log(err);
-            //        $('.VolidateCode').addClass('hot');
-    				//    })
         },
         ShowNumber(){  // 显示倒计时
            clearInterval(this.timer)   //调用定时器之前先清除定时器
             this.isTimer = true;
             this.time = 60;
+            this.count++;
+            console.log('验证码发送次数:',this.count);
+            if(this.count > 5){ // 每天最多可以获取5次验证码
+                console.log("验证码发送次数已达上限");
+                this.$router.push({path:'/overCount',query:{title:this.codeOverTime,helpMessage:this.helpMessage}});
+              }
             this.timer = setInterval (() => {
                 this.time -= 10;
                 if(this.time <= 0){
                     clearInterval(this.timer);  // 清除定时器
                     this.isTimer = false;
                     this.reNum = true;
-                    this.count++;
-                    console.log('验证码发送次数:',this.count);
+                    
                     if(this.count > 1){
                         this.listenCode = true;
                     }
-                    if(this.count >= 4){ // 每天最多可以获取5次验证码
-                    console.log("验证码发送次数已达上限");
-                    this.$router.push({path:'/overCount',query:{title:this.codeOverTime,helpMessage:this.helpMessage}});
-                    }
+                    
                 }
             },1000)
         },
@@ -257,25 +241,6 @@ export default {
                           this.$router.push({path:"/overCount",query:{title:this.txt,helpMessage:this.helpMessage}});
                       } 
                   }
-                    // if(res[0].id == 1){  // 跳转到 userName
-                    //     this.$router.push({path:'/userName',query:{title:this.$route.query.title}})
-                    // }
-
-                    // if(res[0].id == 2){  // 验证码错误
-                    //   $('.VolidateCode').addClass('red')
-                    //     this.isShowCode = true
-                    //     this.getCodeNum ++ ;
-                    //     $(".rightPhone").html('验证码错误');
-                    //     console.log('验证码输入错误次数:',this.getCodeNum)
-                    //     if(this.getCodeNum > 9){   // 记录验证码输入错误的次数, 到达10次 就进入反馈界面
-                    //         console.log("验证码输入错误超过10次");
-                    //         this.$router.push({path:"/overCount",query:{title:this.txt,helpMessage:this.helpMessage}});
-                    //     } 
-                    // }
-                    // if(res[0].id==3){
-                    //     // 验证码发送失败
-                    //     this.isCodeFail = true;
-                    // }
                 })  
                 .catch(err => {
                     console.log('err:',err);
@@ -293,7 +258,7 @@ export default {
         this.number = this.$route.query.phone;
 
         if(sessionStorage.getItem('myphone')){
-            this.ShowNumber();
+            //this.ShowNumber();
             this.getVolidateCode();
         }else{
           this.reNum = true   // 进入验证码界面就获取验证码.并且显示重新获取验证码提示
@@ -601,7 +566,7 @@ export default {
   border: 0.0533rem solid #BBAB71;
   border-radius: 0.2667rem;
   position: absolute;
-  top: 5.1733rem;
+  top: 3.0667rem;
   bottom: 7.84rem;
 }
 .ListenCodeFail .Listenfail #modal .titleListen {
