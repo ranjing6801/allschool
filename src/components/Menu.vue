@@ -120,32 +120,10 @@ import $ from 'jquery'
                       $('.input').addClass('red');
                       $('.rightPhone').html(res.data.error_response.msg);
                 }
-                // if(res[0].id == 1){   // 提示 该手机号已经加入其他学校 15122222222
-                //       this.isRightNumber = true;
-                //       $('.input').addClass('red');
-                //       $('.rightPhone').html('该手机号已经加入其他学校');
-
-                // }else if(res[0].id==2){ // 手机号码验证错误
-                //       this.isRightNumber = true;
-                //       $('.input').addClass('red');
-                //       $('.rightPhone').html('请填写正确的手机号码');
-
-                // }else if(res[0].id==3){
-                //       // 验证码发送失败
-                //       this.isCodeFailShow = true;
-
-                // }else{
-                //   //手机号码验证成功  跳转 到验证码界面
-                        //  localStorage.setItem("phone",this.phone); 
-                //       sessionStorage.setItem("phone",this.phone);   // 将电话号码存储在 本地 
-                //       this.$router.push({name:'VolidateCode',query:{title:this.title,phone:this.phone}});
-
-                // }
               })
               .catch(err => {
                 console.log('请求错误');
                 this.isCodeFailShow = true;
-                console.log('errPhone:',err);
                 // 手机号码验证错误
                 //this.isRightNumber = true;
               });

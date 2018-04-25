@@ -18,7 +18,8 @@
                     <div class="line"></div>
                 </li>
 
-                <!--   -->
+                <!-- 本地测试打开 -->
+
                 <!-- <li class="classList">
                     <div class="left">
                         <img :src="img1">
@@ -96,8 +97,8 @@ export default {
         }
     },
     created(){
-        //测试的时候 注释掉
-        this.createClass();
+        //本地测试的时候 注释掉
+        //this.createClass();
     },
     mounted(){
         document.title = "创建班级并认证";
@@ -180,7 +181,6 @@ export default {
   line-height: 0.3733rem;
   text-align: center;
   margin-top: 0.2667rem;
-  width: 2.6133rem;
   height: 0.3733rem;
 }
 
