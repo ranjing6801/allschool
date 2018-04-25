@@ -3,7 +3,7 @@
         <div class="classContent">
             <P class="create">已为您创建以下晓黑板班级:</P>
             <ul>
-                <!-- <li class="classList"  v-for="item in imgArr" :key="item.index">
+                <li class="classList"  v-for="item in imgArr" :key="item.index">
                     <div class="left">
                         <img :src="item.src">
                     </div>
@@ -16,10 +16,10 @@
                     <img class="myimg" :src="item.src">
                      
                     <div class="line"></div>
-                </li> -->
+                </li>
 
                 <!--   -->
-                <li class="classList">
+                <!-- <li class="classList">
                     <div class="left">
                         <img :src="img1">
                     </div>
@@ -30,9 +30,9 @@
                         <p class="last saveSecond">邀请他们进班</p>
                     </div>
                     <img class="myimg" :src="img1">
-                     <!-- 二维码图片分割线 -->
+
                     <div class="line"></div>
-                </li>
+                </li> -->
             </ul>
         </div>
 
@@ -97,7 +97,7 @@ export default {
     },
     created(){
         //测试的时候 注释掉
-        //this.createClass();
+        this.createClass();
     },
     mounted(){
         document.title = "创建班级并认证";

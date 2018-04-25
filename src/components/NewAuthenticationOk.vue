@@ -20,7 +20,7 @@
             <p class="title2">晓黑板账号密码<img src="/static/images/left3.png" alt=">"><span @click="onOff=true">点击查看</span><img src="/static/images/right3.png" alt="<">已通过短信发送给您</p>
         </div>
         <div class="footer2">
-            <div class="btn" @click="openSmallDesk">打开晓黑板</div>
+            <div class="btn" @click="openSmallDesk1">打开晓黑板</div>
         </div>
         <div class="img">
             <p><span class="line1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>找对方法，下载更快捷<span class="line2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
@@ -70,8 +70,14 @@ export default {
     },
     methods:{
         openSmallDesk() {
-            // 打开晓黑板
-            alert('打开晓黑板');
+            // 打开晓黑板  http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk
+            //alert('打开晓黑板');
+            window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=org.xinkb.blackboard.android&g_f=991653';
+        },
+        openSmallDesk1() {
+            // 打开晓黑板  http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk
+            //alert('打开晓黑板');
+            window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
         },
         closeBox() {
           this.onOff = false;

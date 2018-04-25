@@ -17,7 +17,7 @@
             <p class="title1">现在起您可以免费享受【晓黑板】提供的增值服务</p>
         </div>
         <div class="footer2">
-            <div class="btn" @click="openSmallDesk">打开晓黑板</div>
+            <div class="btn" @click="openSmallDesk1">打开晓黑板</div>
         </div>
         <div class="img">
             <p><span class="line1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>找对方法，下载更快捷<span class="line2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
@@ -51,10 +51,15 @@ export default {
         }
     },
     methods:{
-        openSmallDesk(){
-            // 打开晓黑板  跳转到晓黑板
-            //window.open("http://a.app.qq.com/o/simple.jsp?pkgname=org.xinkb.blackboard.android&g_f=991653")
+        openSmallDesk() {
+            // 打开晓黑板  http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk
+            //alert('打开晓黑板');
             window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=org.xinkb.blackboard.android&g_f=991653';
+        },
+        openSmallDesk1() {
+            // 打开晓黑板  http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk
+            //alert('打开晓黑板');
+            window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
         },
         knowing(){
           this.reVolidate = false;

@@ -47,7 +47,7 @@ export default {
             zhiwenImg:zhiwenImg,
             isSave:false,
             indexValue:'',  // [点击创建班级认证 ]  记录 班主任 有班级 创建晓黑板班级的时候  传过来的 整校班级的id 
-            imgSrc,
+            imgSrc:'',
             imgArr:[],
         }
     },
@@ -83,8 +83,8 @@ export default {
         document.title = "创建班级";
         this.indexValue = this.$route.query.index;
         console.log('this.indexValue=',this.indexValue);
-        
-        //this.createClassData();
+        //测试的时候注释
+        this.createClassData();
     }
 }
 
@@ -171,7 +171,6 @@ export default {
 }
 
 #createClass  .saveSecond {
-  width: 0.9333rem;
   text-align: center;
   font-family: PingFangSC-Light;
   font-size: 0.2667rem;
