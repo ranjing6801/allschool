@@ -29,9 +29,7 @@
       <!-- 安卓手机 遮罩层  -->
 
       <div class="overlay" v-if="mask">
-        <div class="lightbox">
-          <img src="/static/images/arrow.png">
-        </div>
+          <img class="arrow" src="/static/images/arrow.png">
       </div>
       
     </div>
@@ -48,17 +46,27 @@ export default {
         }
     },
     methods:{
-        openSmallDesk(){
+        openSmallDesk(){ // ios 下载
             window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=org.xinkb.blackboard.android&g_f=991653';
         },
-        openSmallDesk1() { // android
+        openSmallDesk1() { // android 下载
             // 打开晓黑板  http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk
             this.mask = true;
-            window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
+            //window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
         }
     },
     created() {
         document.title = "反馈成功";
+        //判断手机类型
+      
+        var ua = navigator.userAgent.toLowerCase();
+
+        //alert(ua);
+
+        if(/android/.test(ua)){
+            console.log('android...');
+            window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
+        }
     },
     mounted() {
       //判断手机类型
@@ -83,21 +91,17 @@ export default {
 /* 遮罩层*/
 .overlay{
   position:fixed;
-  top: 0;right: 0;left: 0;bottom: 0;
-  background:rgba(0,0,0,0.7);
-
-}
-.lightbox{
-  position:absolute;
-  z-index:1;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.7);
   width:100%;
   height: 100%;
 }
-
-.lightbox img{
+.arrow{
   width: 4.5rem;
-  padding-top: 0.4rem;
-  padding-left: 4.2rem;
+  position:absolute;
+  right: 1rem;
+  top: 0.8rem;
 }
 /* 遮罩层*/
 

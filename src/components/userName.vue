@@ -58,9 +58,11 @@ export default {
         userNameFocus(){  // 聚焦
             if(this.userName.length > 0){
                   $('.refer').addClass('active');
+                  $('.user').addClass('hot');
                     this.dis = false;
             }else{
                   $('.refer').removeClass('active');
+                  $('.user').removeClass('hot');
                     this.dis = true;
             }
         },
@@ -280,7 +282,9 @@ export default {
   color: #fff;
   background: #2b2b2b;
   border-bottom:  0.0267rem solid #555555;
-
+}
+.hot{
+  border-bottom:  0.0267rem solid #aaa;
 }
 
 .contentUser input::-webkit-input-placeholder {

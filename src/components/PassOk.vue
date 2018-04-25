@@ -26,15 +26,6 @@
             <img src="/static/images/android.png" alt="">
         </div> -->
       </div>
-       
-      <!-- 安卓手机 遮罩层  -->
-
-      <div class="overlay" v-if="mask">
-        <div class="lightbox">
-          <img src="/static/images/arrow.png">
-        </div>
-      </div>
-
 
       <!--  重复验证弹窗 -->
       <div class="reVolidateModal" v-if="reVolidate" >
@@ -51,9 +42,7 @@
 
        <!-- 安卓手机 遮罩层  -->
       <div class="overlay" v-if="mask">
-        <div class="lightbox">
-          <img src="/static/images/arrow.png">
-        </div>
+          <img class="arrow" src="/static/images/arrow.png">
       </div>
 
   </div>
@@ -70,14 +59,14 @@ export default {
         }
     },
     methods:{
-        openSmallDesk() {
+        openSmallDesk() { // ios 下载
             // 打开晓黑板  http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk
             window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=org.xinkb.blackboard.android&g_f=991653';
         },
-        openSmallDesk1() {
+        openSmallDesk1() { // android 下载
             // 打开晓黑板  http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk
             this.mask = true;
-            window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
+            //window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
         },
         knowing(){
           this.reVolidate = false;
@@ -99,11 +88,23 @@ export default {
         }
     },
     created() {
-        document.title = "反馈成功";
+        document.title = "认证成功";
+        //判断手机类型
+      
+        var ua = navigator.userAgent.toLowerCase();
+
+        //alert(ua);
+
+        if(/android/.test(ua)){
+            console.log('android...');
+            window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
+        }
     },
     mounted() {
-        // this.createClass();
-      //判断手机类型
+        //测试的时候注释
+        //this.createClass();
+
+        //判断手机类型
         var ua = navigator.userAgent.toLowerCase();
 
         if(/android/.test(ua)){
@@ -141,21 +142,17 @@ export default {
 /* 遮罩层*/
 .overlay{
   position:fixed;
-  top: 0;right: 0;left: 0;bottom: 0;
-  background:rgba(0,0,0,0.7);
-
-}
-.lightbox{
-  position:absolute;
-  z-index:1;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.7);
   width:100%;
   height: 100%;
 }
-
-.lightbox img{
+.arrow{
   width: 4.5rem;
-  padding-top: 0.4rem;
-  padding-left: 4.2rem;
+  position:absolute;
+  right: 1rem;
+  top: 0.8rem;
 }
 /* 遮罩层*/
 
