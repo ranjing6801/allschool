@@ -2,8 +2,7 @@
   <div id="clychooseClass">
         <p class="leadTitle">您是{{ num }}个班级班主任, 请选择:</p>
         <ul>
-            <li v-for="(item,index) in classList" :key="index">
-                class="classList" @click="getMore(index)">
+            <li v-for="(item,index) in classList" :key="index" class="classList" @click="getMore(index)">
                <span class="className"> {{ item.class_name }}</span> 
                <img v-show="item.isOver" class="vip"  src="/static/images/vip.png" />
                <span class="classTeam"> {{ item.className}}</span>   
@@ -59,7 +58,8 @@ export default {
           if(this.classList[i].isOver==true){ //判断是否点击了已经绑定过的班级
             var txt = sessionStorage.getItem(i);
             this.$router.push({ path:'/getClass',query:{index:i,txt:txt,flag:'yes'}});
-          }else{
+          }
+          else{
             this.$router.push({ path:'/getClass',query:{index:i}}); //点击的时候带上对应的下标
           }
         },

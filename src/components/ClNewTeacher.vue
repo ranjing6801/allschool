@@ -21,7 +21,7 @@
                 <!--   -->
                 <li class="classList">
                     <div class="left">
-                        <img :src="secImg">
+                        <img :src="img1">
                     </div>
                     <div class="right">
                         <img :src="zhiwenImg">
@@ -29,7 +29,7 @@
                         <p class="first saveSecond">用于发送给家长</p>
                         <p class="last saveSecond">邀请他们进班</p>
                     </div>
-                    <img class="myimg" :src="secImg">
+                    <img class="myimg" :src="img1">
                      <!-- 二维码图片分割线 -->
                     <div class="line"></div>
                 </li>
