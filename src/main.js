@@ -7,6 +7,7 @@ import {store} from './store/store.js'
 
 
 
+
 // 配置默认的根路径
 
 // axios.defaults.baseURL = 'http://school-dev.xiaoheiban.cn'

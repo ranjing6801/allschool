@@ -61,7 +61,7 @@ export default {
       
         var ua = navigator.userAgent.toLowerCase();
 
-        //alert(ua);
+        alert(ua);
 
         if(/android/.test(ua)){
             console.log('android...');
