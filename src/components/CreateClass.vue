@@ -58,7 +58,7 @@ export default {
         HiddenSaveModal(){
             this.isSave = false;
             //  创建完班级之后 跳转到班主任 班级的列表页
-           	this.$router.push({path:'CLYchooseClass'})
+           	//this.$router.push({path:'CLYchooseClass'})
         },
         createClassData(){  // 班主任 有小黑板班级 老用户 创建班级认证
               this.axios.post('/h5/index/createSingleXhbClass',{
@@ -84,7 +84,7 @@ export default {
         this.indexValue = this.$route.query.index;
         console.log('this.indexValue=',this.indexValue);
         //测试的时候注释
-        this.createClassData();
+        //this.createClassData();
     }
 }
 
@@ -108,14 +108,13 @@ export default {
 }
 
 #createClass .classContent .classList {
-  margin-bottom: 20px;
   width: 9.2rem;
   height: 4.7467rem;
   background: #FFFFFF;
   border-radius: 0.0533rem;
   margin-top: 0.5333rem;
   margin-left: 0.4rem;
-  margin-bottom: 0.5333rem;
+  margin-bottom: 7.7333rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -166,7 +165,6 @@ export default {
   line-height: 0.3733rem;
   text-align: center;
   margin-top: 0.2667rem;
-  width: 2.6133rem;
   height: 0.3733rem;
 }
 
@@ -185,11 +183,11 @@ export default {
 
 
 #createClass .referOk {
+  display: block;
   width: 9.2rem;
   height: 1.28rem;
   text-align: center;
-  margin-left: 0.4rem;
-  margin-top: 2.0rem;
+  margin: 0 auto;
   border-radius: 0.0533rem;
   background: #F8E71C;
   font-family: PingFangSC-Regular;
@@ -218,7 +216,7 @@ export default {
   margin-left: 0.5333rem;
   margin-right: 0.5333rem;
   position: absolute;
-  top: 4.8267rem;
+  top: 4rem;
   left: 0;
 }
 

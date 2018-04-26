@@ -2,10 +2,10 @@
   <div id="clychooseClass">
         <p class="leadTitle">您是{{ num }}个班级班主任, 请选择:</p>
         <ul>
-            <li v-for="(item,index) in classList" :key="index" class="classList" @click="getMore(index)">
+            <li v-for="(item,index) in classList" :key="index" class="classList" @click="getMore(item,index)">
                <span class="className"> {{ item.class_name }}</span> 
                <img v-show="item.isOver" class="vip"  src="/static/images/vip.png" />
-               <span class="classTeam"> {{ item.className}}</span>   
+               <span class="classTeam"> {{ item.className | teacherName }}</span>   
                <img v-show="item.isOver" class="over"  src='/static/images/over.png'>
                <img src="/static/images/more.png" class="more" />
             </li>
@@ -37,6 +37,13 @@ export default {
             cur: null,
         }
     },
+    filters:{
+      teacherName(value){
+        if(value.length > 5){
+            return value.split(' ').join('').slice(0,2) + '...'+value.split(' ').join('').slice(-3,value.length);
+         }return value
+      }
+    },
     computed:{
       // classList(){
       //     if(this.$store.state.res1.length){
@@ -54,10 +61,11 @@ export default {
         // getDetail(passId){             
         //     this.$router.push({path:'/getClass',query:{userId:passId}});
         // },
-        getMore(i) { //跳转到对应班级绑定页面
+        getMore(o,i) { //跳转到对应班级绑定页面
           if(this.classList[i].isOver==true){ //判断是否点击了已经绑定过的班级
             var txt = sessionStorage.getItem(i);
-            this.$router.push({ path:'/getClass',query:{index:i,txt:txt,flag:'yes'}});
+            var word = o.className;
+            this.$router.push({ path:'/getClass',query:{index:i,txt:txt,flag:'yes',word:word}});
           }
           else{
             this.$router.push({ path:'/getClass',query:{index:i}}); //点击的时候带上对应的下标
@@ -96,7 +104,7 @@ export default {
           for(var i = 0; i<this.$store.state.res1.length; i++){
                 var obj = {class_id:'',xhb_class_token:''};
                 var str = sessionStorage.getItem(i);
-                var item = this.$store.state.res2.find( (datum)=>datum.name==str );
+                var item = this.$store.state.res2.find( (datum)=>datum.code==str );
                 //console.log('item:',item.id);
                 obj.class_id = this.$store.state.res1[i].class_id;
                 obj.xhb_class_token = item.id;
@@ -269,7 +277,7 @@ export default {
   height: 1.28rem;
   margin-left: 0.4rem;
   position: fixed;
-  bottom: 60px;
+  bottom: 0.8rem;
   border-radius: 0.0533rem;
   border: none;
   background: #AAAAAA;

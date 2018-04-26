@@ -3,7 +3,7 @@
         <div class="classContent">
             <P class="create">已为您创建以下晓黑板班级:</P>
             <ul>
-                <li class="classList"  v-for="item in imgArr" :key="item.index">
+                <!-- <li class="classList"  v-for="item in imgArr" :key="item.index">
                     <div class="left">
                         <img :src="item.src">
                     </div>
@@ -16,11 +16,11 @@
                     <img class="myimg" :src="item.src">
                      
                     <div class="line"></div>
-                </li>
+                </li> -->
 
                 <!-- 本地测试打开 -->
 
-                <!-- <li class="classList">
+                <li class="classList">
                     <div class="left">
                         <img :src="img1">
                     </div>
@@ -33,7 +33,21 @@
                     <img class="myimg" :src="img1">
 
                     <div class="line"></div>
-                </li> -->
+                </li>
+                <li class="classList">
+                    <div class="left">
+                        <img :src="img1">
+                    </div>
+                    <div class="right">
+                        <img :src="zhiwenImg">
+                        <p class="save">长按保存二维码</p>
+                        <p class="first saveSecond">用于发送给家长</p>
+                        <p class="last saveSecond">邀请他们进班</p>
+                    </div>
+                    <img class="myimg" :src="img1">
+
+                    <div class="line"></div>
+                </li>
             </ul>
         </div>
 
@@ -97,11 +111,12 @@ export default {
         }
     },
     created(){
-        //本地测试的时候 注释掉
-        //this.createClass();
+        
     },
     mounted(){
         document.title = "创建班级并认证";
+        //本地测试的时候 注释掉
+        //this.createClass();
     }
 }
 </script>
@@ -123,7 +138,6 @@ export default {
 }
 
 #CLNewTeacher  .classList {
-  margin-bottom: 20px;
   width: 9.2rem;
   height: 4.7467rem;
   background: #FFFFFF;
@@ -200,10 +214,11 @@ export default {
 
 
 #CLNewTeacher .referOk {
+  display: block;
   width: 9.2rem;
   height: 1.28rem;
   text-align: center;
-  margin-left: 0.4rem;
+  margin: 0 auto;
   margin-top: 2.0rem;
   border-radius: 0.0533rem;
   background: #F8E71C;
@@ -233,7 +248,7 @@ export default {
   margin-left: 0.5333rem;
   margin-right: 0.5333rem;
   position: absolute;
-  top: 4.8267rem;
+  top: 4rem;
   left: 0;
 }
 .myimg{

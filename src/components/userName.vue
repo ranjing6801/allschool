@@ -281,6 +281,7 @@ export default {
   border: none;
   color: #fff;
   background: #2b2b2b;
+  border-radius: 0;
   border-bottom:  0.0267rem solid #555555;
 }
 .hot{

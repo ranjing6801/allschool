@@ -5,7 +5,7 @@
         <li v-for="(item,index) in list"  :key="item.index" v-show="item.isOver">
           <div class="bind-div">
             <img class="vip" src="/static/images/vip.png" />
-            <div class="cont"><p class="p-top">{{item.class_name}} 已对应</p><p class="p-bot">{{item.className}}</p></div>
+            <div class="cont"><p class="p-top">{{item.class_name}} 已对应</p><p class="p-bot">{{item.className|tosix}}</p></div>
             <div class="cancle"><img src="/static/images/ic.png" /><span @click="unbind(index)">取消对应</span></div>
           </div>
         </li>
@@ -17,9 +17,9 @@
             <div @click="handleCheck($event,index)" class="left"></div>
             <img class="logo" src="/static/images/logo.jpg" />
             <div class="right">
-              <p class="p1">{{item.title}}</p>
+              <p class="p1">{{ item.title | teacherName }}</p>
               <p class="p2">
-                <img src="/static/images/p1.png" /><span>{{item.code}}</span>
+                <img src="/static/images/p1.png" /><span class="num1">{{item.code}}</span>
                 <img src="/static/images/p2.png" /><span>{{item.teacherName|sliceValue}}</span>
                 <img src="/static/images/p3.png" /><span>{{item.membersCount}}</span>
               </p>
@@ -51,89 +51,6 @@
 
     <button @click="bindBtn" :class="!ischeck||flag?'active':''" class="referClass" :disabled="ischeck">确认</button>
 
-
-<!-- <ul>
-      <li class="checkList box" v-if="option.vip" v-for="(option,index) in optionList" :key="option.index" @click="getId(index)">
-        <div class="checkbox-group box"  v-if="!option.vip">
-          <input type="radio" :id="option.code"  name="classChoose" :value="option.id"  v-model="team"  @change="change" />
-          <label :for="option.code"></label>
-        </div>
-        
-        <div class="vipLogo" v-if="option.vip">
-            <img src="/static/images/vip.png" >
-        </div>
-        <div class="right">
-          <div class="title passTitle">
-              <div class="teamClass">
-                <p class="teamTitle">{{ option.teamShow  | teacherName}} 已对应</p>
-              </div>
-              <p class="className1">
-                <span class="classTitle">{{ option.name }}</span>
-              </p>
-              <div class="cancle" @click="cancle(index)">
-                <img src="/static/images/ic.png" />
-                <span>取消对应</span>
-              </div>
-          </div> 
-        </div> 
-      </li> -->
-
-      
-<!--  没有认证的班级列表页 -->
-      <!-- <li class="checkList box2" v-if="!option.vip"  v-for="(option,index) in optionList" :key="option.index" @click="getId(index)">
-        <div class="checkbox-group" v-if="!option.vip" >
-          <input type="radio" :id="option.code"  name="classChoose" :value="option.id"  v-model="team"  @change="change" />
-          <label :for="option.code"></label>
-        </div>
-        <div class="vipLogo" v-if="option.vip" >
-            <img src="/static/images/vip.png" >
-        </div>
-        <div class="right">
-          <div class="logo" v-if="!option.vip">
-              <img :src="option.badgeId" alt="" >
-          </div>
-          <div class="title">
-              <p class="className">   
-                <span class="classTitle">{{ option.name  }}</span>
-              </p>
-              <p class="classNumber">
-                  <img src="/static/images/classNum.png" class="classNum common" /> 
-                  <span class="banjiNumber">{{ option.code }}</span>
-                  <img src="/static/images/classCreater.png" class="classCreater common" /> 
-                  <span class="created">{{ option.teacherName | teacherName}}</span>
-                  <img src="/static/images/classMembers.png" class="classMembers common" />
-                  <span>{{ option.membersCount }}</span>
-              </p>
-          </div> 
-        </div> 
-      </li>  
-    </ul> -->
-    <!--  创建班级去认证 -->
-    <!-- <ul>
-      <li class="checkList">
-          <div class="checkbox-group">
-              <input type="radio" name="classChoose" value="4" id="value" v-model="team" @change="change">
-              <label for="value"></label>
-          </div>
-          <div class="textCreate" >
-              <label for="create" class="createClass">创建新班级认证</label>
-          </div>
-      </li>
-    </ul>  -->
-    <!--  顶替弹窗 -->
-     <!-- <div class="modalShow" v-if="isReCertificationShow" @click="ReCertificationShow" >
-        <div class="modal">
-            <div id="ReCertification">
-                <p class="content">{{ accountTile}}</p>
-                <p class=" titleClass">{{ classTitle }}</p>
-                <p class="saveTip"><span>已被</span>  <span class="name">{{ classUser }}</span><span>老师认证过</span></p>
-                <p class="replace">{{ accountReplace }}</p>
-                <button class="Btn Btn-left" @click="giveUp">取消</button>
-                <button class="Btn Btn-rigth" @click="Replace">顶替Ta</button>
-            </div>
-        </div>
-    </div> -->
-    <!-- <button class="referClass" :disabled="dis"  @click="getClassPromise" >确认</button> -->
   </div>
 </template>
 <script>
@@ -194,14 +111,19 @@ export default {
     filters:{
       sliceValue(value){
          if(value.length > 4){
-            return value.slice(0,2) + '...'+value.slice(2,4);
+            return value.split(' ').join('').slice(0,2) + '...'+value.split(' ').join('').slice(-2,value.length);
          }return value
       },
       teacherName(value){
         if(value.length > 12){
-            return value.slice(0,6) + '...'+value.slice(6,12);
+            return value.split(' ').join('').slice(0,6) + '...'+value.split(' ').join('').slice(-6,value.length);
          }return value
-      }
+      },
+      tosix(value){
+         if(value.length > 8){
+            return value.split(' ').join('').slice(0,4) + '...'+value.split(' ').join('').slice(-4,value.length);
+         }return value
+      },
     },
     methods:{
         getClassPromise(){ //  确认按钮  
@@ -290,7 +212,9 @@ export default {
         console.log('this.valueId:',this.valueId);
 
         var p = $(el).parent().find('.p1').html();
-        // console.log('选择了:',p);
+        console.log('选择了:',p);
+        console.log('res2[i].num1:',this.list2[i].code);
+        this.num1 = this.list2[i].code;
         this.txt = p;
       },
       handleCreateCheck(e,string) {  //创建新班级按钮
@@ -305,7 +229,7 @@ export default {
         console.log('解绑...');
         var str = sessionStorage.getItem(i);
         console.log('str:',str);
-        var item = this.list2.find( (datum)=>datum.title==str );
+        var item = this.list2.find( (datum)=>datum.code==str );
         console.log('item:',item);
         var data = {index1:i,index2:item.index};
 
@@ -319,16 +243,12 @@ export default {
         // this.list2[data.index2].hadBind = false;
         // this.list[data.index1].className = '的对应班级';
 
-        //this.$store.dispatch('unbindClass2',data);
       },
       bindBtn() {  //确认按钮
         var oIndex = this.index;      // 记录整校班级 index
         var detail = this.txt;
-        console.log('oIndex=',oIndex);
-        console.log('this.$store.state.res1=',this.$store.state.res1); 
+        var num1 = this.num1;
         if(this.team){  // 创建晓黑板班级去认证
-
-            console.log('this.team=',this.team);
             this.$router.push({path:'/createClass',query:{index:oIndex}});
         }
         else{ //  选择班级去认证
@@ -343,15 +263,11 @@ export default {
                     xhb_class_token:this.xhb_class_token
                 }) 
                 .then(res => {
-                    console.log('isClassBind res =',res);
                     this.$store.state.res1[oIndex].xhb_class_token = this.$store.state.res2[this.valueId].id;
-                    var obj = {index:oIndex,detail:detail,sta:true};
-                    sessionStorage.setItem(oIndex,detail);            //保存当前对应的状态
+                    var obj = {index:oIndex,name:detail,sta:true,num1:num1};
+                    sessionStorage.setItem(oIndex,num1);            //保存当前对应的状态
                     this.$store.commit('setClass',obj);               //更改store的数据
                     this.$router.push({ path:'/CLYchooseClass',query:{index:this.index} }); //跳回去的时候保存这次的序号
-
-                    console.log('this.$store.state.res1 数据绑定之后=',this.$store.state.res1); 
-
                     // 该班级已经被其他老师绑定
                     if(res.data.error_response){
                         alert('该班级已经被其他老师绑定');
@@ -376,7 +292,7 @@ export default {
 
          if(this.flag){
           var str = this.$route.query.txt;
-          var item = this.list2.find( (datum)=>datum.title==str );
+          var item = this.list2.find( (datum)=>datum.code==str );
           var obj = {index1: this.index,index2: item.index};
           this.$store.commit('resetClass',obj);//先解绑
       }
@@ -384,19 +300,21 @@ export default {
     mounted() {
         document.title = '选择班级';
         var oindex = this.index;
-        var mytxt = this.$route.query.txt;
+        var num1 = this.$route.query.txt;
+        var word = this.$route.query.word;
 
         if(this.$route.query.flag=='yes'){ // 找到上次绑定班级的默认选项
           console.log('修改上次已经绑定过的班级');
-          var l = $('.p1').length;
+          var l = $('.num1').length;
           var temp = 0;
           for(var i=0;i<l;i++){
-            if($('.p1').eq(i).html()==mytxt){
+            if($('.num1').eq(i).html()==num1){
               temp=i;
             }
           }
-          $('.p1').eq(temp).parent().prev().prev().addClass('no-bor');
-          this.txt = mytxt;
+          $('.num1').eq(temp).parent().parent().prev().prev().addClass('no-bor');
+          this.txt = word;
+          this.num1 = num1;
           this.ischeck = false;
           this.valueId = '' || sessionStorage.getItem('valueId');
         }
@@ -437,7 +355,7 @@ export default {
 }
 
 .cont {
-  margin-right: 1.2rem;
+  width: 5.3333rem;
 }
 
 .p-top {

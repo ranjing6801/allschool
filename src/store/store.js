@@ -63,8 +63,9 @@ export const store = new Vuex.Store({
     mutations:{
       setClass(state,opt) {
         state.res1[opt.index].isOver = opt.sta;
-        state.res1[opt.index].className = opt.detail;
-        var myindex = state.res2.find( (datum)=>datum.title==opt.detail );
+        state.res1[opt.index].className = opt.name;
+        var myindex = state.res2.find( (datum)=>datum.code==opt.num1 );
+        console.log('myindex',myindex);
         state.res2[myindex.index].hadBind = true;
       },
       resetClass(state,opt) {

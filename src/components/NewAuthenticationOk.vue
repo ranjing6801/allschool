@@ -351,8 +351,7 @@ export default {
   border: 0.0533rem solid #BBAB71;
   border-radius: 0.2667rem;
   position: absolute;
-  /*top:200px;*/
-  top:2.6667rem;
+  top: 4.4rem;
   bottom: 7.84rem;
 }
 
