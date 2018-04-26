@@ -10,6 +10,7 @@
         </div>
         <div class="footer">
             <div class="btn" @click="openSmallDesk">打开晓黑板</div>
+            <p class="tip">如已下载直接在手机中打开</p>
         </div>
       </div>
       <div v-if="isAND" class="android">
@@ -20,13 +21,18 @@
             <p class="title2">晓黑板账号密码<img src="/static/images/left3.png" alt=">"><span @click="onOff=true">点击查看</span><img src="/static/images/right3.png" alt="<">已通过短信发送给您</p>
         </div>
         <div class="footer2">
-            <div class="btn" @click="openSmallDesk">打开晓黑板</div>
-        </div>
-        <div class="img">
-            <p><span class="line1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>找对方法，下载更快捷<span class="line2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
-            <img src="/static/images/android.png" alt="">
+            <div class="btn" @click="openSmallDesk1">打开晓黑板</div>
+            <p class="tip">如已下载直接在手机中打开</p>
         </div>
       </div>
+      
+      <!-- 安卓手机 遮罩层  -->
+
+      <div class="overlay" v-if="mask">
+          <img class="arrow" src="/static/images/arrow.png">
+      </div>
+
+
 
       <!-- 查看密码 -->
       <div class="codeFail" v-if="onOff" @click="closeBox" >
@@ -39,10 +45,24 @@
             </div>
         </div>
       </div>
+
+       <!--  重复验证弹窗 -->
+      <div class="reVolidateModal" v-if="reVolidate" >
+          <div class="reVolidate">
+              <div id="modal">
+                  <p class="titleListen">请勿重复认证</p>
+                  <p class="contentListen"> 
+                      您已是认证用户,请勿重复认证
+                  </p>
+                  <button class="Btn" @click="knowing">我知道啦</button>
+              </div>
+          </div>
+      </div>
     </div>
 </template>
 <script>
 import pwdModal from './pwdModal'
+import $ from 'jquery'
 export default {
     name:'newauthentication',
     data(){
@@ -50,25 +70,79 @@ export default {
           isIOS: true,
           isAND: false,
           onOff: false,
-          account: '13661552121',
-          password: '552121'
+          reVolidate:false,
+          account: '',
+          password: '',
+          mask:false    // 遮罩层
         }
     },
     methods:{
-        openSmallDesk() {
-            // 打开晓黑板
-            alert('打开晓黑板');
+        openSmallDesk() {  // ios 
+            // 打开晓黑板  http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk
+            window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=org.xinkb.blackboard.android&g_f=991653';
+        },
+        openSmallDesk1() { // android
+            // 打开晓黑板  http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk
+            this.mask = true;
         },
         closeBox() {
           this.onOff = false;
+        },
+        forbiddenReback(){
+          this.reVolidate = true;
+        },
+        knowing(){
+          this.reVolidate = false;
+        },
+        downLoad(){  // 下载晓黑板 地址
+            // this.axios.post('https://www.xiaoheiban.cn/admin-Apk-findNew')
+            //     .then(res => {
+            //       console.log('res=',res);
+            //     })
+            //     .catch(err => {
+            //       console.log('err=',err);
+            //     })
+
+            // $.ajax({
+            //   type:'get',
+            //   url:'https://www.xiaoheiban.cn/admin-Apk-findNew',
+            //   success(response){
+            //       console.log(response);
+            //   }
+            // })
+
+                
         }
     },
     created(){
-        document.title = "认证成功"
+        document.title = "认证成功";
+        //this.downLoad();
+
+        //判断手机类型
+      
+        var ua = navigator.userAgent.toLowerCase();
+
+        //alert(ua);
+
+        if(/android/.test(ua)){
+            console.log('android...');
+            window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
+          }
+
     },
     mounted() {
+      
+      //默认用户名密码
+      if(sessionStorage.getItem('phone')){
+        this.account = sessionStorage.getItem('phone');
+        this.password = sessionStorage.getItem('phone').slice(6,12);
+      }
+
       //判断手机类型
+      
       var ua = navigator.userAgent.toLowerCase();
+
+      //alert(ua);
 
       if(/android/.test(ua)){
           console.log('android...');
@@ -81,11 +155,44 @@ export default {
           this.isIOS = true;
           this.isAND = false;
         }
+        
+      //微信浏览器 返回事件
+      pushHistory();  
+      let that = this;
+      window.addEventListener("popstate", function(e) {  
+            that.forbiddenReback();
+
+      }, false);  
+    
+      function pushHistory() {  
+          var state = {  
+              title: "",  
+              url: ""  
+          };  
+          window.history.pushState(state, state.title, state.url);  
+      }
     }
 }
 </script>
 
 <style scoped>
+/* 遮罩层*/
+.overlay{
+  position:fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.7);
+  width:100%;
+  height: 100%;
+}
+.arrow{
+  width: 4.5rem;
+  position:absolute;
+  right: 1rem;
+  top: 0.8rem;
+}
+/* 遮罩层*/
+
 #newauthentication {
   width: 100%;
   height: 100%;
@@ -106,12 +213,18 @@ export default {
   font-size: 0.4533rem;
   line-height: 1.28rem;
   border-radius: 0.0533rem;
-  margin: 0 auto;
+  margin: 2.4rem auto 0.2667rem ;
   color: #000000;
   background: #F8E71C;
   text-align: center;
   font-family: PingFangSC-Regular;
 }
+.tip{
+  color: #AAAAAA;
+  text-align: center;
+  font-family: PingFangSC-Regular;
+}  
+
 .img{
   text-align: center;
 }
@@ -128,17 +241,16 @@ export default {
 }
 .p-img{
   text-align: center;
+  margin-top: 2.4rem;
 }
 .content .p-img img{
   width: 1.6rem;
   height: 1.6rem;
-  margin-top: 2.4rem;
   margin-bottom: 0.4rem;
 }
 .content2 .p-img img{
   width: 1.6rem;
   height: 1.6rem;
-  margin-top: 0.8rem;
   margin-bottom: 0.4rem;
 }
 .title{
@@ -169,7 +281,7 @@ export default {
   color: #aaa;
   font-size: 0.3733rem;
   line-height: 0.3733rem;
-  margin-bottom: 2.4rem;
+  /*margin-bottom: 2.4rem;*/
   text-align: center;
   font-family: PingFangSC-Light;
 }
@@ -188,7 +300,6 @@ export default {
   color: #aaa;
   font-size: 0.3733rem;
   line-height: 0.3733rem;
-  margin-bottom: 1.3333rem;
   text-align: center;
   font-family: PingFangSC-Light;
 }
@@ -240,7 +351,7 @@ export default {
   border: 0.0533rem solid #BBAB71;
   border-radius: 0.2667rem;
   position: absolute;
-  top: 5.1733rem;
+  top: 4.4rem;
   bottom: 7.84rem;
 }
 
@@ -277,6 +388,67 @@ export default {
   margin-top: 0.78rem;
   margin-left: 0.4rem;
 }
+
+/*重复认证弹窗*/
+.reVolidateModal {
+  width: 100%;
+  height: 100%;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+.reVolidateModal .reVolidate {
+  width: 8.9333rem;
+  height: 4.7733rem;
+  margin-left: 0.5333rem;
+  margin-right: 0.5333rem;
+  background: #2B2B2B;
+  border: 0.0533rem solid #BBAB71;
+  border-radius: 0.2667rem;
+  position: absolute;
+  top: 3.84rem;
+  bottom: 9.1733rem;
+}
+.reVolidateModal .reVolidate #modal .titleListen {
+  font-family: PingFangSC-Light;
+  font-size: 0.5333rem;
+  color: #FFFFFF;
+  line-height: 0.5333rem;
+  text-align: center;
+  margin-top: 0.5333rem;
+}
+
+.reVolidateModal .reVolidate #modal .contentListen {
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+  line-height: 0.6933rem;
+  text-align: center;
+  margin-top: 0.5333rem;
+}
+
+.reVolidateModal .reVolidate #modal .Btn {
+    width: 8.1333rem;
+    height: 1.28rem;
+    background: #2B2B2B;
+    font-family: PingFangSC-Regular;
+    font-size: 0.4533rem;
+    color: #000000;
+    line-height: 0.4533rem;
+    margin-top: 0.6667rem;
+    margin-left: 0.4rem;
+    border-radius: 0.0533rem;
+    background: #F8E71C;
+    border: none;
+}
+
+
 
 </style>
 

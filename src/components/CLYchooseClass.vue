@@ -1,98 +1,203 @@
 <template>
-    <!-- 班主任 有班级 并选择班级认证 -->
   <div id="clychooseClass">
         <p class="leadTitle">您是{{ num }}个班级班主任, 请选择:</p>
-        
-        <!--   展示已经认证好了的班级  -->
-        <!-- <ul>
-            <li v-if="isCompleteClass" v-for="item in AtteCompleteClass" :key="item.index" 
-                          class="classList"   @click="getDetail">
-                <span class="className"> {{ item.name }}</span>  
-                <span> ========></span>
-                <span class="className"> {{ item.teamName }} </span>
-                <span class="more"></span>
-            </li>
-        </ul> -->
-        
-         <!--  展示还没有认证的班级  -->
         <ul>
-            <li v-for="item in classList" :key="item.index" class="classList" @click="getMore">
-             <span class="className"> {{ item.name }}</span> 
-             <span class="classTeam" > 的对应班级</span>   
-             <span class="more" ></span>
+            <li v-for="(item,index) in classList" :key="index" class="classList" @click="getMore(item,index)">
+               <span class="className"> {{ item.class_name }}</span> 
+               <img v-show="item.isOver" class="vip"  src="/static/images/vip.png" />
+               <span class="classTeam"> {{ item.className | teacherName }}</span>   
+               <img v-show="item.isOver" class="over"  src='/static/images/over.png'>
+               <img src="/static/images/more.png" class="more" />
             </li>
         </ul>
-
-      <button id="referName" :disabled="dis"  @click="classRefer">认证班级</button>
+      <button :class="!dis?'referBtn':''" @click="referBtn"  class="referName" :disabled="dis">认证班级</button>
   </div>
 </template>
+
 <script>
 export default {
     name:'clychooseClass',
     data(){
         return {
-            num:'',     // 数量
-            classList:[], // 所有班级列表
-            dis:true,   // 按钮样式
-            isCompleteClass: true, //  是否完成了班级认证 
-            // AtteCompleteClass:[], // 完成认证
-            teamName:'',  // 认证班级的名称
+            num:'',       
+            teamName:'',         // 认证班级的名称
+            havenListShow:false, // 展示已经认证好的班级,
+            id:1,                // 接收从userName 组件传过来的userId
+            CLYTogetClassId:'',  // 接收从getClass 传过来的认证好了的班级id
+            classListShow:true,
+            arr:[],
+            bindClass:{
+              class_id:'',
+              xhb_class_token:''
+            },
+            dis: true,
+            classList: [],
+            index:'',
+            detail:'',
+            cur: null,
         }
+    },
+    filters:{
+      teacherName(value){
+        if(value.length > 5){
+            return value.split(' ').join('').slice(0,2) + '...'+value.split(' ').join('').slice(-3,value.length);
+         }return value
+      }
     },
     computed:{
-        AtteCompleteClass(){ 
-             
-             return this.$store.state.getItems;   
-
-        }
+      // classList(){
+      //     if(this.$store.state.res1.length){
+      //         return  this.$store.state.res1;
+      //     }else {
+      //         return JSON.parse(localStorage.getItem('this.$store.state.res1'));
+      //     }
+      // }
     },
     methods:{
-        getMore(){
-             // console.log("获取更多")  // 跳转到 选择班级组件
-             console.log(this.classList)
-            this.$router.push({ path:'/getClass',query:{list:this.classList,num:this.num}});
+        // getMore(id){             
+        //     console.log("userID=",id);
+        //     this.$router.push({ path:'/getClass',query:{userId:id}});
+        // },
+        // getDetail(passId){             
+        //     this.$router.push({path:'/getClass',query:{userId:passId}});
+        // },
+        getMore(o,i) { //跳转到对应班级绑定页面
+          if(this.classList[i].isOver==true){ //判断是否点击了已经绑定过的班级
+            var txt = sessionStorage.getItem(i);
+            var word = o.className;
+            this.$router.push({ path:'/getClass',query:{index:i,txt:txt,flag:'yes',word:word}});
+          }
+          else{
+            this.$router.push({ path:'/getClass',query:{index:i}}); //点击的时候带上对应的下标
+          }
         },
-
-        getDetail(){ //  认证完成之后点击展示 绑定的班级详细信息 
-            alert("获取详细信息!")
+        classRefer() {  // 班级确认
+            // for(var i = 0; i<this.$store.state.res1.length; i++){
+            //     var item = sessionStorage.getItem(i);
+            //     console.log('item。。。:',item);
+            //     this.bindClass.class_id = this.$store.state.res1[i].class_id;
+            //     //this.bindClass.xhb_class_token = this.$store.state.res2[i].id;
+            //     this.arr.push(this.bindClass);
+            //     console.log('this.arr:',this.arr);
+            // }
+            // this.axios.post('/h5/index/bindClass',{ 
+            //       bind_class : JSON.stringify(this.arr),
+            //       teacher_id : sessionStorage.getItem('teacher_id'),
+            //       phone : sessionStorage.getItem('phone'),
+            //       user_token : sessionStorage.getItem('user_token')
+            //     })
+            //     .then(res => {
+            //       console.log('bindClass:',res);
+            //       if(res.data.response){
+            //           this.$router.push({path:'/PassOk'});
+            //       }
+            //       if(res.data.error_response){
+            //           console.log(res.data.error_response.msg);
+            //       }
+            //     })
+            //     .catch(err => {
+            //       console.log('err:',err);
+            //     })
         },
-        classRefer(){  // 班级确认
-            // 这里判断是否所有的班级都认证了,如果都认证了,按钮的状态为可点击,否则是不可点击状态
-           
+        referBtn() {
+          console.log('认证...');
+          for(var i = 0; i<this.$store.state.res1.length; i++){
+                var obj = {class_id:'',xhb_class_token:''};
+                var str = sessionStorage.getItem(i);
+                var item = this.$store.state.res2.find( (datum)=>datum.code==str );
+                //console.log('item:',item.id);
+                obj.class_id = this.$store.state.res1[i].class_id;
+                obj.xhb_class_token = item.id;
+                //this.bindClass.class_id = this.$store.state.res1[i].class_id;
+                //this.bindClass.xhb_class_token = item.id;
+                console.log('obj:',obj);
+                this.arr.push(obj);
+          }
 
+          //    暂时先不认证
+                console.log('this.arr:',this.arr);
+                this.axios.post('/h5/index/bindClass',{ 
+                  bind_class : JSON.stringify(this.arr),
+                  teacher_id : sessionStorage.getItem('teacher_id'),
+                  phone : sessionStorage.getItem('phone'),
+                  user_token : sessionStorage.getItem('user_token')
+                })
+                .then(res => {
+                  console.log('bindClass:',res);
+                  if(res.data.response){
+                      this.$router.push({path:'/PassOk'});
+                  }
+                  if(res.data.error_response){
+                      console.log(res.data.error_response.msg);
+                  }
+                })
+                .catch(err => {
+                  console.log('err:',err);
+                })
         }
+    },
+    created() {
+        this.classList = this.$store.state.res1; // 从store中获取数据
+        this.num = this.$store.state.res1.length;
+        var result;
+        if(this.$store.state.res1.length){
+          result = this.$store.state.res1.every(function(el){
+              if(el.isOver){
+                return true;
+              }  
+          });
+        }
+        if(result){
+          this.dis = false;
+        }
+
+        // for(var i=0;i<this.classList.length;i++){
+        //   if(this.classList[i].isOver==false){
+        //     this.dis = false;
+        //     console.log(this.dis);
+        //   }else{
+        //     this.dis=true;
+        //     console.log(this.dis);
+        //   }
+        // }
+
     },
     mounted(){
         document.title = "认证班级";
+        // 判断num 
+        // if(this.$store.state.res1.length){
+        //     this.num = this.$store.state.res1.length;
+        // }
+        // else{
+        //   this.num = JSON.parse(localStorage.getItem('this.$store.state.res1')).length;
+        // }
 
-        console.log(this.$route)
-        this.num = this.$route.query.num;
-        this.classList = this.$route.query.classList;
-        // console.log ("this.classList=",this.classList) 
-        // console.log ("this.num=",this.num) 
-
-
-        // 认证成功 跳转回来 
-        console.log("跳转回来=",this.$route)
-        console.log("跳转回来this.$route.params=",this.$route.params)
-        // this.AtteCompleteClass = this.$route.params
-        this.isCompleteClass = true
-        console.log("跳转回来之后的classList=",this.classList)
+        // 认证班级按钮的显示隐藏
+        // var result;
+        // if(this.$store.state.res1.length){
+        //     result = this.$store.state.res1.every(function(el){
+        //         if(el.symbol){
+        //           return true;
+        //         }  
+        //     });
+        // }else {
+        //   var resultObj = JSON.parse(localStorage.getItem('this.$store.state.res1'));
+        //     result = resultObj.every(function(el){
+        //         if(el.symbol){
+        //           return true;
+        //         }  
+        //     });
+        // }
+        // if(result){
+        //   this.dis = false;
+        // }
     }
 }
 </script>
+
 <style scoped>
 
-#clychooseClass .leadTitle {
-  font-family: PingFangSC-Light;
-  font-size: 0.3733rem;
-  color: #888888;
-  line-height: 0.3733rem;
-  margin-top: 0.5333rem;
-  margin-left: 0.5333rem;
-}
-
-#clychooseClass .classList {
+.havenList {
   width: 9.2rem;
   height: 1.8667rem;
   background: #363636;
@@ -103,7 +208,41 @@ export default {
   position: relative;
 }
 
-#clychooseClass .classList .className {
+.vip {
+  display: inline-block;
+  width:0.64rem;
+  height: 0.64rem;
+}
+
+.over {
+  width: 1.3067rem;
+  right: 0.8107rem;
+  position: absolute;
+}
+
+.leadTitle {
+  font-family: PingFangSC-Light;
+  font-size: 0.3733rem;
+  color: #888888;
+  line-height: 0.3733rem;
+  margin-top: 0.5333rem;
+  margin-left: 0.5333rem;
+}
+
+.classList {
+  width: 9.2rem;
+  height: 1.8667rem;
+  background: #363636;
+  border-radius: 0.0533rem;
+  line-height: 1.8667rem;
+  margin-top: 0.5333rem;
+  margin-left: 0.4rem;
+  position: relative;
+  display:flex;
+  align-items: center;
+}
+
+.className {
   margin-left: 0.4rem;
   margin-right: 0.2667rem;
   font-family: PingFangSC-Regular;
@@ -111,31 +250,36 @@ export default {
   color: #FFFFFF;
   line-height: 0.4533rem;
 }
+
 .classTeam{
-  font-family: PingFangSC-Light;
-  font-size: 0.4533rem;
   color: #AAAAAA;
+  width: 2.8rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 0.4533rem;
   line-height: 0.4533rem;
+  margin-left: 0.2133rem;
+  font-family: PingFangSC-Light;
 }
-#clychooseClass .classList .more {
+
+.more {
   position: absolute;
   top: 0.7467rem;
   left: 8.5867rem;
-  display: inline-block;
   width: 0.2133rem;
   height: 0.3733rem;
-  line-height: 0.4533rem;
-  background-size:0.2133rem  0.3733rem;
-  background:url('../../static/images/more.png') no-repeat center;
+  display: inline-block;
 }
 
-#clychooseClass #referName {
+.referName {
   width: 9.2rem;
   height: 1.28rem;
   margin-left: 0.4rem;
   position: fixed;
-  bottom: 60px;
+  bottom: 0.8rem;
   border-radius: 0.0533rem;
+  border: none;
   background: #AAAAAA;
   font-family: PingFangSC-Regular;
   font-size: 0.4533rem;
@@ -143,51 +287,9 @@ export default {
   line-height: 0.4533rem;
 }
 
-/*#clychooseClass #AttestationComple {
-  background: rgba(0, 0, 0, 0.1);
+.referBtn{
+  background: #F8E71C;
 }
-
-#clychooseClass #AttestationComple #leadTitle {
-  font-size: 16px;
-  font-weight: 500;
-  background: rgba(0, 0, 0, 0.2);
-  padding-top: 20px;
-  padding-bottom: 20px;
-  padding-left: 20px;
-}
-*/
-/*#clychooseClass #AttestationComple .classList {
-  position: relative;
-  font-size: 16px;
-  height: 80px;
-  line-height: 80px;
-  padding-left: 40px;
-  padding-right: 60px;
-  margin-bottom: 10px;
-  background: rgba(0, 0, 0, 0.1);
-}
-
-#clychooseClass #AttestationComple .classList .className {
-  font-weight: bold;
-}
-
-#clychooseClass #AttestationComple .classList .more {
-  font-size: 20px;
-  position: absolute;
-  right: 50px;
-}
-
-#clychooseClass #AttestationComple #AttestationComple {
-  width: 80%;
-  margin-left: 10%;
-  position: fixed;
-  bottom: 80px;
-  border-radius: 25px;
-  background: rgba(0, 0, 0, 0.5);
-  color: orangered;
-}
-*/
-
 
 </style>
 

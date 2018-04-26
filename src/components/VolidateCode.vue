@@ -1,12 +1,12 @@
 <template>
     <div id="volidateCode">
         <div class="head">
-            <div class="left">
-                <img :src="imgSrc">
-            </div>
-            <div class="right">
-                {{ title }} 
-            </div>
+          <div class="left">
+              <img :src="imgSrc">
+          </div>
+          <div :class="isHeight?'height1':'height2'" class="right">
+              <span>{{ title }}</span>
+          </div>
         </div>
         <div class="content">
             <p class="tip" v-if="YZM">短信验证码已发送至 {{ number | value }} </p>
@@ -16,20 +16,20 @@
                     @keyup="codeNumber" v-on:input="reCredNumFocus" />
 
             <span class="volidateNum" @click="regetNum" v-if="reNum">重发短信验证码</span>
-
-            <p v-show="listenCode" class="listencode">收不到验证码?
-                <span  v-show="listenCode" class="getListen" @click="getListenCode">接听语音验证码</span>
-            </p>
-            <!--  div  占位符 -->
-            <div v-show="!listenCode" class="listencode"></div>
-
-            <p class="telError"  v-if="isShowCode">
-                <span class="telPhone" @click="clearCode" v-if="isShowCode">
-                  <!-- <img src="/static/images/warn.png" alt="!"> -->
-                </span>
+            
+            <div class="box">
+              <div class="telError" :class="isShowCode?'':'hidden'">
+                <img src="/static/images/warn.png" alt="!">
                 <span class="rightPhone">验证码错误</span>
-            </p>
-            <span class="volidateNum"  v-show="isTimer">{{ time }} s</span>
+              </div>
+              <div v-show="listenCode" class="listencode">收不到验证码?
+                <span  v-show="listenCode" class="getListen" @click="getListenCode">接听语音验证码</span>
+              </div>
+            </div>
+            
+            <!--  div  占位符 -->
+            <!-- <div v-show="!listenCode" class="listencode"></div> -->
+            <span class="volidateNum"  v-show="isTimer">{{ time }}s</span>
             <button :class="!dis ? 'referBtn': '' " :disabled="dis" class="referCode"   @click="codePromise" >提交</button>
         </div>
         
@@ -52,7 +52,7 @@
         <div class="pushfail">
             <div id="codeFailModal" >
               <p class="title">验证码发送失败</p>
-              <p class="content-p">验证码发送失败, 请稍后重试</p>
+              <p class="content-p">验证码发送失败,  请稍后重试</p>
               <div class="btn" @click="codeFailHidden">我知道啦</div>
             </div>
         </div>
@@ -62,11 +62,7 @@
 
 
 <script>
-import imgSrc from  '../../static/images/logo.jpg'
-import axios from 'axios'
 import $ from 'jquery'
-import api from '../api/api'
-// import codeFail from './codeFail'
 import overCount from './overCount'
 import userName from './userName'
 
@@ -77,26 +73,27 @@ export default {
     },
     data(){
         return {
-                imgSrc:imgSrc,
+                imgSrc:sessionStorage.getItem('imgSrc'),
                 title:'',
                 reCredNum:'',
                 YZM:false,
                 ListenYzm:false,  // 语音验证码
-                number:null,
+                number:'',
                 time:null,
+                timer:null,
                 reNum:false,
                 isTimer:false,
                 count:0,
                 listenCode:false,
                 isShowCode:false,
-                isCodeFail:false,   // 验证码发送错误
+                isCodeFail:false,   // 验证码发送失败
                 codeOverTime:'验证码发送次数已达上限',
                 helpMessage:'您填写的信息可以帮助我们及时更正哦',
                 txt:'验证码累计错误已达上线',
                 dis:true,
                 getCodeNum:0,   // 记录获取验证码次数, 到达10次 就进入反馈界面
                 isCodeFailShow:false,  // 语音验证码
-
+                isHeight:false,
         }
     },
     filters:{ // 过滤
@@ -105,6 +102,35 @@ export default {
         }
     },
     methods:{
+        getVolidateCode(){
+          // 刚刚进入这个组件  就获取验证码
+          this.axios.post('/h5/index/sendMessageCode',{
+                phone:sessionStorage.getItem('phone')
+          })
+          .then(res => {
+            console.log('sendMessageCode:',res);
+            //***** 本地打开测试 *****//
+            this.ShowNumber();  
+            //***** 本地打开测试 *****//
+            if(res.data.response){
+                //this.ShowNumber();
+            }
+            if(res.data.error_response){
+              sessionStorage.setItem('school_id',res.data.error_response.school_id);
+              if(res.data.error_response.code==213){
+                this.reNum = true;
+                this.isCodeFail = true;
+              }else if(res.data.error_response.code==210){
+                 console.log("验证码发送次数已达上限");
+                 sessionStorage.setItem('keyword',res.data.error_response.keyword);
+                 this.$router.push({path:'/overCount',query:{title:this.codeOverTime,helpMessage:this.helpMessage}});
+                }
+            }
+          })
+          .catch(err => {
+            console.log('err:',err);
+          })
+        },
         codeFailHidden(){ // 验证码发送失败弹窗
             this.isCodeFail = false;
         },
@@ -116,18 +142,15 @@ export default {
         },
         
         reCredNumFocus(){    // 验证码输入框 焦点事件
-
             if(this.reCredNum.length > 0){
-
                 $('.VolidateCode').addClass('hot');
             }
             else{
                 $('.VolidateCode').removeClass('hot');
             }
-
+            
             if(this.reCredNum.length == 4 ){  
                 this.dis = false;
-
             }
             else{
                 this.dis = true;
@@ -136,50 +159,39 @@ export default {
             }
         },
         codeNumber(){//禁止输入非数字
-          this.reCredNum = this.reCredNum.replace(/[^\d]/g,'');
+          //console.log('暂时不限制格式..');
+          // this.reCredNum = this.reCredNum.replace(/[^\d]/g,'');
         },
         getListenCode(){  // 获取语音验证码
             this.isCodeFailShow = true;
         },
-        
         regetNum(){ // 重新获取短信验证码
             this.reNum = false;
             this.YZM = true;
             this.ListenYzm = false;
-            api.myGet("users",{id:'1'})
-    				   .then(res => {
-                    this.ShowNumber();
-                    // this.count++;
-                    // if(this.count > 0){
-                    //     console.log('this.count:',this.count);
-                    //     this.listenCode = true;
-                    // }
-                    if(this.count > 4){ // 每天最多可以获取5次验证码
-                        console.log("验证码发送次数已达上限");
-                        this.$router.push({path:'/overCount',query:{title:this.codeOverTime,helpMessage:this.helpMessage}});
-                    }
-    				   })
-    				   .catch(err => {
-      					   // 手机号码验证错误
-      					   console.log(err);
-                   $('.VolidateCode').addClass('hot');
-    				   })
+            this.getVolidateCode();  
         },
         ShowNumber(){  // 显示倒计时
-           clearInterval(timer)   //调用定时器之前先清除定时器
+           clearInterval(this.timer)   //调用定时器之前先清除定时器
             this.isTimer = true;
             this.time = 60;
-            var timer = setInterval (() => {
+            this.count++;
+            console.log('验证码发送次数:',this.count);
+            if(this.count > 5){ // 每天最多可以获取5次验证码
+                console.log("验证码发送次数已达上限");
+                this.$router.push({path:'/overCount',query:{title:this.codeOverTime,helpMessage:this.helpMessage}});
+              }
+            this.timer = setInterval (() => {
                 this.time -= 10;
                 if(this.time <= 0){
-                    clearInterval(timer);  // 清除定时器
+                    clearInterval(this.timer);  // 清除定时器
                     this.isTimer = false;
                     this.reNum = true;
-                    this.count++;
-                      console.log('this.count:',this.count);
+                    
                     if(this.count > 1){
                         this.listenCode = true;
                     }
+                    
                 }
             },1000)
         },
@@ -189,8 +201,11 @@ export default {
             //this.reNum = false; 
         },
         know(){  // 请求语音验证码 点击 好的 
-            api.myGet("users",{id:'1'}) // 点击 好的  语音验证码请求数据返回成功  
+            this.axios.post('/h5/index/sendvoicecode',{
+                phone:sessionStorage.getItem('phone')
+            })
             .then(res => {
+              console.log('sendvoicecode:',res);
                 this.isCodeFailShow = false;  //语音短信码弹窗关闭
                 this.reNum = false;      //关闭重发验证码提示
                 this.ListenYzm = true;    
@@ -199,52 +214,56 @@ export default {
                 this.ShowNumber();
             })
             .catch(err => {
-              console.log(err)
+              console.log('err:',err);
             })
             
         },
         codePromise(){ // 验证码提交
-            api.myGet("users",{id:1,reCredNum:this.reCredNum}) 
-               .then(res => {
-                   // console.log(res[0].id)
-                    if(res[0].id == 1){  // 跳转到 userName
-                        this.$router.push({path:'/userName',query:{title:this.$route.query.title}})
-                    }
-
-                    if(res[0].id == 2){  // 验证码错误
-                      $('.VolidateCode').addClass('red')
-                        this.isShowCode = true
-                        this.getCodeNum ++ ;
-                        $(".rightPhone").html('验证码错误');
-                        console.log('验证码输入错误次数:',this.getCodeNum)
-                        if(this.getCodeNum > 9){   // 记录验证码输入错误的次数, 到达10次 就进入反馈界面
-                            console.log("验证码输入错误超过10次");
-                            this.$router.push({path:"/overCount",query:{title:this.txt,helpMessage:this.helpMessage}});
-                        } 
-                    }
-                     if(res[0].id==3){
-                        // 验证码发送失败
-                        this.isCodeFail = true;
-                    }
-               })  
-               .catch(err => {
-
-               })
+            console.log('输入的验证码:',this.reCredNum);
+            this.axios.post('/h5/index/checkCode',{
+                    phone:sessionStorage.getItem('phone'),
+                    code:this.reCredNum
+                })
+                .then(res => {
+                  console.log('checkcode:',res);
+                  if(res.data.response){
+                    this.$router.push({path:'/userName'})
+                  }
+                  if(res.data.error_response){
+                      sessionStorage.setItem('school_id',res.data.error_response.school_id);
+                      $('.VolidateCode').addClass('red');
+                      this.isShowCode = true;
+                      this.getCodeNum ++ ;
+                      $(".rightPhone").html('验证码错误');
+                      console.log('验证码输入错误次数:',this.getCodeNum)
+                      if(this.getCodeNum > 9){   // 记录验证码输入错误的次数, 到达10次 就进入反馈界面
+                          console.log("验证码输入错误超过10次");
+                          this.$router.push({path:"/overCount",query:{title:this.txt,helpMessage:this.helpMessage}});
+                      } 
+                  }
+                })  
+                .catch(err => {
+                    console.log('err:',err);
+                })
         }
     },
+    created(){
+        // this.getVolidateCode();
+    },
     mounted(){
-        // console.log(this.$route)
-        this.YZM = true
-        document.title = "填写验证码"
-        this.title = this.$route.query.title
-        this.number = this.$route.query.phone
+        this.YZM = true;
+        document.title = "填写验证码";
+        this.title = this.$route.query.title;
+        this.title.length > 14 ? this.isHeight=false : this.isHeight=true;
+        this.number = this.$route.query.phone;
 
-        if(sessionStorage.getItem('phone')){
-            this.ShowNumber();
+        if(sessionStorage.getItem('myphone')){
+            //this.ShowNumber();
+            this.getVolidateCode();
         }else{
           this.reNum = true   // 进入验证码界面就获取验证码.并且显示重新获取验证码提示
         }
-        sessionStorage.removeItem('phone')  // 防止刷新页面后出现倒计时, 刷新页面应该出现重新获取验证码
+        sessionStorage.removeItem('myphone')  // 防止刷新页面后出现倒计时, 刷新页面应该出现重新获取验证码
     }
 }
 </script>
@@ -272,7 +291,6 @@ export default {
   display: block;
 
 }
-
 .head .right {
   height: 1.44rem;
   width: 7.8667rem;
@@ -281,6 +299,11 @@ export default {
   font-family: PingFangSC-Regular;
   font-size: 0.4533rem;
   color: #FFFFFF;
+}
+.height1{
+  line-height: 1.44rem;
+}
+.height2{
   line-height: 0.6933rem;
 }
 /*   head end*/
@@ -288,6 +311,7 @@ export default {
 
 .content {
   width: 9.2rem;
+  margin-top:0.5333rem;
   margin-left:0.4rem;
   box-sizing: border-box;
   position: relative;
@@ -330,10 +354,11 @@ export default {
     text-indent:  0.1333rem;
     outline: none;
     border: none;
+    padding: 0;
     border-radius: 0;
     color: #fff;
     background: #2b2b2b;
-    border-bottom:  0.0267rem solid #555555;
+    border-bottom:  1px solid #555555;
 }
 
 .content .referCode {
@@ -347,7 +372,7 @@ export default {
     line-height: 0.4533rem;
     background: #888888;
     border-radius: 0.0533rem;
-    margin-top: 0.7467rem;
+    margin-top: 1.0133rem;
 }
 .content .referBtn{
   background: #F8E71C;
@@ -356,10 +381,10 @@ export default {
 
 /* 输入框动态样式*/
 .content .hot{  
-  border-bottom: 0.0533rem solid #AAAAAA;
+  border-bottom: 1px solid #AAAAAA;
 }
 .content .red{
-  border-bottom: 0.0533rem solid #FF6688;
+  border-bottom: 1px solid #FF6688;
 }
 .content .active{
   border: 1px solid #333;
@@ -375,26 +400,31 @@ export default {
   font-size: 0.32rem;
   color: #AAAAAA;
   line-height: 0.32rem;
-  margin-top: 0.5333rem;
-  margin-right: 0.6667rem;
-  margin-bottom: 0.7467rem;
+  margin-right: 0.2667rem;
+  margin-top: 0.2667rem;
 }
 
 .content .listencode .getListen {
   position: relative;
   font-family: PingFangSC-Regular;
   font-size: 0.32rem;
-  /*color: #000000;*/
   line-height: 0.32rem;
 }
-
+.box{
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
 .content .telError {
-  /*float: left;
-  margin-top: 0.2667rem;*/
-  position: absolute;
-  top:1.6rem;
-  line-height: 0.5333rem;
-  margin-left: 0.333rem;
+  margin-top: 0.2667rem;
+  display: flex;
+  align-items: center;
+}
+.telError img{
+  width: 0.2667rem;
+  height: 0.2667rem;
+  margin-right: 0.1333rem;
+  vertical-align: middle;
 }
 
 .content .telPhone {
@@ -404,9 +434,8 @@ export default {
     margin-left: -0.4rem;
     color: #FF6688 ;
     display: inline-block;
-    background-size: 0.2667rem  0.2667rem;
-    background: url('../../static/images/warn.png');
-    /*background: url('../../static/images/icon.jpg');*/
+    /*background-size: 0.2667rem 0.2667rem;*/
+    /*background: url('../../static/images/warn.png') no-repeat center;*/
     border-radius: 50%;
 
 }
@@ -537,7 +566,7 @@ export default {
   border: 0.0533rem solid #BBAB71;
   border-radius: 0.2667rem;
   position: absolute;
-  top: 5.1733rem;
+  top: 3.0667rem;
   bottom: 7.84rem;
 }
 .ListenCodeFail .Listenfail #modal .titleListen {
@@ -582,6 +611,9 @@ export default {
   
   background:#F8E71C;
   color: #000000;
+}
+.hidden{
+  opacity: 0.01;
 }
 
 </style>

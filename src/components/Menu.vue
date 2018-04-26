@@ -5,20 +5,20 @@
         <div class="left">
             <img :src="imgSrc">
         </div>
-        <div class="right">
+        <div :class="isHeight?'height1':'height2'" class="right">
             <span>{{ title }}</span>
         </div>
     </div>
     <!--  content  -->
     <div class="content">
-      <p class="tip" v-show="tip">无晓黑板账号请输入手机号</p>
+      <p class="tip" v-show="tip">无晓黑板账号请输入手机号</p >
       <input @keyup="tel" type="tel" placeholder="请输入晓黑板账号 / 手机号"  v-model="phone"
                v-on:input="focus" class="input"  maxlength=13 />
 
-      <p class="telError"  v-show="isRightNumber">
-        <span class="telPhone" @click="rightNumberTip" v-show="isRightNumber"><img src="/static/images/warn.png" alt="!"></span>
+      <div class="telError" :class="isRightNumber?'':'hidden'">
+        <img src="/static/images/warn.png" alt="!" />
         <span class="rightPhone">请输入正确的手机号码</span>
-      </p>
+      </div>
                
       <span class="telePhone" @click="clearTel" v-if="telNum"></span>
       <button :class="!btn?'referBtn':''" class="refer"  :disabled="btn" @click="telPromise" >提交</button>
@@ -28,36 +28,36 @@
     <div class="codeFail" v-if="isCodeFailShow" @click="codeFailKnow" >
         <div class="fail">
             <div id="codeFailModal" >
-              <p class="title">验证码发送失败</p>
-              <p class="content-p">验证码发送失败, 请稍后重试</p>
+              <p class="title">验证码发送失败</p >
+              <p class="content-p">验证码发送失败, 请稍后重试</p >
               <div class="btn" @click="codeFailKnow">我知道啦</div>
             </div>
         </div>
     </div>
-    
-  
 </div>
 </template>
 
 <script>
-import imgSrc from  '../../static/images/logo.jpg'
 import VolidateCode from './VolidateCode'
-import axios from 'axios'
 import $ from 'jquery'
-import api from '../api/api'
+
   export default {
     name:'myMenu',
+    meataInfo:{
+      title:'输入手机号'
+    },
     data(){
       return {
-        title:'苏州工业园二十一世纪实验幼儿园二期',  // 扫码进来后的标题
-        imgSrc:imgSrc,
+        title:'',
+        imgSrc:'',
         tip:true,
         phone:'',
         btn:true,
         isRightNumber:false,
         count:null,
         isCodeFailShow:false,
-        telNum:false,    // 控制手机号码输入框 右边的 x
+        telNum:false,// 控制手机号码输入框 右边的 x
+        isHeight:false,
       }
     },
     watch:{ // 监听phone
@@ -66,11 +66,6 @@ import api from '../api/api'
         }
     },
     methods:{
-      // ! 
-      rightNumberTip(){
-        
-      },
-      //  x
       clearTel(){
         this.phone = '';
         this.telNum = false;
@@ -90,7 +85,6 @@ import api from '../api/api'
           }
           if(this.phone.length == 13){
             this.btn = false;
-
           }else{
             this.btn = true;
             this.isRightNumber = false;
@@ -99,47 +93,40 @@ import api from '../api/api'
         }
       },
       telPromise(){  // 获取验证码
-            console.log('点击按钮了..');
-    //请求数据之前 要判断手机号是否合法
+          console.log('点击提交按钮');
+          //请求数据之前 要判断手机号是否合法
           let myphone = this.phone.split(' ').join('');
           if(!(/^1[3|4|5|7|8][0-9]\d{4,8}$/.test(myphone))) {
               this.isRightNumber = true;
-              console.log('myphone:',myphone);
+              console.log('输入的手机号:',myphone);
               $('.input').addClass('red');
               $('.rightPhone').html('请填写正确的手机号码');
               return;
           }
-  
-          api.myGet("users",{id:4})
-               .then(res => {
-                  console.log(res[0].id)         
-                  if(res[0].id == 1){   // 提示 该手机号已经加入其他学校
-                        this.isRightNumber = true;
-                        $('.input').addClass('red');
-                        $('.rightPhone').html('该手机号已经加入其他学校');
+          console.log('手机号:',myphone);
 
-                  }else if(res[0].id==2){ // 手机号码验证错误
-                        this.isRightNumber = true;
-                        $('.input').addClass('red');
-                        $('.rightPhone').html('请填写正确的手机号码');
-
-                  }else if(res[0].id==3){
-                        // 验证码发送失败
-                        this.isCodeFailShow = true;
-
-                  }else{
-                    //手机号码验证成功  跳转 到验证码界面
-
-                        sessionStorage.setItem("phone",this.phone);   // 将电话号码存储在 本地 
-                        this.$router.push({name:'VolidateCode',query:{title:this.title,phone:this.phone}});
-
-                  }
-         })
-         .catch(err => {
-           // 手机号码验证错误
-           //this.isRightNumber = true;
-            //$('.mint-cell').addClass('red');
-         })
+          this.axios.post('/h5/index/checkPhoneNumber',{
+                  phone: myphone,
+                })
+              .then(res => {
+                console.log('checkPhoneNumber:',res);
+                if(res.data.response){
+                  sessionStorage.setItem("phone",myphone);   // 将电话号码存储在 本地
+                  sessionStorage.setItem("myphone",myphone);   // 将电话号码存储在 本地
+                  this.$router.push({name:'VolidateCode',query:{title:this.title,phone:this.phone}});
+                }
+                if(res.data.error_response){
+                      this.isRightNumber = true;
+                      $('.input').addClass('red');
+                      $('.rightPhone').html(res.data.error_response.msg);
+                }
+              })
+              .catch(err => {
+                console.log('请求错误');
+                this.isCodeFailShow = true;
+                // 手机号码验证错误
+                //this.isRightNumber = true;
+              });
       },
       tel(){
         //禁止输入非数字
@@ -149,8 +136,20 @@ import api from '../api/api'
           this.isCodeFailShow = false;
       } 
     },
-      mounted(){
+    mounted(){
       document.title = "输入手机号";
+      this.axios.get('/h5/index/index?tcode='+ 16695090)
+          .then(res => {
+          //console.log('res:',res.data.response.school_info);
+            this.imgSrc = res.data.response.school_info.school_img;
+            this.title = res.data.response.school_info.school_name;
+            this.title.length > 14 ? this.isHeight=false : this.isHeight=true;
+            sessionStorage.setItem("imgSrc",this.imgSrc);
+            sessionStorage.setItem("title",this.title);
+          })
+          .catch(err => {
+            console.log('err:',err);
+          })
     }
   }
 </script>
@@ -159,16 +158,13 @@ import api from '../api/api'
 button{
   outline: none;
 }
-#myMenu{
-    
-    
-}
 .head {
   width:9.2rem;
   height: 2.6667rem;
   margin-top:0.5333rem;
   margin-left:0.4rem;
   display: flex;
+  justify-content: center;
   background: #363636;
 }
 .head .left{
@@ -194,6 +190,11 @@ button{
   font-family: PingFangSC-Regular;
   font-size: 0.4533rem;
   color: #FFFFFF;
+}
+.height1{
+  line-height: 1.44rem;
+}
+.height2{
   line-height: 0.6933rem;
 }
 /*   head end*/
@@ -227,7 +228,7 @@ button{
   border: none;
   color: #fff;
   background: #2b2b2b;
-  border-bottom: 0.0267rem solid #555555;
+  border-bottom: 1px solid #555555;
   border-radius: 0;
 }
 
@@ -246,10 +247,10 @@ button{
     border-radius: 50%;
 }
 .content .hot{
-  border-bottom: 0.0267rem solid #AAAAAA;
+  border-bottom: 1px solid #AAAAAA;
 }
 .content .red{
-  border-bottom: 0.0267rem solid #FF6688;
+  border-bottom: 1px solid #FF6688;
 }
 
 .content input::-webkit-input-placeholder {
@@ -270,8 +271,7 @@ button{
   line-height: 0.4533rem;
   background: #888888;
   border-radius: 0.0533rem;
-  margin-top: 1.6rem;
-
+  margin-top: 1.0133rem;
 }
 
 .content .referBtn{
@@ -279,33 +279,24 @@ button{
 }
 
 .content .telError {
-  float: left;
   margin-top: 0.2667rem;
-  line-height: 0.5333rem;
+  display: flex;
+  align-items: center;
 }
-
-.content .telPhone {
-  display: inline-block;
+.hidden{
+  opacity: 0.01;
+}
+.telError img{
   width: 0.2667rem;
   height: 0.2667rem;
-  margin: 0 0.0533rem 0 0;
-  text-align: center;
-  color: #000;
-  border-radius: 50%;
-  /*background-size: 0.1333rem;*/
-  /*background: url('../../static/images/warn.png') no-repeat center;*/
-}
-.telPhone img{
-  float: left;
-  display: block;
-  width: 0.2667rem;
-  height: 0.2667rem;
-  margin-top: 0.0267rem;
+  margin-right: 0.1333rem;
+  vertical-align: middle;
 }
 
 .content .telError .rightPhone {
   font-size: 0.32rem;
   color: #FF6688;
+  margin-left: 0.0533rem;
 }
 
 /* 验证码错误弹窗*/

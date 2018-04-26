@@ -1,59 +1,62 @@
 <template>
   <div id="getClass">
-    <ul>
-      <li class="checkList" v-for='option in options' :key="option.index">
-        <div class="checkbox-group ">
-          <input type="radio" :id="option.name" name="classChoose" :value="option.name" 
-                     v-model="team"  @change="change" />
-          <label :for="option.name"></label>
-        </div>
-        <div class="right">
-          <div class="logo">
-              <img src="" alt="">
+    <div class="box">
+      <ul class="bind">
+        <li v-for="(item,index) in list"  :key="item.index" v-show="item.isOver">
+          <div class="bind-div">
+            <img class="vip" src="/static/images/vip.png" />
+            <div class="cont"><p class="p-top">{{item.class_name}} 已对应</p><p class="p-bot">{{item.className|tosix}}</p></div>
+            <div class="cancle"><img src="/static/images/ic.png" /><span @click="unbind(index)">取消对应</span></div>
           </div>
-          <div class="title">
-              <p class="className">
-                <span class="classTitle">{{ teamName}} </span>
-              </p>
+        </li>
+      </ul>
 
-              <p class="classNumber">
-                  <span class="classNum common"></span> 
-                  <span class="banjiNumber">{{ banjiNumber }}</span>
-                  <span class="classCreater common"></span> 
-                  <span>{{ banjichuangjianzhe }}</span>
-                  <span class="classMembers common"></span>
-                  <span>{{ Members }}</span>
+      <ul class="unbind">
+        <li v-for="(item,index) in list2" :key="item.index" v-show="!item.hadBind">
+          <div class="unbind-div">
+            <div @click="handleCheck($event,index)" class="left"></div>
+            <img class="logo" src="/static/images/logo.jpg" />
+            <div class="right">
+              <p class="p1">{{ item.title | teacherName }}</p>
+              <p class="p2">
+                <img src="/static/images/p1.png" /><span class="num1">{{item.code}}</span>
+                <img src="/static/images/p2.png" /><span>{{item.teacherName|sliceValue}}</span>
+                <img src="/static/images/p3.png" /><span>{{item.membersCount}}</span>
               </p>
-          </div> 
-        </div> 
-      </li>
-    </ul>
-    <ul>
-      <li class="creatClass">
-          <div id="Clcreateclass">
-              <input type="radio" name="classChoose" id="create" v-model="team">
-              <label for="create"></label>
+            </div>
           </div>
-          <div class="rightClass" >
-              <label for="create" class="create">创建新班级认证</label>
-          </div>
-      </li>
-    </ul> 
+        </li>
+      </ul> 
 
+    <!--  创建班级去认证 -->
+      <div class="create">
+        <div @click="handleCreateCheck($event)" class="left"></div>
+        <div class="txt">创建新班级去认证</div>
+      </div>
+    </div>
+
+    <!--  顶替弹窗 -->
     <div class="modalShow" v-if="isReCertificationShow" @click="ReCertificationShow" >
         <div class="modal">
-            <ReCertification :accountTile="accountTile" :classTitle="classTitle" 
-                :classUser="classUser" :accountReplace="accountReplace"
-                     @ReCertification="ReCertificationShow">
-            </ReCertification>
+            <div id="ReCertification">
+                <p class="content">{{ accountTile}}</p>
+                <p class=" titleClass">{{ classTitle }}</p>
+                <p class="saveTip"><span>已被</span>  <span class="name">{{ classUser }}</span><span>老师认证过</span></p>
+                <p class="replace">{{ accountReplace }}</p>
+                <button class="Btn Btn-left" @click="giveUp">取消</button>
+                <button class="Btn Btn-rigth" @click="Replace">顶替Ta</button>
+            </div>
         </div>
     </div>
-    <mt-button id="referClass" :disabled="dis" size="large" @click="getClassPromise" >确认</mt-button>
-    </div>
+
+    <button @click="bindBtn" :class="!ischeck||flag?'active':''" class="referClass" :disabled="ischeck">确认</button>
+
+  </div>
 </template>
 <script>
+
 import axios from 'axios'
-import api from '../api/api'
+import $ from 'jquery'
 import ReCertification from './ReCertification'
 
 export default {
@@ -63,91 +66,272 @@ export default {
     },
     data(){
         return {
-            value:'',
-            radioValue:'',
-            num:null,
-            options:[],  //  
+            logoSrc:'',
+            getClassId:'',  // 接收从CLYchooseClass传过来的 整校班级id
             create:'',  // 选中  创建班级
-            team:'',    // 检测是否 有选择一个班级
-            teamName:'阳光中队',  // 班级名称
-            banjiNumber:'123654',   // 班级号
-            banjichuangjianzhe:'王姐姐',   //  班级创建者 如果不知道真实姓名下展示小黑板账号
-            Members:32  ,  // 班级中的人数
-            dis:true,    // 按钮disabled属性
+            team:false,    //   
             isReCertificationShow:false,  // 重新认证 班级已经被人认证了  顶替弹窗
             accountTile:'重新验证该班级',
             classTitle:'一年级二班',
-            classUser:'王宇娟' ,
-            accountReplace:'您是否要顶替Ta,成为该班级班主任'
+            classUser:'张老师' ,
+            accountReplace:'您是否要顶替Ta,成为该班级班主任',
+            valueId:'',
+            xhb_class_token:'',
+            num: 3,
+            txt: '',
+            dis: false,
+            isbind: true,
+            ischeck: true,
+            hasbind: null,
+            index:'',
+            list:[],
+            list2:[],
+            flag: null,
+            cur: null,
         }
     },
+    computed:{
+      classList() {
+          return this.$store.getters.getRes1;
+      },
+      classList2() {
+          return this.$store.getters.getRes2;
+      },
+      // optionList(){
+      //   if(this.$store.state.res2.length){
+      //     console.log('this.$store.state.res1=',this.$store.state.res1);
+      //     console.log('this.$store.state.res2=',this.$store.state.res2);
+      //       return  this.$store.state.res2;
+      //     }else {
+      //     // console.log('this.$store.state.res1=',JSON.parse(localStorage.getItem('this.$store.state.res2')));
+      //       return JSON.parse(localStorage.getItem('this.$store.state.res2'));
+      //     }
+      // }    
+    },
+    filters:{
+      sliceValue(value){
+         if(value.length > 4){
+            return value.split(' ').join('').slice(0,2) + '...'+value.split(' ').join('').slice(-2,value.length);
+         }return value
+      },
+      teacherName(value){
+        if(value.length > 12){
+            return value.split(' ').join('').slice(0,6) + '...'+value.split(' ').join('').slice(-6,value.length);
+         }return value
+      },
+      tosix(value){
+         if(value.length > 8){
+            return value.split(' ').join('').slice(0,4) + '...'+value.split(' ').join('').slice(-4,value.length);
+         }return value
+      },
+    },
     methods:{
-        getClassListData(){  // 请求数据
-            
-        },
-        getClassPromise(){ //  确认   
+        getClassPromise(){ //  确认按钮  
             /*
                 1.第一种情况: 如果该班级没有被其他的班主任认证    点击确认跳转到 前面 班主任列表查询页
                 2.第二种情况:如果在认证某一个班级的时候,他已经被其他老师认证过了,会提示弹窗
-                3.第三种情况，就是 班级认证完了，创建班级 
+                3.第三种情况:就是班级认证完了,创建班级 
             */
-            console.log('确认班级认证')
-            api.myGet("users",{id:'6'})
-                .then(res => {
-                    // console.log(res)
-                     // 请求接口,数据判断 
-                    if(res[0].id == 6){  // 第一种情况: 如果该班级没有被其他的班主任认证    点击确认跳转到 前面 查询 班主任的列表页
-                        let data = [{
-                            name: this.$route.query.list[0].name,
-                            num:this.num,
-                            teamName:this.teamName
-                        }]
-                        console.log("data=",data)
-                        this.$router.push({name:'CLYchooseClass',params:data})    
-                    }
+                if(this.team == '4'){
+                    alert('班主任创建班级');
+                    // 班主任 有晓黑板班级 再去创建班级 跳转组件
+                    //  请求接口 周日 来加班
+                    // this.$router.push({path:'/createClass',query:{index:this.getClassId}});
+                }else{
+                  // 选择班级认证
+                          if(this.$store.state.res2.length){
+                              this.xhb_class_token = this.$store.state.res2[this.idvalue].id
+                          }else {
+                              this.xhb_class_token = JSON.parse(localStorage.getItem('this.$store.state.res2'))[this.idvalue].id;
+                          }
 
-                    if(res[0].id == 4){   // 第二种情况:如果在认证某一个班级的时候,他已经被其他老师认证过了,会提示弹窗
-                         this.isReCertificationShow = true
-                    }
+                          this.axios.post('/h5/index/isClassBind',{
+                              xhb_class_token:this.xhb_class_token
+                            })
+                            .then(res => {
+                                // console.log('isClassBindres=',res);
+                                if(res.data.response){
+                                  this.$store.state.res1[this.getClassId].teamId = this.idvalue;
+                                  this.$store.state.res1[this.getClassId].name = this.$store.state.res2[this.idvalue].name;
+                                  this.$store.state.res1[this.getClassId].xhb_class_token = this.$store.state.res2[this.idvalue].id;
+                                  this.$store.state.res1[this.getClassId].symbol = true;
+                                  this.$store.state.res2[this.idvalue].teamShow = this.$store.state.res1[this.getClassId].class_name;
+                                  this.$store.state.res2[this.idvalue].vip = true;
+                                  // console.log('res2=',this.$store.state.res2);
+                                  // console.log('res1=',this.$store.state.res1);
+                                  localStorage.setItem('this.$store.state.res2',JSON.stringify(this.$store.state.res2));
+                                  localStorage.setItem('this.$store.state.res1',JSON.stringify(this.$store.state.res1));
 
-
-                    if(res[0].id == 7){ // 第三种情况，就是 班级认证完了，创建班级
-                        alert("开始创建班级")
-                        this.$router.push({name:'CreateClass'})
-                    }
-                })
-                .catch(err => {
-                    console.log(err)
-                })
+                                  this.$router.push({path:'/CLYchooseClass'});
+                                }
+                                // 该班级已经被其他老师绑定
+                                if(res.data.error_response){
+                                   alert('该班级已经被其他老师绑定');
+                                    this.isReCertificationShow = true
+                                    this.classUser = res.data.error_response.teacher_name;
+                                }
+                            })
+                            .catch(err => {
+                                console.log('isClassBinderr=',err);
+                            })   
+                }
         },
         change(){ // 单选框change事件
-          console.log(this.team)
-            if(this.team){
-                this.dis = false
-                document.querySelector("#referClass").style.background="rgba(0,0,0,0.6)"
+            if(this.team+1){
+                this.dis = false;
+                $(".referClass").addClass('active');
             }
         },
         ReCertificationShow(){  // 关闭被顶替的弹窗
-               this.isReCertificationShow = false
+            this.isReCertificationShow = false;
+        },
+        cancle(index){
+          // alert("取消已经认证过的班级,重新认证");
+          this.$store.state.res2[index].vip = false;
+          this.$store.state.res1[index].symbol = false;  
+          this.$store.state.res1[index].name = '的对应班级';
+        },
+        giveUp(){  // 取消
+            // 弹窗隐藏
+            this.isReCertificationShow = false;
+        },
+        Replace(){  // 顶替Ta
+            alert("顶替Ta");
+            console.log('this.idvalue=',thid.idvalue);
+            // this.$store.state.res1[this.getClassId].xhb_class_token = this.$store.state.res2[this.idvalue].id;
+            this.$router.push({path:'/CLYchooseClass'});
+        },
+      handleCheck(e,i) {  //选择班级按钮
+        var el = e.currentTarget;
+        $('.left').removeClass('no-bor');
+        $(el).addClass('no-bor');
+        this.ischeck = false;
+        this.team = false; 
+        this.valueId = i;
+        sessionStorage.setItem('valueId',i);
+        console.log('this.valueId:',this.valueId);
+
+        var p = $(el).parent().find('.p1').html();
+        console.log('选择了:',p);
+        console.log('res2[i].num1:',this.list2[i].code);
+        this.num1 = this.list2[i].code;
+        this.txt = p;
+      },
+      handleCreateCheck(e,string) {  //创建新班级按钮
+        var el = e.currentTarget;
+        $('.left').removeClass('no-bor');
+        $(el).addClass('no-bor');
+        this.ischeck = false;
+        this.team = true;
+
+      },
+      unbind(i) {  //取消对应按钮
+        console.log('解绑...');
+        var str = sessionStorage.getItem(i);
+        console.log('str:',str);
+        var item = this.list2.find( (datum)=>datum.code==str );
+        console.log('item:',item);
+        var data = {index1:i,index2:item.index};
+
+        this.$store.commit('unbindClass',data);
+
+        // this.$set(data,list[data.index1].isOver,false);
+        // this.$set(data,list2[data.index2].hadBind,false);
+        // this.$set(data,list[data.index1].className,'的对应班级');
+
+        // this.list[data.index1].isOver = false;
+        // this.list2[data.index2].hadBind = false;
+        // this.list[data.index1].className = '的对应班级';
+
+      },
+      bindBtn() {  //确认按钮
+        var oIndex = this.index;      // 记录整校班级 index
+        var detail = this.txt;
+        var num1 = this.num1;
+        if(this.team){  // 创建晓黑板班级去认证
+            this.$router.push({path:'/createClass',query:{index:oIndex}});
         }
+        else{ //  选择班级去认证
+
+           this.xhb_class_token = this.$store.state.res2[this.valueId].id;
+
+          //  console.log('this.xhb_class_token',this.xhb_class_token);
+          //  console.log('this.$store.state.res2=',this.$store.state.res2);
+          //  console.log('this.$store.state.res1=',this.$store.state.res1); 
+
+           this.axios.post('/h5/index/isClassBind',{
+                    xhb_class_token:this.xhb_class_token
+                }) 
+                .then(res => {
+                    this.$store.state.res1[oIndex].xhb_class_token = this.$store.state.res2[this.valueId].id;
+                    var obj = {index:oIndex,name:detail,sta:true,num1:num1};
+                    sessionStorage.setItem(oIndex,num1);            //保存当前对应的状态
+                    this.$store.commit('setClass',obj);               //更改store的数据
+                    this.$router.push({ path:'/CLYchooseClass',query:{index:this.index} }); //跳回去的时候保存这次的序号
+                    // 该班级已经被其他老师绑定
+                    if(res.data.error_response){
+                        alert('该班级已经被其他老师绑定');
+                        this.isReCertificationShow = true
+                        this.classUser = res.data.error_response.teacher_name;
+                    }
+                })
+                .catch(err => {
+                  console.log('err=',err);
+                })
+              
+        }
+      }
     },
-    mounted(){
-        document.title = '选择班级'
-        // 进入到这个组件  请求数据
-        // console.log('options:',this.options);
-        this.options = this.$route.query.list
-         this.num = this.$route.query.num
-         console.log(this.$route.query)
-         console.log(this.options);
+    created() {
+        this.list = this.$store.state.res1; //获取数据
+        this.list2 = this.$store.state.res2; //获取数据
+
+        this.index = this.$route.query.index;
+        
+        this.$route.query.flag ? this.flag=true : this.flag=false;
+
+         if(this.flag){
+          var str = this.$route.query.txt;
+          var item = this.list2.find( (datum)=>datum.code==str );
+          var obj = {index1: this.index,index2: item.index};
+          this.$store.commit('resetClass',obj);//先解绑
+      }
     },
+    mounted() {
+        document.title = '选择班级';
+        var oindex = this.index;
+        var num1 = this.$route.query.txt;
+        var word = this.$route.query.word;
+
+        if(this.$route.query.flag=='yes'){ // 找到上次绑定班级的默认选项
+          console.log('修改上次已经绑定过的班级');
+          var l = $('.num1').length;
+          var temp = 0;
+          for(var i=0;i<l;i++){
+            if($('.num1').eq(i).html()==num1){
+              temp=i;
+            }
+          }
+          $('.num1').eq(temp).parent().parent().prev().prev().addClass('no-bor');
+          this.txt = word;
+          this.num1 = num1;
+          this.ischeck = false;
+          this.valueId = '' || sessionStorage.getItem('valueId');
+        }
+    } 
+  
 }
 
 </script>
 
-
 <style scoped>
+/* new css 2018 4-20 */
 
-#getClass .checkList {
+.box {
+  min-height: 14.0rem;
+}
+
+.bind li {
   width: 9.2rem;
   height: 1.8667rem;
   background: #363636;
@@ -157,273 +341,162 @@ export default {
   position: relative;
 }
 
-
-/* 选择班级修饰input[type=radio]*/
-
-#getClass .checkList .checkbox-group {
-  width: 50px;
-  height: 100px;
-}
-
-.checkbox-group input {
-  display: none;
-  opacity: 0;
-}
-
-.checkbox-group input[type=radio]+label {
+.bind-div {
+  width: 100%;
+  height: 100%;
   display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  -ms-flex-align: center;
-  display: block;
-/*  line-height: 100px;
-  text-align: center;
-  width: 50px;
-  height: 100px;*/
-  /* background: red; */
+  align-items: center;
 }
 
-.checkbox-group input[type=radio]+label:before {
+.vip{
   width: 0.64rem;
-  height: 0.64rem;
-  display: inline-block;
-  line-height: 0.64rem;
-  content: '';
-  background: rgba(43,43,43,0.30);
   margin-left: 0.4rem;
   margin-right: 0.2667rem;
-  margin-top: 0.64rem;
-  color: #000;
-  border: 1px solid #FFFFFF;
-  border-radius: 50%;
 }
 
-.checkbox-group input[type=radio]:checked+label:before {
-  content: '';
-  background:url('../../static/images/radio.png') no-repeat center;
-  background-size: 0.64rem 0.64rem;
-  border-radius: 50%;
+.cont {
+  width: 5.3333rem;
 }
 
-
-/* 创建班级修饰input[type=radio]*/
-
-#getClass .checkList #Clcreateclass {
-  width: 60px;
-  height: 70px;
+.p-top {
+  color: #888;
+  width: 3.4rem;
+  font-size: 0.3733rem;
+  margin-bottom: 0.2667rem;
+  font-family: PingFangSC-Regular;
 }
 
-#Clcreateclass input {
-  display: none;
-  opacity: 0;
+.p-bot {
+  color: #fff;
+  font-size: 0.4533rem;
+  font-family: PingFangSC-Regular;
 }
 
-#Clcreateclass input[type=radio]+label {
+.cancle {
   display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  -ms-flex-align: center;
-  display: block;
-  line-height: 70px;
-  text-align: center;
-  width: 50px;
-  height: 70px;
-  background: red;
+  justify-content: center;
+  align-items: center;
+  width: 2.16rem;
+  height: 0.64rem;
+  margin-right: 0.4rem;
+  border: 1px solid #aaa;
+  border-radius: 2.6667rem;
 }
 
-#Clcreateclass input[type=radio]+label:before {
-  line-height: 20px;
-  display: inline-block;
-  width: 18px;
-  height: 18px;
-  margin-right: 8px;
-  content: '';
-  color: #fff;
-  border: 1px solid #dce4e6;
-  background-color: #f3f6f8;
-  border-radius: 50%;
+.cancle img {
+  width: 0.3rem;
+  margin-right: 0.1067rem;
 }
 
-#Clcreateclass input[type=radio]:checked+label:before {
-  content: '\2713';
-  color: #fff;
-  background-color: #31b968;
-  border-radius: 50%;
-  font-size: 16px;
-  text-align: center;
-  border-color: #31b968;
-}
-
-
-/* 创建班级修饰input[type=radio]*/
-
-#getClass .checkList .right {
-  position: absolute;
-  top: 0px;
-  right: 0;
-  height: 100px;
-  /*background: #ccc;*/
-  /*width: 300px;*/
-  margin-left: 0.1333rem;
-}
-
-#getClass .checkList .right .logo {
-  width: 1.3333rem;
-  height: 1.3333rem;
-  border-radius: 0.2667rem;
-  margin-top: 0.2667rem;
-  margin-right: 6.56rem;
-  background: url('../../static/images/logo.jpg');
-}
-
-#getClass .checkList .right .title {
+.cancle span {
+  color: #AAA;
+  font-size: 0.32rem;
   font-family: PingFangSC-Regular;
-  font-size: 0.4533rem;
-  color: #FFFFFF;
-  line-height: 0.4533rem;
-  position: absolute;
-  top: 0;
-  right: 1.0933rem;
 }
 
-#getClass .checkList .right .title .className {
-  font-size: 18px;
-  height: 50px;
-  line-height: 75px;
-}
-
-#getClass .checkList .right .title .className .classTitle {
-  display: inline-block;
-  font-family: PingFangSC-Regular;
-  font-size: 0.4533rem;
-  color: #FFFFFF;
-  line-height: 0.4533rem;
-  margin-top: 0.3733rem;
-
-}
-
-/*#getClass .checkList .right .title .className .num {
-  color: #666;
-  font-size: 16px;
-}*/
-.classNumber {
-  margin-top: 0.2667rem;
-}
-.banjiNumber{
-  margin-left: 0.1333rem;
-}
-#getClass .checkList .right .title .classNumber span {
-  font-family: PingFangSC-Light;
-  font-size: 0.3733rem;
-  color: #888888;
-  line-height: 0.3733rem;
-  margin-top: 0.2667rem;
-}
-.classNumber span:nth-child(1){
-  /*display: inline-block;*/
-  /*background: red;*/
-  /*margin-right:0.2667rem;*/
-}
-.common {
-  height: 0.2667rem;
-  width: 0.2667rem;
-  font-family: PingFangSC-Light;
-  font-size: 0.3733rem;
-  color: #888888;
-  line-height: 0.4267rem;
-  display: inline-block;
-  background-size: 0.2667rem 0.2667rem;
-  /*margin-right:0.1067rem*/
-}
-.classNum {
-  
-  background: url('../../static/images/classNum.png') no-repeat center;
-}
-.classCreater {
-  background: url('../../static/images/classCreater.png') no-repeat center;
-}
-.classMembers {
-  background: url('../../static/images/classMembers.png') no-repeat center;
-}
-
-
-#getClass .checkList .right .title span {
-  font-size: 14px;
-  margin-right: 10px;
-}
-
-#getClass .checkList .right .createClass {
-  font-size: 18px;
-  margin-left: 20px;
-}
-
-#getClass .creatClass {
-  width: 100%;
+.unbind li {
+  width: 9.2rem;
+  height: 1.8667rem;
+  background: #363636;
+  margin-left: 0.4rem;
+  margin-top: 0.5333rem;
+  border-radius: 0.0533rem;
   position: relative;
 }
 
-#getClass .creatClass .create {
-  height: 70px;
-  width: calc(100% - 50px);
-  background: #ccc;
-  position: absolute;
-  top: 0;
-  left: 50px;
-  padding-left: 20px;
-  line-height: 70px;
-  font-size: 18px;
-}
-
-
-#getClass .checkList .rightClass {
-  position: absolute;
-  top: 0;
-  left: 50px;
-  font-size: 18px;
-  padding-left: 20px;
-  line-height: 60px;
-  background: #666;
-  width: calc(100% - 50px);
-}
-
-#getClass #referClass {
-  width: 80%;
-  margin-left: 10%;
-  position: fixed;
-  bottom: 120px;
-  border-radius: 25px;
-  background: rgba(0, 0, 0, 0.1);
-  color: orangered;
-}
-
-#getClass .modalShow {
+.unbind-div {
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
+  display: flex;
+  align-items: center;
 }
 
-#getClass .modalShow .modal {
-  width: 90%;
-  height: 45%;
-  margin-left: 5%;
-  margin-right: 5%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  background: #fff;
+.left {
+  width: 0.64rem;
+  height: 0.64rem;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  margin-left: 0.4rem;
+  margin-right: 0.2667rem;
 }
 
+.left img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
 
+.logo{
+  width: 1.3333rem;
+  height: 1.3333rem;
+  margin-right: 0.2667rem;
+  border-radius: 0.0533rem;
+}
 
+.p1 {
+  color: #fff;
+  width: 5.84rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 0.4533rem;
+  margin-bottom: 0.2667rem;
+  font-family: PingFangSC-Regular;
+}
 
+.p2 img {
+  width: 0.2667rem;
+  margin-right: 0.1067rem;
+}
+
+.p2 span {
+  color: #888;
+  font-size: 0.3733rem;
+  margin-right: 0.4rem;
+  font-family: PingFangSC-Light;
+}
+
+.create {
+  width: 9.2rem;
+  height: 1.8667rem;
+  display: flex;
+  align-items: center;
+  background: #363636;
+  margin-left: 0.4rem;
+  margin-top: 0.5333rem;
+  border-radius: 0.0533rem;
+  margin-bottom: 1rem;
+}
+
+.txt {
+  color: #fff;
+  font-size: 0.4533rem;
+  margin-left: 0.14rem;
+  font-family: PingFangSC-Regular;
+}
+
+.referClass {
+  width: 9.2rem;
+  height: 1.28rem;
+  margin-left: 0.4rem;
+  margin-bottom: 0.8rem;
+  border-radius: 0.0533rem;
+  background: #AAAAAA;
+  font-size: 0.4533rem;
+  color: #000000;
+  border: none;
+  font-family: PingFangSC-Regular;
+}
+
+.active {
+  background: #F8E71C;
+}
+
+.no-bor {
+  border: 1px solid transparent;
+  background:url('../../static/images/radio.png') no-repeat center;
+  background-size: cover;
+}
+/* new css end */
 </style>
 

@@ -2,41 +2,51 @@
     <div id="CLNewTeacher">
         <div class="classContent">
             <P class="create">已为您创建以下晓黑板班级:</P>
-            <ul >
-                <li class="classList">
+            <ul>
+                <li class="classList"  v-for="item in imgArr" :key="item.index">
                     <div class="left">
-                        <!-- <p >{{clName}} </p> -->
-                            <img :src="secImg">
-                            <!-- <div class="line"></div> -->
-                        <!-- <p class="bot">{{clNum}}: {{clNumber}}</p> -->
+                        <img :src="item.src">
                     </div>
-                  
-
                     <div class="right">
-                        <img :src="zhiwenImg" alt="">
+                        <img :src="zhiwenImg">
                         <p class="save">长按保存二维码</p>
-                        <p class="saveSecond">
-                          <span>用于发送给家长</span>
-                          <span>邀请他们进班</span>
-                        </p>
+                        <p class="first saveSecond">用于发送给家长</p>
+                        <p class="last saveSecond">邀请他们进班</p>
                     </div>
-
-                    <img class="myimg" src="/static/images/secImg.jpg" alt="">
+                    <img class="myimg" :src="item.src">
+                     
+                    <div class="line"></div>
                 </li>
+
+                <!-- 本地测试打开 -->
+
                 <!-- <li class="classList">
                     <div class="left">
-                        <p >{{clName}} </p>
-                        
-                            <img :src="secImg">
-                        
-                        <p class="bot">{{clNum}}: {{clNumber}}</p>
+                        <img :src="img1">
                     </div>
                     <div class="right">
-                        <img :src="zhiwenImg" alt="">
+                        <img :src="zhiwenImg">
                         <p class="save">长按保存二维码</p>
-                        <p class="saveSecond">用于发送给家长</p>
-                        <p class="last">邀请他们进班</p>
+                        <p class="first saveSecond">用于发送给家长</p>
+                        <p class="last saveSecond">邀请他们进班</p>
                     </div>
+                    <img class="myimg" :src="img1">
+
+                    <div class="line"></div>
+                </li>
+                <li class="classList">
+                    <div class="left">
+                        <img :src="img1">
+                    </div>
+                    <div class="right">
+                        <img :src="zhiwenImg">
+                        <p class="save">长按保存二维码</p>
+                        <p class="first saveSecond">用于发送给家长</p>
+                        <p class="last saveSecond">邀请他们进班</p>
+                    </div>
+                    <img class="myimg" :src="img1">
+
+                    <div class="line"></div>
                 </li> -->
             </ul>
         </div>
@@ -53,8 +63,8 @@
 </template>
 
 <script>
-    import secImg from  '../../static/images/secImg.jpg'
     import zhiwenImg from  '../../static/images/zhiwen.png'
+    import secImg from  '../../static/images/secImg.jpg'
     import saveModal from './saveModal'
 export default {
     name:'CLNewTeacher',
@@ -63,27 +73,50 @@ export default {
     },
     data(){
         return {
-            clName:'一年级一班',
             secImg:secImg,
             zhiwenImg:zhiwenImg,
-            clNum:'班级号',
-            clNumber:'460540',
             isSave:false,
-            // saveTitle:'确认已保存',
-            // saveContent:'请确保您已保存二维码,将用于发送给家长,邀请他们进班'
-            // // saveTip:'将用于发送给家长,邀请他们进班',
+            imgSrc:{
+                src:''
+            },
+            imgArr:[],
+            img1:"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524574592221&di=9c42ed71dd2fa31c0718badd1ee3ab20&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F018e5955490c260000019ae9bffba9.jpg%402o.jpg",
+            img2:"http://school-dev.xiaoheiban.cn/h5/index/makeQrcode?class_code=334897&class_name=%E5%A4%A7%E5%A9%B6%E7%BA%A7+1+7%E7%8F%AD"
         }
     },
     methods:{
         overRefer(){  // 认证完成
-            this.isSave = true
+            this.isSave = true;
         },
         HiddenSaveModal(){
-            this.isSave = false
+            this.isSave = false;
+        },
+        createClass(){
+            this.axios.post('/h5/index/createXhbClass',{
+                user_token:sessionStorage.getItem('user_token'),
+                teacher_id:sessionStorage.getItem('teacher_id')
+            })
+            .then(res => {
+                console.log('createXhbClass=',res);
+                for(var i = 0;i<res.data.response.qrcode_url.length;i++){
+                    var obj = {};
+                    obj.src = res.data.response.qrcode_url[i];
+                    this.imgArr.push(obj);
+                }
+                // console.log('this.imgArr=',this.imgArr);
+            })
+            .catch(err => {
+                console.log('err=',err);
+            })
         }
     },
+    created(){
+        
+    },
     mounted(){
-        document.title = "创建班级并认证"
+        document.title = "创建班级并认证";
+        //本地测试的时候 注释掉
+        this.createClass();
     }
 }
 </script>
@@ -95,23 +128,16 @@ export default {
   box-sizing: border-box;
 }
 
-#CLNewTeacher .classContent  p{
+#CLNewTeacher   .create{
   font-family: PingFangSC-Light;
   font-size: 0.3733rem;
   color: #AAAAAA;
   line-height: 0.3733rem;
   margin-top: 0.5333rem;
   margin-left: 0.5333rem;
-  
 }
 
-/*#CLNewTeacher .classContent .title {
-  padding-left: 30px;
-  margin-bottom: 10px;
-}*/
-
-#CLNewTeacher .classContent .classList {
-  margin-bottom: 20px;
+#CLNewTeacher  .classList {
   width: 9.2rem;
   height: 4.7467rem;
   background: #FFFFFF;
@@ -119,24 +145,21 @@ export default {
   margin-top: 0.5333rem;
   margin-left: 0.4rem;
   margin-bottom: 0.5333rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
 }
 
-#CLNewTeacher .classContent .classList .left {
-  width: 9.2rem;
+#CLNewTeacher  .left {
+  width: 4.5867rem;
   height: 4.7467rem;
-  position: absolute;
-  z-index: 5;
-
-
+  flex: 1;
 }
 
-#CLNewTeacher .classContent .classList .left img {
-  height: 3.6267rem;
-  width: 2.6667rem;
-  display: block;
-  padding-top: 0.5067rem;
-  margin-left: 0.96rem;
+#CLNewTeacher  .left img {
+  height: 4.7467rem;
+  width: 4.5867rem;
 }
 
 .line {
@@ -148,66 +171,54 @@ export default {
     left: 4.5867rem;
     background: #F8F8F8;
 }
-/*#CLNewTeacher .classContent .classList .left p {
-  font-size: 16px;
-  font-weight: 600;
-  margin-top: 10px;
-  padding-left: 10px;
-}*/
 
-/*#CLNewTeacher .classContent .classList .left .bot {
-  margin-bottom: 10px;
-}
-*/
-#CLNewTeacher .classContent .classList .right {
-  width: 9.2rem;
+#CLNewTeacher  .right {
+  width: 4.5867rem;
   height: 4.7467rem;
-  /*background: #ccc;*/
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
-#CLNewTeacher .classContent .classList .right img {
+#CLNewTeacher  .right img {
   width: 1.2533rem;
   height: 1.3333rem;
-  padding-left: 6.2667rem;
-  padding-top: 0.9333rem;
   display: block;
-
 }
 
-#CLNewTeacher .classContent .classList .right .save {
+#CLNewTeacher  .save {
   font-family: PingFangSC-Light;
   font-size: 0.3733rem;
   color: #000000;
   line-height: 0.3733rem;
   text-align: center;
-  margin-left: 5.6rem;
   margin-top: 0.2667rem;
-  width: 2.6133rem;
   height: 0.3733rem;
 }
 
-#CLNewTeacher .classContent .classList .right .saveSecond {
-  width: 1.8667rem;
-  height: 0.7467rem;
+#CLNewTeacher  .saveSecond {
   text-align: center;
-  margin-left: 5.9733rem;
-  margin-top: 0.16rem;
   font-family: PingFangSC-Light;
   font-size: 0.2667rem;
   color: #AAAAAA;
   line-height: 0.3733rem;
 }
 
-#CLNewTeacher .classContent .classList .right .last {
-  text-align: center;
-  font-size: 12px;
+#CLNewTeacher  .first {
+  margin-top: 0.16rem;
+  margin-bottom: 0.08rem;
+  
 }
 
+
 #CLNewTeacher .referOk {
+  display: block;
   width: 9.2rem;
   height: 1.28rem;
   text-align: center;
-  margin-left: 0.4rem;
+  margin: 0 auto;
   margin-top: 2.0rem;
   border-radius: 0.0533rem;
   background: #F8E71C;
@@ -215,6 +226,7 @@ export default {
   font-size: 0.4533rem;
   color: #000000;
   line-height: 0.4533rem;
+  border:none;
 }
 
 #CLNewTeacher .modalShow {
@@ -236,18 +248,18 @@ export default {
   margin-left: 0.5333rem;
   margin-right: 0.5333rem;
   position: absolute;
-  top: 4.8267rem;
+  top: 4rem;
   left: 0;
 }
-.classList{
-  position: relative;
-}
 .myimg{
-  position: absolute;
-  right: 0.8rem;
-  top: 0.5rem;
-  opacity: 0.01;
-  z-index: 9;
+    height: 4.7467rem;
+    width: 4.5867rem;
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    opacity: 0.01;
+    z-index: 9;
 }
 
 

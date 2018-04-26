@@ -1,13 +1,11 @@
 <template>
   <div id="ReCertification">
-        <h5 class="content">{{ accountTile}}</h5>
+        <p class="content">{{ accountTile}}</p>
         <p class=" title">{{ classTitle }}</p>
-        <p class="saveTip">已被 {{ classUser }}   老师认证过</p>
+        <p class="saveTip">已被  <span class="name">{{ classUser }}</span>   老师认证过</p>
         <p class="replace">{{ accountReplace }}</p>
-        <div class="saveBtn">
-            <div class="btn " @click="giveUp">取消</div>
-            <div class="btn btnLeft" @click="Replace">顶替Ta</div>
-        </div>
+        <button class="Btn Btn-left" @click="giveUp">取消</button>
+        <button class="Btn Btn-rigth" @click="Replace">顶替Ta</button>
   </div>
 </template>
 
@@ -27,73 +25,84 @@ export default {
         },
         Replace(){  // 顶替Ta
             // 请求接口
-            alert("顶替Ta")
+            alert("顶替Ta");
+            console.log('res1=',this.$store.state.res1);
         }
     }
 }
 </script>
 <style scoped>
-/*// @import  '../assets/css/variables.scss';
-// @import  '../assets/css/ReCertification.css';*/
+
 
 #ReCertification {
-  line-height: 1.5;
+    width: 8.9333rem;
+    height: 6.16rem;
 }
 
-#ReCertification .title {
-  font-size: 18px;
-  padding-top: 20px;
-  padding-left: 20px;
-  text-align: center;
-}
 
 #ReCertification .content {
-  font-size: 16px;
-  margin-top: 40px;
-  padding-left: 30px;
-  padding-right: 20px;
+  font-family: PingFangSC-Light;
+  font-size: 0.5333rem;
+  color: #FFFFFF;
+  line-height: 0.5333rem;
+  text-align: center;
+  margin-top: 0.5333rem;
+}
+#ReCertification .title {
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+  line-height: 0.6933rem;
+  text-align: center;
+  margin-top:0.5333rem;
 }
 
+
 #ReCertification .saveTip {
-  font-size: 18px;
-  padding-left: 30px;
-  padding-right: 20px;
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+  line-height: 0.6933rem;
   text-align: center;
-  font-weight: bold;
+}
+
+#ReCertification .saveTip  .name {
+  font-family: PingFangSC-Regular;
+  font-size: 0.4533rem;
+  color:#fff;
+  line-height: 0.6933rem;
 }
 
 #ReCertification .replace {
-  font-size: 16px;
-  padding-left: 30px;
-  padding-right: 20px;
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+  line-height: 0.6933rem;
   text-align: center;
 }
-
-#ReCertification .saveBtn {
-  width: 100%;
-  margin-left: 10%;
+/**/
+#ReCertification .Btn {
+    width: 4.0rem;
+    height: 1.28rem;
+    background: #2B2B2B;
+    font-family: PingFangSC-Regular;
+    font-size: 0.4533rem;
+    color: #F8E71C;
+    line-height: 0.4533rem;
+    border-radius: 0.0533rem;
+    border: none;
+    margin-top:0.6667rem;
 }
 
-#ReCertification .saveBtn .btn {
-  float: left;
-  height: 40px;
-  font-size: 16px;
-  text-align: center;
-  margin-top: 50px;
-  line-height: 40px;
-  padding-left: 15px;
-  padding-right: 15px;
+#ReCertification .Btn-left{
+   margin-left: 0.4rem;
 }
-
-#ReCertification .saveBtn .btnLeft {
-  margin-right: 40px;
-  border-radius: 20px;
-  margin-left: 40px;
-  background: rgba(0, 0, 0, 0.4);
-  width: 40%;
-  color: #fff;
+#ReCertification .Btn-rigth{
+  
+  background:#F8E71C;
+  color: #000000;
+  margin-right: 0.4rem;
 }
-
 
 </style>
 

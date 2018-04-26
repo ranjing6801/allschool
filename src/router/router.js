@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+
 import Menu from '../components/Menu'
 import VolidateCode from '../components/VolidateCode'
 import overCount from '../components/overCount'
@@ -14,25 +15,27 @@ import getClass from '../components/getClass'
 import AttestationComple from '../components/AttestationComple'   
 import CreateClass from '../components/CreateClass' 
 
+
 Vue.use(VueRouter)
 
 const router = new VueRouter({
+    mode:'hash',
     routes:[
         {
             path:'/',
-            component:Menu
+            component:Menu 
         },
-        {
-            path:'/menu',
+        {  // 输入手机号
+            path:'/menu/:tcode',
             name:'menu',
             component:Menu
         },
-        { 
+        {  // 验证码
             path:'/VolidateCode',
             name:'VolidateCode',
             component:VolidateCode
         },
-        { 
+        {  // 用户名
             path:'/userName',
             name:'userName',
             component:userName
@@ -52,7 +55,7 @@ const router = new VueRouter({
             name:'NewAuthenticationOk',
             component:NewAuthenticationOk
         },
-        { // 班主任 没有班级
+        { // 班主任 没有班级 
             path:'/CLNewTeacher',
             name:'CLNewTeacher',
             component:CLNewTeacher     

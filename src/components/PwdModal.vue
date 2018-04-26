@@ -39,8 +39,6 @@ export default {
 </script>
 
 <style  scoped>
-/*@import  '../assets/css/variables.scss';      
-@import  '../assets/css/PwdModal.css';*/
 
 #pwdModal {
   font-size: 16px;
