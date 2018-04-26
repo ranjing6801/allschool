@@ -84,7 +84,7 @@ export default {
         this.indexValue = this.$route.query.index;
         console.log('this.indexValue=',this.indexValue);
         //测试的时候注释
-        //this.createClassData();
+        this.createClassData();
     }
 }
 

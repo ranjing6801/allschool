@@ -102,7 +102,7 @@ export default {
     },
     mounted() {
         //测试的时候注释
-        //this.createClass();
+        this.createClass();
 
         //判断手机类型
         var ua = navigator.userAgent.toLowerCase();
