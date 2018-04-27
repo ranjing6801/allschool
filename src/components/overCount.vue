@@ -64,6 +64,10 @@ export default {
                 keyword: sessionStorage.getItem('keyword'),    // 关键字
                 detail: this.reback
             };
+
+            sessionStorage.setItem('userTitle',this.user);
+            sessionStorage.setItem('reback',this.reback);
+
             console.log('提交的信息:',obj);
             this.axios.post('/h5/index/questionBack',{
                 user_name: this.user,   //老师姓名 
@@ -90,9 +94,17 @@ export default {
     mounted(){
         document.title = "反馈信息";
         this.title = this.$route.query.title;
-        this.user = this.$route.query.username;
+       
         this.helpMessage = this.$route.query.helpMessage;
-        this.reback = this.$route.query.title;
+        
+        if(this.$route.query.username){
+             this.user = this.$route.query.username;
+            this.reback = this.$route.query.title;
+        }
+        else{
+            this.user = sessionStorage.getItem('userTitle');
+            this.user = sessionStorage.getItem('reback');
+        }
     }
 }
 </script>

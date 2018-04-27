@@ -63,8 +63,8 @@ export default {
         // },
         getMore(o,i) { //跳转到对应班级绑定页面
           if(this.classList[i].isOver==true){ //判断是否点击了已经绑定过的班级
-            var txt = sessionStorage.getItem(i);
-            var word = o.className;
+            var txt = sessionStorage.getItem(i); //晓黑板的班级号
+            var word = o.className; //晓黑板的name
             this.$router.push({ path:'/getClass',query:{index:i,txt:txt,flag:'yes',word:word}});
           }
           else{

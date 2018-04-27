@@ -72,7 +72,6 @@ export default {
     },
     data(){
         return {
-            secImg:secImg,
             zhiwenImg:zhiwenImg,
             isSave:false,
             imgSrc:{
@@ -102,7 +101,7 @@ export default {
                     obj.src = res.data.response.qrcode_url[i];
                     this.imgArr.push(obj);
                 }
-                // console.log('this.imgArr=',this.imgArr);
+                 console.log('this.imgArr=',this.imgArr);
             })
             .catch(err => {
                 console.log('err=',err);
@@ -217,7 +216,7 @@ export default {
   width: 9.2rem;
   height: 1.28rem;
   text-align: center;
-  margin: 0 auto;
+  margin: 0 auto 0.8rem;
   margin-top: 2.0rem;
   border-radius: 0.0533rem;
   background: #F8E71C;

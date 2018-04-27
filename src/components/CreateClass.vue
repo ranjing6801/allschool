@@ -49,6 +49,7 @@ export default {
             indexValue:'',  // [点击创建班级认证 ]  记录 班主任 有班级 创建晓黑板班级的时候  传过来的 整校班级的id 
             imgSrc:'',
             imgArr:[],
+            myclass:{}
         }
     },
     methods:{
@@ -57,8 +58,20 @@ export default {
         },
         HiddenSaveModal(){
             this.isSave = false;
+            var obj = this.myclass;
+            
+            this.$store.state.res2.push(obj);
+
+            var oIndex = this.indexValue;  //整校的索引
+            var detail = obj.name;  //晓黑板的班级名字
+            var num1 = obj.code;  //晓黑板的班级号
+            
+
+            var myobj = {index:oIndex,name:detail,sta:true,num1:num1};
+            console.log('myobj:',myobj);
+            this.$store.commit('setClass',myobj);
             //  创建完班级之后 跳转到班主任 班级的列表页
-           	//this.$router.push({path:'CLYchooseClass'})
+           	this.$router.push({path:'CLYchooseClass'})
         },
         createClassData(){  // 班主任 有小黑板班级 老用户 创建班级认证
               this.axios.post('/h5/index/createSingleXhbClass',{
@@ -67,7 +80,8 @@ export default {
                   })
                   .then(res => {
                         console.log('createSingleXhbClass=',res);
-                        this.imgSrc = res.data.response.qrcode_url
+                        this.imgSrc = res.data.response.qrcode_url;
+                        this.myclass = res.data.response.xhb_class;
                         // for(var i = 0;i<res.data.response.qrcode_url.length;i++){
                         //     var obj = {};
                         //     obj.src = res.data.response.qrcode_url[i];
@@ -187,7 +201,7 @@ export default {
   width: 9.2rem;
   height: 1.28rem;
   text-align: center;
-  margin: 0 auto;
+  margin: 0 auto 0.8rem;
   border-radius: 0.0533rem;
   background: #F8E71C;
   font-family: PingFangSC-Regular;

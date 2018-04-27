@@ -15,9 +15,9 @@
         <li v-for="(item,index) in list2" :key="item.index" v-show="!item.hadBind">
           <div class="unbind-div">
             <div @click="handleCheck($event,index)" class="left"></div>
-            <img class="logo" :src="!item.badgeId ? logoSrc :item.badgeId" />
+            <img class="logo" :src="item.badgeId ? item.badgeId :logoSrc"/>
             <div class="right">
-              <p class="p1">{{ item.title | teacherName }}</p>
+              <p class="p1">{{ item.title | teacherName }} </p>
               <p class="p2">
                 <img src="../../static/images/p1.png" /><span class="num1">{{item.code}}</span>
                 <img src="../../static/images/p2.png" /><span>{{item.teacherName|sliceValue}}</span>
