@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
         '/':{
-            target:'http://school-test.xiaoheiban.cn/',
+            target:'https://school-test.xiaoheiban.cn',
             changeOrigin:true
         }
     },
