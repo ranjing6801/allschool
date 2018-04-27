@@ -16,7 +16,7 @@
                v-on:input="focus" class="input"  maxlength=13 />
 
       <div class="telError" :class="isRightNumber?'':'hidden'">
-        <img src="/static/images/warn.png" alt="!" />
+        <img src="../../static/images/warn.png" alt="!" />
         <span class="rightPhone">请输入正确的手机号码</span>
       </div>
                
@@ -105,7 +105,7 @@ import $ from 'jquery'
           }
           console.log('手机号:',myphone);
 
-          this.axios.post('/h5/index/checkPhoneNumber',{
+          this.axios.post('https://school-test.xiaoheiban.cn/h5/index/checkPhoneNumber',{
                   phone: myphone,
                 })
               .then(res => {
@@ -138,7 +138,9 @@ import $ from 'jquery'
     },
     mounted(){
       document.title = "输入手机号";
-      this.axios.get('/h5/index/index?tcode='+ 16695090)
+      var tcode = this.$route.params.tcode;
+      console.log('tcode:',this.$route.params.tcode);
+      this.axios.get('https://school-test.xiaoheiban.cn/h5/index/index?tcode='+ tcode)
           .then(res => {
           //console.log('res:',res.data.response.school_info);
             this.imgSrc = res.data.response.school_info.school_img;

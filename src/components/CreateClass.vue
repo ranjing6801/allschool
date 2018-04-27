@@ -61,7 +61,7 @@ export default {
            	//this.$router.push({path:'CLYchooseClass'})
         },
         createClassData(){  // 班主任 有小黑板班级 老用户 创建班级认证
-              this.axios.post('/h5/index/createSingleXhbClass',{
+              this.axios.post('https://school-test.xiaoheiban.cn/h5/index/createSingleXhbClass',{
                       user_token:sessionStorage.getItem('user_token'),
                       class_name:this.$store.state.res1[this.indexValue].class_name
                   })

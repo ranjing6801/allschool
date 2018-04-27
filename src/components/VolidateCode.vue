@@ -104,7 +104,7 @@ export default {
     methods:{
         getVolidateCode(){
           // 刚刚进入这个组件  就获取验证码
-          this.axios.post('/h5/index/sendMessageCode',{
+          this.axios.post('https://school-test.xiaoheiban.cn/h5/index/sendMessageCode',{
                 phone:sessionStorage.getItem('phone')
           })
           .then(res => {
@@ -182,7 +182,7 @@ export default {
                 this.$router.push({path:'/overCount',query:{title:this.codeOverTime,helpMessage:this.helpMessage}});
               }
             this.timer = setInterval (() => {
-                this.time -= 10;
+                this.time -= 1;
                 if(this.time <= 0){
                     clearInterval(this.timer);  // 清除定时器
                     this.isTimer = false;
@@ -201,7 +201,7 @@ export default {
             //this.reNum = false; 
         },
         know(){  // 请求语音验证码 点击 好的 
-            this.axios.post('/h5/index/sendvoicecode',{
+            this.axios.post('https://school-test.xiaoheiban.cn/h5/index/sendvoicecode',{
                 phone:sessionStorage.getItem('phone')
             })
             .then(res => {
@@ -220,7 +220,7 @@ export default {
         },
         codePromise(){ // 验证码提交
             console.log('输入的验证码:',this.reCredNum);
-            this.axios.post('/h5/index/checkCode',{
+            this.axios.post('https://school-test.xiaoheiban.cn/h5/index/checkCode',{
                     phone:sessionStorage.getItem('phone'),
                     code:this.reCredNum
                 })

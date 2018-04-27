@@ -116,7 +116,7 @@ export default {
 
           //    暂时先不认证
                 console.log('this.arr:',this.arr);
-                this.axios.post('/h5/index/bindClass',{ 
+                this.axios.post('https://school-test.xiaoheiban.cn/h5/index/bindClass',{ 
                   bind_class : JSON.stringify(this.arr),
                   teacher_id : sessionStorage.getItem('teacher_id'),
                   phone : sessionStorage.getItem('phone'),
