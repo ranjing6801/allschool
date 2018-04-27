@@ -57,7 +57,7 @@
 
 import $ from 'jquery'
 import ReCertification from './ReCertification'
-import logoSrc from '../../static/images/logo.jpg'
+import logoSrc from '../../static/images/logo2.jpg'
 
 export default {
     name:'getClass',

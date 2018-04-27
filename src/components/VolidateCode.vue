@@ -2,7 +2,7 @@
     <div id="volidateCode">
         <div class="head">
           <div class="left">
-              <img :src="imgSrc">
+              <img :src="imgSrc ? imgSrc : imgsrc1">
           </div>
           <div :class="isHeight?'height1':'height2'" class="right">
               <span>{{ title }}</span>
@@ -65,6 +65,7 @@
 import $ from 'jquery'
 import overCount from './overCount'
 import userName from './userName'
+import imgsrc1 from '../../static/images/logo.jpg'
 
 export default {
     name:'volidateCode',
@@ -73,6 +74,7 @@ export default {
     },
     data(){
         return {
+                imgsrc1:imgsrc1,
                 imgSrc:sessionStorage.getItem('imgSrc'),
                 title:'',
                 reCredNum:'',

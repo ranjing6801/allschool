@@ -25,7 +25,13 @@
         <!--  完成认证 确认保存二维码 弹窗 -->
         <div class="modalShow" v-if="isSave" @click="HiddenSaveModal" >
             <div class="modal">
-                <saveModal  @changeIsSaveModal="HiddenSaveModal"></saveModal>
+                <div id="saveModal" @click="know">
+                    <p class="title">确认已保存</p>
+                    <p class="sure">请确保您已保存二维码</p>
+                    <p class="content">将用于发送给家长,邀请他们进班</p>
+                    <button class="Btn Btn-left" @click="know">去保存</button>
+                    <button class="Btn Btn-rigth" @click="saveOk">保存好了</button>
+                </div>
             </div>
         </div>
     </div> 
@@ -49,10 +55,17 @@ export default {
             indexValue:'',  // [点击创建班级认证 ]  记录 班主任 有班级 创建晓黑板班级的时候  传过来的 整校班级的id 
             imgSrc:'',
             imgArr:[],
-            myclass:{}
+            myclass:{},
+            myLength:null
         }
     },
     methods:{
+        know(){
+            this.isSave =false;
+        },
+        saveOk(){
+            this.$router.push({path:'/CLYchooseClass'});
+        },
         overRefer(){  // 认证完成
             this.isSave = true;
         },
@@ -65,18 +78,21 @@ export default {
             var oIndex = this.indexValue;  //整校的索引
             var detail = obj.name;  //晓黑板的班级名字
             var num1 = obj.code;  //晓黑板的班级号
-            
 
+            sessionStorage.setItem(oIndex,num1); 
+            
             var myobj = {index:oIndex,name:detail,sta:true,num1:num1};
             console.log('myobj:',myobj);
-            this.$store.commit('setClass',myobj);
+            
+            this.$store.commit('setClass1',myobj);
             //  创建完班级之后 跳转到班主任 班级的列表页
            	this.$router.push({path:'CLYchooseClass'})
         },
         createClassData(){  // 班主任 有小黑板班级 老用户 创建班级认证
               this.axios.post('/h5/index/createSingleXhbClass',{
                       user_token:sessionStorage.getItem('user_token'),
-                      class_name:this.$store.state.res1[this.indexValue].class_name
+                      class_name:this.$store.state.res1[this.indexValue].class_name,
+                      xhb_class_num:this.myLength
                   })
                   .then(res => {
                         console.log('createSingleXhbClass=',res);
@@ -98,6 +114,8 @@ export default {
         this.indexValue = this.$route.query.index;
         console.log('this.indexValue=',this.indexValue);
         //测试的时候注释
+        this.myLength = this.$store.state.res2.length;
+        console.log('this.myLength=',this.myLength);
         this.createClassData();
     }
 }
@@ -266,5 +284,62 @@ export default {
   position: absolute;
   top: 4.8267rem;
   left: 0;
+}
+
+/*  保存二维码弹窗 */
+#saveModal {
+  width: 8.9333rem;
+  height: 5.4667rem;
+  background: #2B2B2B;
+  border: 0.0267rem solid #BBAB71;
+  border-radius: 0.2667rem;
+  box-sizing: border-box;
+}
+#saveModal .title {
+  font-family: PingFangSC-Light;
+  font-size: 0.5333rem;
+  color: #FFFFFF;
+  line-height: 0.5333rem;
+  margin-top: 0.5333rem;
+  text-align: center;
+}
+
+#saveModal .content {
+  width: 6.64rem;
+  height: 1.3867rem;
+  margin-left: 1.1467rem;
+  margin-right: 1.1467rem;
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+}
+#saveModal .sure {
+    margin-top: 0.5333rem;
+    text-align: center;
+    font-family: PingFangSC-Light;
+    font-size: 0.4533rem;
+    color: #FFFFFF;
+    line-height: 0.6933rem;
+}
+
+#saveModal  .Btn {
+    width: 4.0rem;
+    height: 1.28rem;
+    background: #2B2B2B;
+    font-family: PingFangSC-Regular;
+    font-size: 0.4533rem;
+    color: #F8E71C;
+    line-height: 0.4533rem;
+    border-radius: 0.0533rem;
+    border: none;
+}
+
+.Btn-left{
+   margin-left: 0.4rem;
+}
+#saveModal .Btn-rigth{
+  
+  background:#F8E71C;
+  color: #000000;
 }
 </style>

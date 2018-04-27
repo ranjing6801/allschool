@@ -3,7 +3,7 @@
 	<!--  head 部分 -->
     <div class="head">
         <div class="left">
-            <img :src="imgSrc">
+            <img :src="imgSrc ? imgSrc : imgsrc1">
         </div>
         <div :class="isHeight?'height1':'height2'" class="right">
             <span>{{ title }}</span>
@@ -34,6 +34,7 @@ import overCount from './overCount'
 import AuthenticationOk from './AuthenticationOk'
 import NewAuthenticationOk from './NewAuthenticationOk' 
 import CLNewTeacher from './CLNewTeacher' 
+import imgsrc1 from '../../static/images/logo.jpg'
 
 
 export default {  
@@ -43,6 +44,7 @@ export default {
     },
     data(){
         return {
+            imgsrc1:imgsrc1,
             title:sessionStorage.getItem('title'),
             imgSrc:sessionStorage.getItem('imgSrc'),
             userName:'',

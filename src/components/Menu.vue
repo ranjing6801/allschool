@@ -3,7 +3,7 @@
   <!--  head 部分 -->
     <div class="head">
         <div class="left">
-            <img :src="imgSrc">
+            <img :src="imgSrc ? imgSrc : imgsrc1">
         </div>
         <div :class="isHeight?'height1':'height2'" class="right">
             <span>{{ title }}</span>
@@ -40,6 +40,7 @@
 <script>
 import VolidateCode from './VolidateCode'
 import $ from 'jquery'
+import imgsrc1 from '../../static/images/logo.jpg'
 
   export default {
     name:'myMenu',
@@ -48,6 +49,7 @@ import $ from 'jquery'
     },
     data(){
       return {
+        imgsrc1:imgsrc1,
         title:'',
         imgSrc:'',
         tip:true,
