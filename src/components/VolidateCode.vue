@@ -108,7 +108,7 @@ export default {
                 phone:sessionStorage.getItem('phone')
           })
           .then(res => {
-            alert('sendMessageCode');
+            // alert('sendMessageCode');
             console.log('sendMessageCode:',res);
             //***** 本地打开测试 *****//
             //this.ShowNumber();  
@@ -258,11 +258,11 @@ export default {
         this.title.length > 14 ? this.isHeight=false : this.isHeight=true;
         this.number = this.$route.query.phone;
 
-        alert('mounted');
+        // alert('mounted');
 
         if(sessionStorage.getItem('myphone')){
             //this.ShowNumber();
-            console.log('sessionStorage.getItem(myphone)')
+            // console.log('sessionStorage.getItem(myphone)')
             this.getVolidateCode();
         }else{
           this.reNum = true   // 进入验证码界面就获取验证码.并且显示重新获取验证码提示
