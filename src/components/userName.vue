@@ -82,10 +82,10 @@ export default {
             console.log('输入的姓名是:',this.userName);
             console.log('您的手机号是:',sessionStorage.getItem('phone'));
             this.axios.post('/h5/index/getUserDetail',{
-                    name:'user8',
-                    phone:'14444441013'
-                    // name:this.userName,
-                    // phone:sessionStorage.getItem('phone')
+                    //name:'user12',
+                    //phone:'14444441014'
+                    name:this.userName,
+                    phone:sessionStorage.getItem('phone')
                 })
                .then( res => {
                   console.log('getUserDetail:',res);
