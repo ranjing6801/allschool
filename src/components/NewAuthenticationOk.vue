@@ -3,10 +3,10 @@
     <div id="newauthentication">  
       <div v-if="isIOS" class="ios">
         <div class="content" slot="header">
-            <p class="p-img"><img src="/static/images/v.png" alt=""></p>
+            <p class="p-img"><img src="../../static/images/v.png" alt=""></p>
             <p class="title">恭喜您成为校园认证用户</p>
             <p class="title1">现在起您可以免费享受【晓黑板】提供的增值服务</p>
-            <p class="title2">晓黑板账号密码<img src="/static/images/left3.png" alt=">"><span @click="onOff=true">点击查看</span><img src="/static/images/right3.png" alt="<">已通过短信发送给您</p>
+            <p class="title2">晓黑板账号密码<img src="../../static/images/left3.png" alt=">"><span @click="onOff=true">点击查看</span><img src="../../static/images/right3.png" alt="<">已通过短信发送给您</p>
         </div>
         <div class="footer">
             <div class="btn" @click="openSmallDesk">打开晓黑板</div>
@@ -15,10 +15,10 @@
       </div>
       <div v-if="isAND" class="android">
         <div class="content2">
-            <p class="p-img"><img src="/static/images/v.png" alt=""></p>
+            <p class="p-img"><img src="../../static/images/v.png" alt=""></p>
             <p class="title">恭喜您成为校园认证用户</p>
             <p class="title1">现在起您可以免费享受【晓黑板】提供的增值服务</p>
-            <p class="title2">晓黑板账号密码<img src="/static/images/left3.png" alt=">"><span @click="onOff=true">点击查看</span><img src="/static/images/right3.png" alt="<">已通过短信发送给您</p>
+            <p class="title2">晓黑板账号密码<img src="../../static/images/left3.png" alt=">"><span @click="onOff=true">点击查看</span><img src="../../static/images/right3.png" alt="<">已通过短信发送给您</p>
         </div>
         <div class="footer2">
             <div class="btn" @click="openSmallDesk1">打开晓黑板</div>
@@ -29,7 +29,7 @@
       <!-- 安卓手机 遮罩层  -->
 
       <div class="overlay" v-if="mask">
-          <img class="arrow" src="/static/images/arrow.png">
+          <img class="arrow" src="../../static/images/arrow.png">
       </div>
 
 

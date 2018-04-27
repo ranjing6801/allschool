@@ -4,10 +4,10 @@
         <ul>
             <li v-for="(item,index) in classList" :key="index" class="classList" @click="getMore(item,index)">
                <span class="className"> {{ item.class_name }}</span> 
-               <img v-show="item.isOver" class="vip"  src="/static/images/vip.png" />
+               <img v-show="item.isOver" class="vip"  src="../../static/images/vip.png" />
                <span class="classTeam"> {{ item.className | teacherName }}</span>   
-               <img v-show="item.isOver" class="over"  src='/static/images/over.png'>
-               <img src="/static/images/more.png" class="more" />
+               <img v-show="item.isOver" class="over"  src='../../static/images/over.png'>
+               <img src="../../static/images/more.png" class="more" />
             </li>
         </ul>
       <button :class="!dis?'referBtn':''" @click="referBtn"  class="referName" :disabled="dis">认证班级</button>

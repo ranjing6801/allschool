@@ -12,6 +12,7 @@ import {store} from './store/store.js'
 
 // axios.defaults.baseURL = 'http://school-dev.xiaoheiban.cn'
 Vue.prototype.axios = axios
+axios.defaults.withCredentials = true
 
 Vue.config.productionTip = false
 

@@ -3,7 +3,7 @@
 <!--  请求验证码次数超时  -->
     <div class="head">
         <div class="left">
-            <img src="/static/images/err.png">
+            <img src="../../static/images/err.png">
         </div>
         <div class="right">
             {{ title }}

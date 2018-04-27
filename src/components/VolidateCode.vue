@@ -19,7 +19,7 @@
             
             <div class="box">
               <div class="telError" :class="isShowCode?'':'hidden'">
-                <img src="/static/images/warn.png" alt="!">
+                <img src="../../static/images/warn.png" alt="!">
                 <span class="rightPhone">验证码错误</span>
               </div>
               <div v-show="listenCode" class="listencode">收不到验证码?

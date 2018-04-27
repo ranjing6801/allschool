@@ -14,7 +14,7 @@
       </div>
       <div v-if="isAND" class="android">
         <div class="content2">
-            <p class="p-img"><img src="/static/images/smile.png" alt=""></p>
+            <p class="p-img"><img src="../../static/images/smile.png" alt=""></p>
             <p class="title">反馈成功</p>
             <p class="title1">我们将尽快处理，请耐心等候</p>
         </div>
@@ -29,7 +29,7 @@
       <!-- 安卓手机 遮罩层  -->
 
       <div class="overlay" v-if="mask">
-          <img class="arrow" src="/static/images/arrow.png">
+          <img class="arrow" src="../../static/images/arrow.png">
       </div>
       
     </div>

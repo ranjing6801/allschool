@@ -2,7 +2,7 @@
     <div id="passOk">
         <div v-if="isIOS" class="ios">
         <div class="content" slot="header">
-            <p class="p-img"><img src="/static/images/v.png" alt=""></p>
+            <p class="p-img"><img src="../../static/images/v.png" alt=""></p>
             <p class="title">恭喜您成为校园认证用户</p>
             <p class="title1">现在起您可以免费享受【晓黑板】提供的增值服务</p>
         </div>
@@ -13,7 +13,7 @@
       </div>
       <div v-if="isAND" class="android">
         <div class="content2">
-            <p class="p-img"><img src="/static/images/v.png" alt=""></p>
+            <p class="p-img"><img src="../../static/images/v.png" alt=""></p>
             <p class="title">恭喜您成为校园认证用户</p>
             <p class="title1">现在起您可以免费享受【晓黑板】提供的增值服务</p>
         </div>
@@ -23,7 +23,7 @@
         </div>
         <!-- <div class="img">
             <p><span class="line1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>找对方法，下载更快捷<span class="line2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
-            <img src="/static/images/android.png" alt="">
+            <img src="../../static/images/android.png" alt="">
         </div> -->
       </div>
 
@@ -42,7 +42,7 @@
 
        <!-- 安卓手机 遮罩层  -->
       <div class="overlay" v-if="mask">
-          <img class="arrow" src="/static/images/arrow.png">
+          <img class="arrow" src="../../static/images/arrow.png">
       </div>
 
   </div>

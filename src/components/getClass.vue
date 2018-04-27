@@ -4,9 +4,9 @@
       <ul class="bind">
         <li v-for="(item,index) in list"  :key="item.index" v-show="item.isOver">
           <div class="bind-div">
-            <img class="vip" src="/static/images/vip.png" />
+            <img class="vip" src="../../static/images/vip.png" />
             <div class="cont"><p class="p-top">{{item.class_name}} 已对应</p><p class="p-bot">{{item.className|tosix}}</p></div>
-            <div class="cancle"><img src="/static/images/ic.png" /><span @click="unbind(index)">取消对应</span></div>
+            <div class="cancle"><img src="../../static/images/ic.png" /><span @click="unbind(index)">取消对应</span></div>
           </div>
         </li>
       </ul>
@@ -15,13 +15,13 @@
         <li v-for="(item,index) in list2" :key="item.index" v-show="!item.hadBind">
           <div class="unbind-div">
             <div @click="handleCheck($event,index)" class="left"></div>
-            <img class="logo" src="/static/images/logo.jpg" />
+            <img class="logo" src="../../static/images/logo.jpg" />
             <div class="right">
               <p class="p1">{{ item.title | teacherName }}</p>
               <p class="p2">
-                <img src="/static/images/p1.png" /><span class="num1">{{item.code}}</span>
-                <img src="/static/images/p2.png" /><span>{{item.teacherName|sliceValue}}</span>
-                <img src="/static/images/p3.png" /><span>{{item.membersCount}}</span>
+                <img src="../../static/images/p1.png" /><span class="num1">{{item.code}}</span>
+                <img src="../../static/images/p2.png" /><span>{{item.teacherName|sliceValue}}</span>
+                <img src="../../static/images/p3.png" /><span>{{item.membersCount}}</span>
               </p>
             </div>
           </div>
