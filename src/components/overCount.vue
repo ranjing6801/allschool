@@ -69,7 +69,7 @@ export default {
                 user_name: this.user,   //老师姓名 
                 is_director: isDirector,//是否班主任
                 phone: sessionStorage.getItem('phone'),//手机号
-                keyword: this.title,    // 关键字
+                keyword: sessionStorage.getItem('keyword'),    // 关键字
                 detail: this.reback     // 问题详情
             })
             .then(res => {

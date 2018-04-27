@@ -9,7 +9,7 @@
           </div>
         </div>
         <div class="content">
-            <p class="tip" v-if="YZM">短信验证码已发送至 {{ number | value }} </p>
+            <p class="tip" v-if="YZM">验证码已发送至  <span>{{ number | value }} </span></p>
             <p class="tip" v-if="ListenYzm">语音验证码已发送成功</p>
            <input maxlength= "4" class="VolidateCode"  placeholder="请输入验证码"
                      type="tel" v-model="reCredNum" 
@@ -39,7 +39,7 @@
               <div id="modal">
                   <p class="titleListen">语音验证码</p>
                   <p class="contentListen"> 
-                      我们将以电话的形式告知您验证码,你可能会接收到010、0051、024、029等开头的来电，请放心接听
+                      我们将以电话形式告知您验证码, 你可能会接收到010、0551、024、029等开头的来电，请放心接听
                   </p>
                   <button class="Btn Btn-left" @click="clear">取消</button>
                   <button class="Btn Btn-rigth" @click="know">好的</button>
@@ -232,6 +232,7 @@ export default {
                   }
                   if(res.data.error_response){
                       sessionStorage.setItem('school_id',res.data.error_response.school_id);
+                      sessionStorage.setItem('keyword',res.data.error_response.keyword);
                       $('.VolidateCode').addClass('red');
                       this.isShowCode = true;
                       this.getCodeNum ++ ;
@@ -329,6 +330,9 @@ export default {
   margin-top: 0.8rem;
 }
 
+.content .code {
+  color: #000;
+}
 
 .content input::-webkit-input-placeholder {
   font-family: PingFangSC-Light;

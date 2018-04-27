@@ -21,7 +21,7 @@
       </div>
                
       <span class="telePhone" @click="clearTel" v-if="telNum"></span>
-      <button :class="!btn?'referBtn':''" class="refer"  :disabled="btn" @click="telPromise" >提交</button>
+      <button :class="!btn?'referBtn':''" class="refer"  :disabled="btn" @click="telPromise" >提交 (当前测试版本号：v2.1.1)</button>
     </div>
     
     <!--  验证码发送失败 -->
