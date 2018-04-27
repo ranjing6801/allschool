@@ -146,6 +146,8 @@ export default {
                 return true;
               }  
           });
+        }else{
+          this.dis = true;
         }
         if(result){
           this.dis = false;

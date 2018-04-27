@@ -15,13 +15,13 @@
         <li v-for="(item,index) in list2" :key="item.index" v-show="!item.hadBind">
           <div class="unbind-div">
             <div @click="handleCheck($event,index)" class="left"></div>
-            <img class="logo" src="../../static/images/logo.jpg" />
+            <img class="logo" :src="item.badgeId" />
             <div class="right">
               <p class="p1">{{ item.title | teacherName }}</p>
               <p class="p2">
                 <img src="../../static/images/p1.png" /><span class="num1">{{item.code}}</span>
                 <img src="../../static/images/p2.png" /><span>{{item.teacherName|sliceValue}}</span>
-                <img src="../../static/images/p3.png" /><span>{{item.membersCount}}</span>
+                <img src="../../static/images/p3.png" /><span>{{item.membersCount}}人</span>
               </p>
             </div>
           </div>
@@ -65,7 +65,7 @@ export default {
     },
     data(){
         return {
-            logoSrc:'',
+            
             getClassId:'',  // 接收从CLYchooseClass传过来的 整校班级id
             create:'',  // 选中  创建班级
             team:false,    //   

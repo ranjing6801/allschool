@@ -135,7 +135,7 @@ export default {
       //默认用户名密码
       if(sessionStorage.getItem('phone')){
         this.account = sessionStorage.getItem('phone');
-        this.password = sessionStorage.getItem('phone').slice(6,12);
+        this.password = sessionStorage.getItem('phone').slice(5,12);
       }
 
       //判断手机类型
