@@ -81,7 +81,7 @@ export default {
           // 7 有整校班级 — 班主任 — 新用户 — 无晓黑板班级 - 创建班级 - 生成二维码 - 认证成功：打开晓黑板  user6 / 144442241171  加
             console.log('输入的姓名是:',this.userName);
             console.log('您的手机号是:',sessionStorage.getItem('phone'));
-            this.axios.post('https://school-test.xiaoheiban.cn/h5/index/getUserDetail',{
+            this.axios.post('/h5/index/getUserDetail',{
                     name:'user3',
                     phone:'14444441122'
                     // name:this.userName,

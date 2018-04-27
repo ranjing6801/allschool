@@ -105,7 +105,7 @@ import $ from 'jquery'
           }
           console.log('手机号:',myphone);
 
-          this.axios.post('https://school-test.xiaoheiban.cn/h5/index/checkPhoneNumber',{
+          this.axios.post('/h5/index/checkPhoneNumber',{
                   phone: myphone,
                 })
               .then(res => {
@@ -140,7 +140,7 @@ import $ from 'jquery'
       document.title = "输入手机号";
       var tcode = this.$route.params.tcode;
       console.log('tcode:',this.$route.params.tcode);
-      this.axios.get('https://school-test.xiaoheiban.cn/h5/index/index?tcode='+ tcode)
+      this.axios.get('/h5/index/index?tcode='+ tcode)
           .then(res => {
           //console.log('res:',res.data.response.school_info);
             this.imgSrc = res.data.response.school_info.school_img;

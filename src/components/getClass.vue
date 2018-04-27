@@ -144,7 +144,7 @@ export default {
                               this.xhb_class_token = JSON.parse(localStorage.getItem('this.$store.state.res2'))[this.idvalue].id;
                           }
 
-                          this.axios.post('https://school-test.xiaoheiban.cn/h5/index/isClassBind',{
+                          this.axios.post('/h5/index/isClassBind',{
                               xhb_class_token:this.xhb_class_token
                             })
                             .then(res => {
@@ -258,7 +258,7 @@ export default {
           //  console.log('this.$store.state.res2=',this.$store.state.res2);
           //  console.log('this.$store.state.res1=',this.$store.state.res1); 
 
-           this.axios.post('https://school-test.xiaoheiban.cn/h5/index/isClassBind',{
+           this.axios.post('/h5/index/isClassBind',{
                     xhb_class_token:this.xhb_class_token
                 }) 
                 .then(res => {

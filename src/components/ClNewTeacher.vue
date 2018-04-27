@@ -64,7 +64,6 @@
 
 <script>
     import zhiwenImg from  '../../static/images/zhiwen.png'
-    import secImg from  '../../static/images/secImg.jpg'
     import saveModal from './saveModal'
 export default {
     name:'CLNewTeacher',
@@ -92,7 +91,7 @@ export default {
             this.isSave = false;
         },
         createClass(){
-            this.axios.post('https://school-test.xiaoheiban.cn/h5/index/createXhbClass',{
+            this.axios.post('/h5/index/createXhbClass',{
                 user_token:sessionStorage.getItem('user_token'),
                 teacher_id:sessionStorage.getItem('teacher_id')
             })

@@ -104,16 +104,16 @@ export default {
     methods:{
         getVolidateCode(){
           // 刚刚进入这个组件  就获取验证码
-          this.axios.post('https://school-test.xiaoheiban.cn/h5/index/sendMessageCode',{
+          this.axios.post('/h5/index/sendMessageCode',{
                 phone:sessionStorage.getItem('phone')
           })
           .then(res => {
             console.log('sendMessageCode:',res);
             //***** 本地打开测试 *****//
-            this.ShowNumber();  
+            //this.ShowNumber();  
             //***** 本地打开测试 *****//
             if(res.data.response){
-                //this.ShowNumber();
+                this.ShowNumber();
             }
             if(res.data.error_response){
               sessionStorage.setItem('school_id',res.data.error_response.school_id);
@@ -201,7 +201,7 @@ export default {
             //this.reNum = false; 
         },
         know(){  // 请求语音验证码 点击 好的 
-            this.axios.post('https://school-test.xiaoheiban.cn/h5/index/sendvoicecode',{
+            this.axios.post('/h5/index/sendvoicecode',{
                 phone:sessionStorage.getItem('phone')
             })
             .then(res => {
@@ -220,7 +220,7 @@ export default {
         },
         codePromise(){ // 验证码提交
             console.log('输入的验证码:',this.reCredNum);
-            this.axios.post('https://school-test.xiaoheiban.cn/h5/index/checkCode',{
+            this.axios.post('/h5/index/checkCode',{
                     phone:sessionStorage.getItem('phone'),
                     code:this.reCredNum
                 })

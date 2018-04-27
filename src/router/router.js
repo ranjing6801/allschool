@@ -22,7 +22,7 @@ const router = new VueRouter({
     mode:'hash',
     routes:[
         {
-            path:'/:tcode',
+            path:'/',
             component:Menu 
         },
         {  // 输入手机号

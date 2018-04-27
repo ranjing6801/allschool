@@ -65,7 +65,7 @@ export default {
                 detail: this.reback
             };
             console.log('提交的信息:',obj);
-            this.axios.post('https://school-test.xiaoheiban.cn/h5/index/questionBack',{
+            this.axios.post('/h5/index/questionBack',{
                 user_name: this.user,   //老师姓名 
                 is_director: isDirector,//是否班主任
                 phone: sessionStorage.getItem('phone'),//手机号

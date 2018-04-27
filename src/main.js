@@ -4,13 +4,13 @@ import router from './router/router'
 
 import axios from 'axios'
 import {store} from './store/store.js'
-
+ 
 
 
 
 // 配置默认的根路径
 
-// axios.defaults.baseURL = 'http://school-dev.xiaoheiban.cn'
+axios.defaults.baseURL = 'https://school-test.xiaoheiban.cn'
 Vue.prototype.axios = axios
 axios.defaults.withCredentials = true
 

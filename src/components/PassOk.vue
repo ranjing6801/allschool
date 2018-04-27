@@ -75,7 +75,7 @@ export default {
           this.reVolidate = true;
         },
         createClass(){
-          this.axios.post('https://school-test.xiaoheiban.cn/h5/index/createXhbClass',{
+          this.axios.post('/h5/index/createXhbClass',{
                 user_token:sessionStorage.getItem('user_token'),
                 teacher_id:sessionStorage.getItem('teacher_id')
               })
