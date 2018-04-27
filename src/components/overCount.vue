@@ -70,7 +70,8 @@ export default {
                 is_director: isDirector,//是否班主任
                 phone: sessionStorage.getItem('phone'),//手机号
                 keyword: sessionStorage.getItem('keyword'),    // 关键字
-                detail: this.reback     // 问题详情
+                detail: this.reback,    // 问题详情
+                teacher_id:sessionStorage.getItem('teacher_id')
             })
             .then(res => {
               console.log('questionBack:',res);

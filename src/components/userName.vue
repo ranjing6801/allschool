@@ -43,7 +43,6 @@ export default {
     },
     data(){
         return {
-            logoSrc:'',    // 保存 班徽 logo
             title:sessionStorage.getItem('title'),
             imgSrc:sessionStorage.getItem('imgSrc'),
             userName:'',

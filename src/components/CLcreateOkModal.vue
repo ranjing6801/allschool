@@ -38,7 +38,7 @@ export default {
             this.$emit("changeIsSaveModal")
         },
         NewClcreated(obj){
-            alert("班主任新用户创建班级成功")
+            // alert("班主任新用户创建班级成功")
            this.$router.push({path:'/NewAuthenticationOk'})
         }
     }

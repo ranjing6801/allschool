@@ -2,7 +2,7 @@
     <div id="authentication">  
       <div v-if="isIOS" class="ios">
         <div class="content" slot="header">
-            <p class="p-img"><img src="/static/images/smile.png" alt=""></p>
+            <p class="p-img"><img src="../../static/images/smile.png" alt=""></p>
             <p class="title">反馈成功</p>
             <p class="title1">我们将尽快处理，请耐心等候</p>
         </div>
@@ -61,7 +61,7 @@ export default {
       
         var ua = navigator.userAgent.toLowerCase();
 
-        alert(ua);
+        // alert(ua);
 
         if(/android/.test(ua)){
             console.log('android...');

@@ -15,7 +15,7 @@
         <li v-for="(item,index) in list2" :key="item.index" v-show="!item.hadBind">
           <div class="unbind-div">
             <div @click="handleCheck($event,index)" class="left"></div>
-            <img class="logo" :src="item.badgeId" />
+            <img class="logo" :src="!item.badgeId ? logoSrc :item.badgeId" />
             <div class="right">
               <p class="p1">{{ item.title | teacherName }}</p>
               <p class="p2">
@@ -57,6 +57,7 @@
 
 import $ from 'jquery'
 import ReCertification from './ReCertification'
+import logoSrc from '../../static/images/logo.jpg'
 
 export default {
     name:'getClass',
@@ -65,7 +66,7 @@ export default {
     },
     data(){
         return {
-            
+            logoSrc:logoSrc,
             getClassId:'',  // 接收从CLYchooseClass传过来的 整校班级id
             create:'',  // 选中  创建班级
             team:false,    //   
@@ -132,7 +133,7 @@ export default {
                 3.第三种情况:就是班级认证完了,创建班级 
             */
                 if(this.team == '4'){
-                    alert('班主任创建班级');
+                    // alert('班主任创建班级');
                     // 班主任 有晓黑板班级 再去创建班级 跳转组件
                     //  请求接口 周日 来加班
                     // this.$router.push({path:'/createClass',query:{index:this.getClassId}});
@@ -165,7 +166,7 @@ export default {
                                 }
                                 // 该班级已经被其他老师绑定
                                 if(res.data.error_response){
-                                   alert('该班级已经被其他老师绑定');
+                                  //  alert('该班级已经被其他老师绑定');
                                     this.isReCertificationShow = true
                                     this.classUser = res.data.error_response.teacher_name;
                                 }
@@ -195,7 +196,7 @@ export default {
             this.isReCertificationShow = false;
         },
         Replace(){  // 顶替Ta
-            alert("顶替Ta");
+            // alert("顶替Ta");
             console.log('this.idvalue=',thid.idvalue);
             // this.$store.state.res1[this.getClassId].xhb_class_token = this.$store.state.res2[this.idvalue].id;
             this.$router.push({path:'/CLYchooseClass'});
@@ -269,7 +270,7 @@ export default {
                     this.$router.push({ path:'/CLYchooseClass',query:{index:this.index} }); //跳回去的时候保存这次的序号
                     // 该班级已经被其他老师绑定
                     if(res.data.error_response){
-                        alert('该班级已经被其他老师绑定');
+                        // alert('该班级已经被其他老师绑定');
                         this.isReCertificationShow = true
                         this.classUser = res.data.error_response.teacher_name;
                     }
