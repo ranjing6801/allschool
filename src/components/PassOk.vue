@@ -189,6 +189,7 @@ export default {
   font-family: PingFangSC-Regular;
 }
 .tip{
+  font-size: 0.3733rem;
   color: #AAAAAA;
   text-align: center;
   font-family: PingFangSC-Regular;

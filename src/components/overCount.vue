@@ -64,9 +64,10 @@ export default {
                 keyword: sessionStorage.getItem('keyword'),    // 关键字
                 detail: this.reback
             };
-
+            console.log('obj=',obj);
             sessionStorage.setItem('userTitle',this.user);
             sessionStorage.setItem('reback',this.reback);
+            
 
             console.log('提交的信息:',obj);
             this.axios.post('/h5/index/questionBack',{
@@ -94,16 +95,16 @@ export default {
     mounted(){
         document.title = "反馈信息";
         this.title = this.$route.query.title;
-       
         this.helpMessage = this.$route.query.helpMessage;
         
         if(this.$route.query.username){
+            console.log('query:',this.$route.query);
              this.user = this.$route.query.username;
-            this.reback = this.$route.query.title;
+             this.reback = this.$route.query.title;
         }
         else{
             this.user = sessionStorage.getItem('userTitle');
-            this.user = sessionStorage.getItem('reback');
+            this.reback = sessionStorage.getItem('reback');
         }
     }
 }
