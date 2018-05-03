@@ -10,7 +10,7 @@
         </div>
     </div>
     <div class="contentUser">
-        <input maxlength="20" placeholder="请输入您的姓名" type="text" v-model="userName" v-on:input="userNameFocus"  class="user" >
+        <input maxlength="20" placeholder="请输入您的真实姓名" type="text" v-model="userName" v-on:input="userNameFocus"  class="user" >
         <button class="refer" id="referName" :disabled="dis" @click="NamePromise" >提交</button>
     </div>
 
@@ -20,7 +20,7 @@
               <div id="modal">
                   <p class="titleListen">请勿重复认证</p>
                   <p class="contentListen"> 
-                      您已是认证用户,请勿重复认证
+                      您已是认证用户,请勿重复认证请勿重复认证
                   </p>
                   <button class="Btn" @click="knowing">我知道啦</button>
               </div>
@@ -83,6 +83,10 @@ export default {
           // 7 有整校班级 — 班主任 — 新用户 — 无晓黑板班级 - 创建班级 - 生成二维码 - 认证成功：打开晓黑板  user6 / 144442241171  加
             console.log('输入的姓名是:',this.userName);
             console.log('您的手机号是:',sessionStorage.getItem('phone'));
+            if(this.userName == ''){
+                this.dis = true;
+                return 
+            }
             this.axios.post('/h5/index/getUserDetail',{
                     //name:'user12',
                     //phone:'14444441014'
@@ -93,7 +97,6 @@ export default {
                   console.log('getUserDetail:',res);
                   if(res.data.response){
                     console.log('xhb_class:',res.data.response.xhb_class);
-
                         var obj = res.data.response;
                         sessionStorage.setItem('teacher_id',obj.teacher_id);  // 保存teacher_id
                         sessionStorage.setItem('user_token',obj.user_token);   // 保存user_token
@@ -280,14 +283,16 @@ export default {
   line-height: 0.4533rem;
   text-indent:  0.1333rem;
   outline: none;
-  border: none;
   color: #fff;
   background: #2b2b2b;
   border-radius: 0;
-  border-bottom:  0.0267rem solid #555555;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  border-bottom:  2px solid #555555;
 }
 .hot{
-  border-bottom:  0.0267rem solid #aaa;
+  border-bottom:  2px solid #aaa;
 }
 
 .contentUser input::-webkit-input-placeholder {

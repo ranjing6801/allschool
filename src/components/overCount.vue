@@ -30,7 +30,7 @@
                 <textarea maxlength="200" rows="8" cols="40" class="rebackContent" v-model="reback"></textarea>
             </li>
         </ul>
-        <div :class="user&&cur&&reback?'active':''" class="btn" @click="getContent">提交</div>
+        <div :class="user&&cur&&reback?'active':''"  class="btn"  @click="getContent">提交</div>
     </div>
 
    </div>
@@ -97,7 +97,7 @@ export default {
         this.title = this.$route.query.title;
         this.helpMessage = this.$route.query.helpMessage;
         
-        if(this.$route.query.username){
+        if(this.$route.query.username){   // 用户名不存在的情况下跳转到 反馈详情界面
             console.log('query:',this.$route.query);
              this.user = this.$route.query.username;
              this.reback = this.$route.query.title;
@@ -106,6 +106,17 @@ export default {
             this.user = sessionStorage.getItem('userTitle');
             this.reback = sessionStorage.getItem('reback');
         }
+
+        if(this.$route.query.title){   // 验证码输入错误超过10次的情况下跳转到 反馈详情界面
+            console.log('query:',this.$route.query);
+             this.user = this.$route.query.username;
+             this.reback = this.$route.query.title;
+        }
+        else{
+            this.user = sessionStorage.getItem('userTitle');
+            this.reback = sessionStorage.getItem('reback');
+        }
+
     }
 }
 </script>
@@ -182,7 +193,7 @@ export default {
   font-family: PingFangSC-Light;
   font-size: 0.4533rem;
   line-height: 1.1733rem;
-  border: 0.0267rem solid #FFFFFF;
+  border: 2px solid #FFFFFF;
   border-radius: 0.0533rem;
   margin-right: 0.16rem;
   text-align: center;
@@ -195,13 +206,13 @@ export default {
   font-family: PingFangSC-Light;
   font-size: 0.4533rem;
   line-height: 1.1733rem;
-  border: 0.0267rem solid #FFFFFF;
+  border: 2px solid #FFFFFF;
   border-radius: 0.0533rem;
   text-align: center;
 }
 .hot{
   background: #F8E71C;
-  border: 0.0267rem solid #F8E71C;
+  border: 2px solid #F8E71C;
   border-radius: 0.0533rem;
   color: #000;
 }

@@ -90,8 +90,8 @@ export default {
                 isShowCode:false,
                 isCodeFail:false,   // 验证码发送失败
                 codeOverTime:'验证码发送次数已达上限',
-                helpMessage:'您填写的信息可以帮助我们及时更正哦',
-                txt:'验证码累计错误已达上线',
+                helpMessage:'请填写反馈信息帮助我们及时解决哦',
+                txt:'验证码累计错误已达上限',
                 dis:true,
                 getCodeNum:0,   // 记录获取验证码次数, 到达10次 就进入反馈界面
                 isCodeFailShow:false,  // 语音验证码
@@ -368,7 +368,7 @@ export default {
     border-radius: 0;
     color: #fff;
     background: #2b2b2b;
-    border-bottom:  1px solid #555555;
+    border-bottom:  2px solid #555555;
 }
 
 .content .referCode {
@@ -391,13 +391,13 @@ export default {
 
 /* 输入框动态样式*/
 .content .hot{  
-  border-bottom: 1px solid #AAAAAA;
+  border-bottom: 2px solid #AAAAAA;
 }
 .content .red{
-  border-bottom: 1px solid #FF6688;
+  border-bottom: 2px solid #FF6688;
 }
 .content .active{
-  border: 1px solid #333;
+  border: 2px solid #333;
   background: #000;
   color: #fff;
 }

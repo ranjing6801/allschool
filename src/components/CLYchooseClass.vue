@@ -39,7 +39,7 @@ export default {
     },
     filters:{
       teacherName(value){
-        if(value.length > 5){
+        if(value.split(' ').join('').length > 5){
             return value.split(' ').join('').slice(0,2) + '...'+value.split(' ').join('').slice(-3,value.length);
          }return value
       }
@@ -219,6 +219,7 @@ export default {
 .over {
   width: 1.3067rem;
   right: 0.8107rem;
+  top:0.4rem;
   position: absolute;
 }
 

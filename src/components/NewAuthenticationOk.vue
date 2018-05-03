@@ -79,7 +79,8 @@ export default {
     methods:{
         openSmallDesk() {  // ios 
             // 打开晓黑板  http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk
-            window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=org.xinkb.blackboard.android&g_f=991653';
+            //window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=org.xinkb.blackboard.android&g_f=991653';
+            window.location.href = 'https://itunes.apple.com/cn/app/%E6%99%93%E9%BB%91%E6%9D%BF-%E5%A5%BD%E8%80%81%E5%B8%88%E7%9A%84%E5%A5%BD%E5%B7%A5%E5%85%B7/id1003713373?mt=8';
         },
         openSmallDesk1() { // android
             // 打开晓黑板  http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk

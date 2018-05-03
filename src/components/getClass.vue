@@ -164,6 +164,7 @@ export default {
 
                                   this.$router.push({path:'/CLYchooseClass'});
                                 }
+                                
                                 // 该班级已经被其他老师绑定
                                 if(res.data.error_response){
                                   //  alert('该班级已经被其他老师绑定');

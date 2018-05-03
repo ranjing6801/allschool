@@ -75,7 +75,7 @@ export const store = new Vuex.Store({
         // console.log('myindex',myindex);
         // state.res2[myindex.index].hadBind = true;
       },
-      resetClass(state,opt) {
+      resetClass(state,opt) {  
         state.res1[opt.index1].isOver = false;
         state.res2[opt.index2].hadBind = false;
         state.res1[opt.index1].className = '的对应班级';
@@ -86,7 +86,7 @@ export const store = new Vuex.Store({
         state.res1[opt.index1].className = '的对应班级';
       }
     },
-    actions:{
+    actions:{ 
       unbindClass2({commit},opt){
         let index1 = opt.index1;
         let index2 = opt.index2; 
