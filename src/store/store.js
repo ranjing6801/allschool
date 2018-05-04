@@ -67,6 +67,8 @@ export const store = new Vuex.Store({
         var myindex = state.res2.find( (datum)=>datum.code==opt.num1 );
         console.log('myindex',myindex);
         state.res2[myindex.index].hadBind = true;
+        localStorage.setItem('res1',JSON.stringify(state.res1));
+        localStorage.setItem('res2',JSON.stringify(state.res2));
       },
       setClass1(state,opt) {
         state.res1[opt.index].isOver = opt.sta;
@@ -74,16 +76,22 @@ export const store = new Vuex.Store({
         // var myindex = state.res2.find( (datum)=>datum.code==opt.num1 );
         // console.log('myindex',myindex);
         // state.res2[myindex.index].hadBind = true;
+        localStorage.setItem('res1',JSON.stringify(state.res1));
+        localStorage.setItem('res2',JSON.stringify(state.res2));
       },
       resetClass(state,opt) {  
         state.res1[opt.index1].isOver = false;
         state.res2[opt.index2].hadBind = false;
         state.res1[opt.index1].className = '的对应班级';
+        localStorage.setItem('res1',JSON.stringify(state.res1));
+        localStorage.setItem('res2',JSON.stringify(state.res2));
       },
       unbindClass(state,opt) {
         state.res1[opt.index1].isOver = false;
         state.res2[opt.index2].hadBind = false;
         state.res1[opt.index1].className = '的对应班级';
+        localStorage.setItem('res1',JSON.stringify(state.res1));
+        localStorage.setItem('res2',JSON.stringify(state.res2));
       }
     },
     actions:{ 

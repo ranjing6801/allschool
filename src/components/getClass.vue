@@ -96,17 +96,7 @@ export default {
       },
       classList2() {
           return this.$store.getters.getRes2;
-      },
-      // optionList(){
-      //   if(this.$store.state.res2.length){
-      //     console.log('this.$store.state.res1=',this.$store.state.res1);
-      //     console.log('this.$store.state.res2=',this.$store.state.res2);
-      //       return  this.$store.state.res2;
-      //     }else {
-      //     // console.log('this.$store.state.res1=',JSON.parse(localStorage.getItem('this.$store.state.res2')));
-      //       return JSON.parse(localStorage.getItem('this.$store.state.res2'));
-      //     }
-      // }    
+      }   
     },
     filters:{
       sliceValue(value){
@@ -126,57 +116,6 @@ export default {
       },
     },
     methods:{
-        getClassPromise(){ //  确认按钮  
-            /*
-                1.第一种情况: 如果该班级没有被其他的班主任认证    点击确认跳转到 前面 班主任列表查询页
-                2.第二种情况:如果在认证某一个班级的时候,他已经被其他老师认证过了,会提示弹窗
-                3.第三种情况:就是班级认证完了,创建班级 
-            */
-                // if(this.team == '4'){
-                    // alert('班主任创建班级');
-                    // 班主任 有晓黑板班级 再去创建班级 跳转组件
-                    //  请求接口 周日 来加班
-                    // this.$router.push({path:'/createClass',query:{index:this.getClassId}});
-                // }else{
-                  // 选择班级认证
-                          // if(this.$store.state.res2.length){
-                          //     this.xhb_class_token = this.$store.state.res2[this.idvalue].id
-                          // }else {
-                          //     this.xhb_class_token = JSON.parse(localStorage.getItem('this.$store.state.res2'))[this.idvalue].id;
-                          // }
-
-                          // this.axios.post('/h5/index/isClassBind',{
-                          //     xhb_class_token:this.xhb_class_token
-                          //   })
-                          //   .then(res => {
-                          //       // console.log('isClassBindres=',res);
-                          //       if(res.data.response){
-                          //         this.$store.state.res1[this.getClassId].teamId = this.idvalue;
-                          //         this.$store.state.res1[this.getClassId].name = this.$store.state.res2[this.idvalue].name;
-                          //         this.$store.state.res1[this.getClassId].xhb_class_token = this.$store.state.res2[this.idvalue].id;
-                          //         this.$store.state.res1[this.getClassId].symbol = true;
-                          //         this.$store.state.res2[this.idvalue].teamShow = this.$store.state.res1[this.getClassId].class_name;
-                          //         this.$store.state.res2[this.idvalue].vip = true;
-                          //         // console.log('res2=',this.$store.state.res2);
-                          //         // console.log('res1=',this.$store.state.res1);
-                          //         localStorage.setItem('this.$store.state.res2',JSON.stringify(this.$store.state.res2));
-                          //         localStorage.setItem('this.$store.state.res1',JSON.stringify(this.$store.state.res1));
-
-                          //         this.$router.push({path:'/CLYchooseClass'});
-                          //       }
-                                
-                          //       // 该班级已经被其他老师绑定
-                          //       if(res.data.error_response){
-                          //         //  alert('该班级已经被其他老师绑定');
-                          //           this.isReCertificationShow = true
-                          //           this.classUser = res.data.error_response.teacher_name;
-                          //       }
-                          //   })
-                          //   .catch(err => {
-                          //       console.log('isClassBinderr=',err);
-                          //   })   
-                // }
-        },
         change(){ // 单选框change事件
             if(this.team+1){
                 this.dis = false;
@@ -197,7 +136,6 @@ export default {
             this.isReCertificationShow = false;
         },
         Replace(){  // 顶替Ta
-            // alert("顶替Ta");
               console.log('this.idvalue=',this.idvalue);
               this.$store.state.res1[this.index].xhb_class_token = this.$store.state.res2[this.valueId].id;
 
@@ -278,7 +216,7 @@ export default {
                         this.$store.state.res1[oIndex].xhb_class_token = this.$store.state.res2[this.valueId].id;
                         var obj = {index:oIndex,name:detail,sta:true,num1:num1};
                         sessionStorage.setItem(oIndex,num1);            //保存当前对应的状态
-                        this.$store.commit('setClass',obj);               //更改store的数据
+                        this.$store.commit('setClass',obj);             //更改store的数据
                         this.$router.push({ path:'/CLYchooseClass',query:{index:this.index} }); //跳回去的时候保存这次的序号
                     }
                     // 该班级已经被其他老师绑定
@@ -298,8 +236,8 @@ export default {
       }
     },
     created() {
-        this.list = this.$store.state.res1; //获取数据
-        this.list2 = this.$store.state.res2; //获取数据
+        this.list = this.$store.state.res1 ||  JSON.parse(localStorage.getItem('res1'));; //获取数据
+        this.list2 = this.$store.state.res2 || JSON.parse(localStorage.getItem('res2'));; //获取数据
 
         this.index = this.$route.query.index;
         
