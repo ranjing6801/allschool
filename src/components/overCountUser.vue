@@ -32,10 +32,7 @@
         </ul>
         <div :class="user&&cur&&reback?'active':''"  class="btn"  @click="getContent">提交</div>
     </div>
-      <!-- 网络不好 -->
-        <div v-show="offline" class="pop">
-          网络不佳，请检查后重试
-        </div>
+
    </div>
 </template>
 <script>
@@ -116,17 +113,7 @@ export default {
         this.title = this.$route.query.title;
         this.helpMessage = this.$route.query.helpMessage;
 
-        if(this.$route.query.title){   // 验证码发送次数达到上限5次 
-            console.log('query:',this.$route.query);
-             this.user = this.$route.query.username;
-             this.reback = this.$route.query.title;
-        }
-        else{
-            this.user = sessionStorage.getItem('userTitle');
-            this.reback = sessionStorage.getItem('reback');
-        }
-
-        // if(this.$route.query.username){   // 用户名不存在的情况下跳转到 反馈详情界面
+        // if(this.$route.query.title){   // 验证码发送次数达到上限5次 
         //     console.log('query:',this.$route.query);
         //      this.user = this.$route.query.username;
         //      this.reback = this.$route.query.title;
@@ -135,6 +122,16 @@ export default {
         //     this.user = sessionStorage.getItem('userTitle');
         //     this.reback = sessionStorage.getItem('reback');
         // }
+
+        if(this.$route.query.username){   // 用户名不存在的情况下跳转到 反馈详情界面
+            console.log('query:',this.$route.query);
+             this.user = this.$route.query.username;
+             this.reback = this.$route.query.title;
+        }
+        else{
+            this.user = sessionStorage.getItem('userTitle');
+            this.reback = sessionStorage.getItem('reback');
+        }
 
         
 
@@ -293,20 +290,6 @@ input{
   font-family: PingFangSC-Light;
 }
 
-.pop{
-  width: 6.0533rem;
-  height: 0.9867rem;
-  color: #fff;
-  background: rgba(0, 0, 0, 0.6);
-  position: fixed;
-  top: 38%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 99;
-  font-family: PingFangSC-Light;
-  font-size: 0.4533rem;
-  text-align: center;
-  line-height: 0.9867rem;
-}
+
 
 </style>

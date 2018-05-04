@@ -240,6 +240,7 @@ export default {
                 })
                 .catch(err => {
                   console.log('err=',err);
+                  alert('无可用网络!');
                 })
               
         }

@@ -107,23 +107,7 @@ export default {
           this.reVolidate = false;
         },
         downLoad(){  // 下载晓黑板 地址
-            // this.axios.post('https://www.xiaoheiban.cn/admin-Apk-findNew')
-            //     .then(res => {
-            //       console.log('res=',res);
-            //     })
-            //     .catch(err => {
-            //       console.log('err=',err);
-            //     })
-
-            // $.ajax({
-            //   type:'get',
-            //   url:'https://www.xiaoheiban.cn/admin-Apk-findNew',
-            //   success(response){
-            //       console.log(response);
-            //   }
-            // })
-
-                
+     
         }
     },
     created(){
@@ -398,8 +382,11 @@ export default {
   border: 0.0533rem solid #BBAB71;
   border-radius: 0.2667rem;
   position: absolute;
-  top: 4.4rem;
-  bottom: 7.84rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
 }
 
 
