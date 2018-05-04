@@ -9,7 +9,7 @@
           </div>
         </div>
         <div class="content">
-            <p class="tip" v-if="YZM">验证码已发送至  <span class="telNum">{{ number | value }} </span></p>
+            <p class="tip" v-if="YZM">验证码已发送至  <span>{{ number | value }} </span></p>
             <p class="tip" v-if="ListenYzm">语音验证码已发送成功</p>
            <input maxlength= "4" class="VolidateCode"  placeholder="请输入验证码"
                      type="text" v-model="reCredNum" 
@@ -331,12 +331,6 @@ export default {
   font-size: 0.3733rem;
   margin-left: 0.1333rem;
   margin-top: 0.8rem;
-}
-.content .telNum {
-  font-family: PingFangSC-Light;
-  font-size: 0.3733rem;
-  color: #000000;
-  line-height: 0.3733rem;
 }
 
 .content .code {

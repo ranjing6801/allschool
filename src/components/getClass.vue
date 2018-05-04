@@ -41,10 +41,10 @@
             <div id="ReCertification">
                 <p class="content">{{ accountTile}}</p>
                 <p class=" titleClass">{{ classTitle }}</p>
-                <p class="saveTip"><span>已被</span>  <span class="name">{{ classUser }}</span><span>老师认证过</span></p>
+                <p class="saveTip"><span>已被</span>  <span class="name">{{ classUser }}</span> <span>老师认证过</span></p>
                 <p class="replace">{{ accountReplace }}</p>
                 <button class="Btn Btn-left" @click="giveUp">取消</button>
-                <button class="Btn Btn-rigth" @click="Replace">顶替Ta</button>
+                <button class="Btn Btn-rigth" @click="Replace">顶替TA</button>
             </div>
         </div>
     </div>
