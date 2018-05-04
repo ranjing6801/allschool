@@ -132,50 +132,50 @@ export default {
                 2.第二种情况:如果在认证某一个班级的时候,他已经被其他老师认证过了,会提示弹窗
                 3.第三种情况:就是班级认证完了,创建班级 
             */
-                if(this.team == '4'){
+                // if(this.team == '4'){
                     // alert('班主任创建班级');
                     // 班主任 有晓黑板班级 再去创建班级 跳转组件
                     //  请求接口 周日 来加班
                     // this.$router.push({path:'/createClass',query:{index:this.getClassId}});
-                }else{
+                // }else{
                   // 选择班级认证
-                          if(this.$store.state.res2.length){
-                              this.xhb_class_token = this.$store.state.res2[this.idvalue].id
-                          }else {
-                              this.xhb_class_token = JSON.parse(localStorage.getItem('this.$store.state.res2'))[this.idvalue].id;
-                          }
+                          // if(this.$store.state.res2.length){
+                          //     this.xhb_class_token = this.$store.state.res2[this.idvalue].id
+                          // }else {
+                          //     this.xhb_class_token = JSON.parse(localStorage.getItem('this.$store.state.res2'))[this.idvalue].id;
+                          // }
 
-                          this.axios.post('/h5/index/isClassBind',{
-                              xhb_class_token:this.xhb_class_token
-                            })
-                            .then(res => {
-                                // console.log('isClassBindres=',res);
-                                if(res.data.response){
-                                  this.$store.state.res1[this.getClassId].teamId = this.idvalue;
-                                  this.$store.state.res1[this.getClassId].name = this.$store.state.res2[this.idvalue].name;
-                                  this.$store.state.res1[this.getClassId].xhb_class_token = this.$store.state.res2[this.idvalue].id;
-                                  this.$store.state.res1[this.getClassId].symbol = true;
-                                  this.$store.state.res2[this.idvalue].teamShow = this.$store.state.res1[this.getClassId].class_name;
-                                  this.$store.state.res2[this.idvalue].vip = true;
-                                  // console.log('res2=',this.$store.state.res2);
-                                  // console.log('res1=',this.$store.state.res1);
-                                  localStorage.setItem('this.$store.state.res2',JSON.stringify(this.$store.state.res2));
-                                  localStorage.setItem('this.$store.state.res1',JSON.stringify(this.$store.state.res1));
+                          // this.axios.post('/h5/index/isClassBind',{
+                          //     xhb_class_token:this.xhb_class_token
+                          //   })
+                          //   .then(res => {
+                          //       // console.log('isClassBindres=',res);
+                          //       if(res.data.response){
+                          //         this.$store.state.res1[this.getClassId].teamId = this.idvalue;
+                          //         this.$store.state.res1[this.getClassId].name = this.$store.state.res2[this.idvalue].name;
+                          //         this.$store.state.res1[this.getClassId].xhb_class_token = this.$store.state.res2[this.idvalue].id;
+                          //         this.$store.state.res1[this.getClassId].symbol = true;
+                          //         this.$store.state.res2[this.idvalue].teamShow = this.$store.state.res1[this.getClassId].class_name;
+                          //         this.$store.state.res2[this.idvalue].vip = true;
+                          //         // console.log('res2=',this.$store.state.res2);
+                          //         // console.log('res1=',this.$store.state.res1);
+                          //         localStorage.setItem('this.$store.state.res2',JSON.stringify(this.$store.state.res2));
+                          //         localStorage.setItem('this.$store.state.res1',JSON.stringify(this.$store.state.res1));
 
-                                  this.$router.push({path:'/CLYchooseClass'});
-                                }
+                          //         this.$router.push({path:'/CLYchooseClass'});
+                          //       }
                                 
-                                // 该班级已经被其他老师绑定
-                                if(res.data.error_response){
-                                  //  alert('该班级已经被其他老师绑定');
-                                    this.isReCertificationShow = true
-                                    this.classUser = res.data.error_response.teacher_name;
-                                }
-                            })
-                            .catch(err => {
-                                console.log('isClassBinderr=',err);
-                            })   
-                }
+                          //       // 该班级已经被其他老师绑定
+                          //       if(res.data.error_response){
+                          //         //  alert('该班级已经被其他老师绑定');
+                          //           this.isReCertificationShow = true
+                          //           this.classUser = res.data.error_response.teacher_name;
+                          //       }
+                          //   })
+                          //   .catch(err => {
+                          //       console.log('isClassBinderr=',err);
+                          //   })   
+                // }
         },
         change(){ // 单选框change事件
             if(this.team+1){
@@ -198,9 +198,18 @@ export default {
         },
         Replace(){  // 顶替Ta
             // alert("顶替Ta");
-            console.log('this.idvalue=',thid.idvalue);
-            // this.$store.state.res1[this.getClassId].xhb_class_token = this.$store.state.res2[this.idvalue].id;
-            this.$router.push({path:'/CLYchooseClass'});
+              console.log('this.idvalue=',this.idvalue);
+              this.$store.state.res1[this.index].xhb_class_token = this.$store.state.res2[this.valueId].id;
+
+              //绑定
+              var oIndex = this.index;      // 记录整校班级 index
+              var detail = this.txt;
+              var num1 = this.num1;
+              var obj = {index:oIndex,name:detail,sta:true,num1:num1};
+              sessionStorage.setItem(oIndex,num1);            //保存当前对应的状态
+              this.$store.commit('setClass',obj);               //更改store的数据
+
+              this.$router.push({path:'/CLYchooseClass'});
         },
       handleCheck(e,i) {  //选择班级按钮
         var el = e.currentTarget;
@@ -264,17 +273,22 @@ export default {
                     xhb_class_token:this.xhb_class_token
                 }) 
                 .then(res => {
-                    this.$store.state.res1[oIndex].xhb_class_token = this.$store.state.res2[this.valueId].id;
-                    var obj = {index:oIndex,name:detail,sta:true,num1:num1};
-                    sessionStorage.setItem(oIndex,num1);            //保存当前对应的状态
-                    this.$store.commit('setClass',obj);               //更改store的数据
-                    this.$router.push({ path:'/CLYchooseClass',query:{index:this.index} }); //跳回去的时候保存这次的序号
+                    console.log('bind res:',res);
+                    if(res.data.response){
+                        this.$store.state.res1[oIndex].xhb_class_token = this.$store.state.res2[this.valueId].id;
+                        var obj = {index:oIndex,name:detail,sta:true,num1:num1};
+                        sessionStorage.setItem(oIndex,num1);            //保存当前对应的状态
+                        this.$store.commit('setClass',obj);               //更改store的数据
+                        this.$router.push({ path:'/CLYchooseClass',query:{index:this.index} }); //跳回去的时候保存这次的序号
+                    }
                     // 该班级已经被其他老师绑定
                     if(res.data.error_response){
                         // alert('该班级已经被其他老师绑定');
-                        this.isReCertificationShow = true
+                        this.isReCertificationShow = true;
                         this.classUser = res.data.error_response.teacher_name;
                     }
+                    
+                    
                 })
                 .catch(err => {
                   console.log('err=',err);
@@ -500,5 +514,106 @@ export default {
   background-size: cover;
 }
 /* new css end */
+
+
+
+/* 顶替弹窗样式*/
+
+#getClass .modalShow {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+#getClass .modalShow .modal {
+  width: 8.9333rem;
+  height: 6.16rem;
+  margin-left: 0.5333rem;
+  margin-right:0.5333rem;
+  position: absolute;
+  top: 4.48rem;
+  background: #2B2B2B;
+  border: 0.0533rem solid #BBAB71;
+  border-radius: 0.2667rem;
+}
+
+
+
+#ReCertification {
+    width: 8.9333rem;
+    height: 6.16rem;
+}
+
+
+#ReCertification .content {
+  font-family: PingFangSC-Light;
+  font-size: 0.5333rem;
+  color: #FFFFFF;
+  line-height: 0.5333rem;
+  text-align: center;
+  margin-top: 0.5333rem;
+}
+#ReCertification .titleClass {
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+  line-height: 0.6933rem;
+  text-align: center;
+  margin-top:0.5333rem;
+}
+
+
+#ReCertification .saveTip {
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+  line-height: 0.6933rem;
+  text-align: center;
+}
+
+#ReCertification .saveTip  .name {
+  font-family: PingFangSC-Regular;
+  font-size: 0.4533rem;
+  color:#fff;
+  line-height: 0.6933rem;
+}
+
+#ReCertification .replace {
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+  line-height: 0.6933rem;
+  text-align: center;
+}
+/**/
+#ReCertification .Btn {
+    width: 4.0rem;
+    height: 1.28rem;
+    background: #2B2B2B;
+    font-family: PingFangSC-Regular;
+    font-size: 0.4533rem;
+    color: #F8E71C;
+    line-height: 0.4533rem;
+    border-radius: 0.0533rem;
+    border: none;
+    margin-top:0.6667rem;
+}
+
+#ReCertification .Btn-left{
+   margin-left: 0.4rem;
+}
+#ReCertification .Btn-rigth{
+  
+  background:#F8E71C;
+  color: #000000;
+  margin-right: 0.4rem;
+}
+
 </style>
 
