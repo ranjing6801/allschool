@@ -34,6 +34,10 @@
             </div>
         </div>
     </div>
+    <!-- 网络不好 -->
+    <div v-show="offline" class="pop">
+      网络不佳，请检查后重试
+    </div>
 </div>
 </template>
 
@@ -60,6 +64,7 @@ import imgsrc1 from '../../static/images/logo.jpg'
         isCodeFailShow:false,
         telNum:false,// 控制手机号码输入框 右边的 x
         isHeight:false,
+        offline:false
       }
     },
     watch:{ // 监听phone
@@ -363,6 +368,21 @@ button{
   text-align: center;
   margin-top: 0.6667rem;
   margin-left: 0.4rem;
+}
+.pop{
+  width: 6.0533rem;
+  height: 0.9867rem;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99;
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  text-align: center;
+  line-height: 0.9867rem;
 }
 
 </style>
