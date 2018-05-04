@@ -23,9 +23,9 @@
         <button class="referOk"  @click="overRefer" >确认</button>
 
         <!--  完成认证 确认保存二维码 弹窗 -->
-        <div class="modalShow" v-if="isSave" @click="HiddenSaveModal" >
+        <div class="modalShow" v-if="isSave">
             <div class="modal">
-                <div id="saveModal" @click="know">
+                <div id="saveModal">
                     <p class="title">确认已保存</p>
                     <p class="sure">请确保您已保存二维码</p>
                     <p class="content">将用于发送给家长,邀请他们进班</p>
@@ -61,18 +61,10 @@ export default {
     },
     methods:{
         know(){
-            this.isSave =false;
+            this.isSave = false;
         },
         saveOk(){
-            this.$router.push({path:'/CLYchooseClass'});
-        },
-        overRefer(){  // 认证完成
-            this.isSave = true;
-        },
-        HiddenSaveModal(){
-            this.isSave = false;
             var obj = this.myclass;
-            
             this.$store.state.res2.push(obj);
 
             var oIndex = this.indexValue;  //整校的索引
@@ -86,7 +78,13 @@ export default {
             
             this.$store.commit('setClass1',myobj);
             //  创建完班级之后 跳转到班主任 班级的列表页
-           	this.$router.push({path:'CLYchooseClass'})
+           	this.$router.push({path:'CLYchooseClass'});
+        },
+        overRefer(){  // 认证完成
+            this.isSave = true;
+        },
+        HiddenSaveModal(){
+            this.isSave = false;
         },
         createClassData(){  // 班主任 有小黑板班级 老用户 创建班级认证
               this.axios.post('/h5/index/createSingleXhbClass',{

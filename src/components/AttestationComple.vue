@@ -71,7 +71,7 @@ export default {
         }
     },
     mounted(){
-        document.title = "认证成功"
+        // document.title = "认证成功"
         
         
         

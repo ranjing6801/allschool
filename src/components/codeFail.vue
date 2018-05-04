@@ -23,8 +23,6 @@ export default {
 }
 </script>
 <style scoped>
-/*@import  '../assets/css/variables.scss';  
-@import '../assets/css/codeFail.css';  */
 
 #codeFailModal {
   height: 100%;

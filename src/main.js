@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router/router'
+import VueWechatTitle from 'vue-wechat-title';  
 
 import axios from 'axios'
 import {store} from './store/store.js'
- 
+
+Vue.use(VueWechatTitle)
 
 
 

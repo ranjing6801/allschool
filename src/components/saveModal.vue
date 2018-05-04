@@ -22,12 +22,12 @@ export default {
             this.$emit("changeIsSaveModal")
         },
         saveOk(){
-            if(sessionStorage.getItem('is_regular')){  // 老用户
-                this.$router.push({path:'/passOk'});
-
-            }else{  // 新用户
-                this.$router.push({path:'/NewAuthenticationOk'})
-            }
+            this.$router.push({path:'/NewAuthenticationOk'});
+            // if(sessionStorage.getItem('is_regular')){  // 老用户
+            //     this.$router.push({path:'/passOk'});
+            // }else{  // 新用户
+            //     this.$router.push({path:'/NewAuthenticationOk'})
+            // }
         }
     }
 }
