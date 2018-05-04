@@ -15,7 +15,7 @@
             <li class="userName">
                 <div class="libox1">
                   <p>您的姓名</p>
-                    <input maxlength="20" class="username" type="text" v-model="user"> 
+                  <input maxlength="20" :class="isIOS?'username':'username1'" type="text" v-model="user"> 
                 </div>
             </li>
             <li>
@@ -50,7 +50,8 @@ export default {
             reback:'',
             value:'',
             isbtn:false,
-            cur:''
+            cur:'',
+            isIOS: false
         }
     }, 
     methods:{
@@ -91,6 +92,20 @@ export default {
             console.log('请输入完整的信息...');
           }
         }
+    },
+    created(){
+        //判断手机类型
+        var ua = navigator.userAgent.toLowerCase();
+
+        if(/android/.test(ua)){
+          console.log('android...');
+          this.isIOS = false;
+        }
+
+        if(/iphone|ipad|ipod/.test(ua)){
+          console.log('ios...');
+          this.isIOS = true;
+        } 
     },
     mounted(){
         document.title = "反馈信息";
@@ -221,7 +236,18 @@ input{
   outline: none;
   border: none;
 }
-.libox1 {
+.username{
+  width: 8.8rem;
+  height: 1.1733rem;
+  color: #000000;
+  background: #FFFFFF;
+  font-size: 0.4533rem;
+  line-height: 0.4533rem;
+  text-indent: 0.2667rem;
+  border-radius: 0.0533rem;
+  font-family: PingFangSC-Light;
+}
+.username1{
   width: 9.2rem;
   height: 1.1733rem;
 }
