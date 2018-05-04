@@ -250,11 +250,6 @@ input{
 .username1{
   width: 9.2rem;
   height: 1.1733rem;
-}
-
-.username{
-  width: 100%;
-  height: 100%;
   color: #000000;
   background: #FFFFFF;
   font-size: 0.4533rem;
