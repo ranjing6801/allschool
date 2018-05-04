@@ -329,7 +329,7 @@ export default {
 /* new css 2018 4-20 */
 
 .box {
-  min-height: 14.0rem;
+  /* min-height: 14.0rem; */
 }
 
 .bind li {
@@ -431,7 +431,7 @@ export default {
   width: 1.3333rem;
   height: 1.3333rem;
   margin-right: 0.2667rem;
-  border-radius: 0.0533rem;
+  border-radius: 0.28rem;
 }
 
 .p1 {
@@ -481,6 +481,7 @@ export default {
   height: 1.28rem;
   margin-left: 0.4rem;
   margin-bottom: 0.8rem;
+  margin-top: 2rem;
   border-radius: 0.0533rem;
   background: #AAAAAA;
   font-size: 0.4533rem;
