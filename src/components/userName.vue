@@ -122,8 +122,8 @@ export default {
 
                         console.log('res1:',this.$store.state.res1);
                         console.log('res2:',this.$store.state.res2);
-                        localStorage.setItem('this.$store.state.res1',JSON.stringify(this.$store.state.res1));
-                        localStorage.setItem('this.$store.state.res2',JSON.stringify(this.$store.state.res2));
+                        localStorage.setItem('res1',JSON.stringify(this.$store.state.res1));
+                        localStorage.setItem('res2',JSON.stringify(this.$store.state.res2));
 
                       //1
                       if(obj.is_has_school_class==0 && obj.is_regular==1){

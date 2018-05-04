@@ -91,7 +91,7 @@ export default {
                 isCodeFail:false,   // 验证码发送失败
                 codeOverTime:'验证码发送次数已达上限',
                 helpMessage:'请填写反馈信息帮助我们及时解决哦',
-                txt:'验证码累计错误已达上限',
+                txt:'验证码累计错误达到10次上限',
                 dis:true,
                 getCodeNum:0,   // 记录获取验证码次数, 到达10次 就进入反馈界面
                 isCodeFailShow:false,  // 语音验证码
@@ -233,15 +233,15 @@ export default {
                     this.$router.push({path:'/userName'})
                   }
                   if(res.data.error_response){
-                      sessionStorage.setItem('school_id',res.data.error_response.school_id);
-                      sessionStorage.setItem('keyword',res.data.error_response.keyword);
                       $('.VolidateCode').addClass('red');
                       this.isShowCode = true;
-                      this.getCodeNum ++ ;
+                      //this.getCodeNum ++ ;
                       $(".rightPhone").html('验证码错误');
-                      console.log('验证码输入错误次数:',this.getCodeNum)
-                      if(this.getCodeNum > 9){   // 记录验证码输入错误的次数, 到达10次 就进入反馈界面
+                      // console.log('验证码输入错误次数:',this.getCodeNum)
+                      if(res.data.error_response.code == 222){   // 记录验证码输入错误的次数, 到达10次 就进入反馈界面
                           console.log("验证码输入错误超过10次");
+                          sessionStorage.setItem('school_id',res.data.error_response.school_id);
+                          sessionStorage.setItem('keyword',res.data.error_response.keyword);
                           this.$router.push({path:"/overCount",query:{title:this.txt,helpMessage:this.helpMessage}});
                       } 
                   }

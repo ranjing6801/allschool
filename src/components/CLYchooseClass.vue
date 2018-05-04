@@ -137,8 +137,8 @@ export default {
         }
     },
     created() {
-        this.classList = this.$store.state.res1; // 从store中获取数据
-        this.num = this.$store.state.res1.length;
+        this.classList = this.$store.state.res1 || JSON.parse(localStorage.getItem('res1')); // 从store中获取数据
+        this.num = this.$store.state.res1.length ||JSON.parse(localStorage.getItem('res1')).length;
         var result;
         if(this.$store.state.res1.length){
           result = this.$store.state.res1.every(function(el){

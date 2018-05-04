@@ -51,8 +51,14 @@ export default {
             window.location.href = 'https://itunes.apple.com/cn/app/%E6%99%93%E9%BB%91%E6%9D%BF-%E5%A5%BD%E8%80%81%E5%B8%88%E7%9A%84%E5%A5%BD%E5%B7%A5%E5%85%B7/id1003713373?mt=8';
         },
         openSmallDesk1() { // android 下载
+            var ua = navigator.userAgent.toLowerCase();
             // 打开晓黑板  http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk
-            this.mask = true;
+            if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+              this.mask = true;
+            }else{
+              this.mask = false;
+            }
+            
             //window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
         }
     },
@@ -61,6 +67,8 @@ export default {
         //判断手机类型
       
         var ua = navigator.userAgent.toLowerCase();
+
+        
 
         // alert(ua);
 
@@ -99,7 +107,7 @@ export default {
   height: 100%;
 }
 .arrow{
-  width: 4.5rem;
+  width: 3.5rem;
   position:absolute;
   right: 1rem;
   top: 0.8rem;

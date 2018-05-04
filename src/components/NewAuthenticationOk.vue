@@ -84,7 +84,13 @@ export default {
         },
         openSmallDesk1() { // android
             // 打开晓黑板  http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk
-            this.mask = true;
+            var ua = navigator.userAgent.toLowerCase();
+            // 打开晓黑板  http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk
+            if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+              this.mask = true;
+            }else{
+              this.mask = false;
+            }
         },
         closeBox() {
           this.onOff = false;
@@ -188,7 +194,7 @@ export default {
   
 }
 .arrow{
-  width: 4.5rem;
+  width: 3.5rem;
   position:absolute;
   right: 1rem;
   top: 0.8rem;

@@ -110,17 +110,17 @@ export default {
     },
     filters:{
       sliceValue(value){
-         if(value.length > 4){
+         if(value.split(' ').join('').length > 4){
             return value.split(' ').join('').slice(0,2) + '...'+value.split(' ').join('').slice(-2,value.length);
          }return value
       },
       teacherName(value){
-        if(value.length > 12){
+        if(value.split(' ').join('').length > 12){
             return value.split(' ').join('').slice(0,6) + '...'+value.split(' ').join('').slice(-6,value.length);
          }return value
       },
       tosix(value){
-         if(value.length > 8){
+         if(value.split(' ').join('').length > 8){
             return value.split(' ').join('').slice(0,4) + '...'+value.split(' ').join('').slice(-4,value.length);
          }return value
       },
