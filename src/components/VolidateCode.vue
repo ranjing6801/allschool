@@ -101,6 +101,7 @@ export default {
                 getCodeNum:0,   // 记录获取验证码次数, 到达10次 就进入反馈界面
                 isCodeFailShow:false,  // 语音验证码
                 isHeight:false,
+                offline:false
         }
     },
     filters:{ // 过滤
@@ -137,7 +138,13 @@ export default {
           })
           .catch(err => {
             console.log('err:',err);
-            alert('无可用网络!');
+            this.offline = true;
+                clearTimeout(timer);
+                var _this = this;
+                var timer=null;
+                timer = setTimeout(function(){
+                  _this.offline = false;
+                },2000);
           })
         },
         codeFailHidden(){ // 验证码发送失败弹窗
@@ -224,7 +231,13 @@ export default {
             })
             .catch(err => {
               console.log('err:',err);
-              alert('无可用网络!');
+              this.offline = true;
+                clearTimeout(timer);
+                var _this = this;
+                var timer=null;
+                timer = setTimeout(function(){
+                  _this.offline = false;
+                },2000);
             })
             
         },
@@ -255,7 +268,13 @@ export default {
                 })  
                 .catch(err => {
                     console.log('err:',err);
-                    alert('无可用网络!');
+                    this.offline = true;
+                    clearTimeout(timer);
+                    var _this = this;
+                    var timer=null;
+                    timer = setTimeout(function(){
+                      _this.offline = false;
+                    },2000);
                 })
         }
     },

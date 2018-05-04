@@ -130,9 +130,14 @@ import imgsrc1 from '../../static/images/logo.jpg'
                 }
               })
               .catch(err => {
-                console.log('请求错误');
-                alert('无可用网络!');
-                this.isCodeFailShow = true;
+                console.log('网络错误');
+                this.offline = true;
+                clearTimeout(timer);
+                var _this = this;
+                var timer=null;
+                timer = setTimeout(function(){
+                  _this.offline = false;
+                },2000);
                 // 手机号码验证错误
                 //this.isRightNumber = true;
               });

@@ -58,6 +58,7 @@ export default {
             num:1,
             reVolidate:false, // 用户重复认证弹窗
             isHeight:false,
+            offline:false,
         }
     },
     methods:{
@@ -177,7 +178,13 @@ export default {
                })
                .catch(err => {
                    console.log('err:',err);
-                   alert('无可用网络!');
+                   this.offline = true;
+                  clearTimeout(timer);
+                  var _this = this;
+                  var timer=null;
+                  timer = setTimeout(function(){
+                    _this.offline = false;
+                  },2000);
                })
         }
     },

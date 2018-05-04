@@ -58,10 +58,6 @@
               </div>
           </div>
       </div>
-      <!-- 网络不好 -->
-      <div v-show="offline" class="pop">
-        网络不佳，请检查后重试
-      </div>
     </div>
 </template>
 <script>
@@ -77,7 +73,8 @@ export default {
           reVolidate:false,
           account: '',
           password: '',
-          mask:false    // 遮罩层
+          mask:false, 
+          offline:false
         }
     },
     methods:{

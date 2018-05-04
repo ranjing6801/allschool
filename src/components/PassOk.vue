@@ -58,7 +58,8 @@ export default {
           isIOS: true,
           isAND: false,
           reVolidate:false,
-          mask:false    // 遮罩层
+          mask:false,
+          offline: false,
         }
     },
     methods:{
@@ -94,7 +95,13 @@ export default {
               })
               .catch(err => {
                   console.log('err=',err);
-                  alert('无可用网络!');
+                this.offline = true;
+                clearTimeout(timer);
+                var _this = this;
+                var timer=null;
+                timer = setTimeout(function(){
+                  _this.offline = false;
+                },2000);
               })
         }
     },

@@ -54,7 +54,8 @@ export default {
             value:'',
             isbtn:false,
             cur:'',
-            isIOS: false
+            isIOS: false,
+            offline:false
         }
     }, 
     methods:{
@@ -89,7 +90,13 @@ export default {
             })
             .catch(err => {
               console.log('err:',err);
-              alert('无可用网络!');
+              this.offline = true;
+                clearTimeout(timer);
+                var _this = this;
+                var timer=null;
+                timer = setTimeout(function(){
+                  _this.offline = false;
+                },2000);
             })
 
           }else{

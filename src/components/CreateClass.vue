@@ -60,7 +60,8 @@ export default {
             imgSrc:'',
             imgArr:[],
             myclass:{},
-            myLength:null
+            myLength:null,
+            offline:false
         }
     },
     methods:{
@@ -108,7 +109,13 @@ export default {
                   })
                   .catch(err => {
                       console.log('err=',err);
-                      alert('无可用网络!');
+                      this.offline = true;
+                clearTimeout(timer);
+                var _this = this;
+                var timer=null;
+                timer = setTimeout(function(){
+                  _this.offline = false;
+                },2000);
                   })  
         } 
     },
