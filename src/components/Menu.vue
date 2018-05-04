@@ -165,7 +165,13 @@ import imgsrc1 from '../../static/images/logo.jpg'
           })
           .catch(err => {
             console.log('err:',err);
-            alert('无可用网络!');
+            this.offline = true;
+            clearTimeout(timer);
+            var _this = this;
+            var timer=null;
+            timer = setTimeout(function(){
+              _this.offline = false;
+            },2000);
           })
     }
   }
