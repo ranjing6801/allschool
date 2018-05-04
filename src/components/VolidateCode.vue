@@ -187,7 +187,7 @@ export default {
                 this.$router.push({path:'/overCount',query:{title:this.codeOverTime,helpMessage:this.helpMessage}});
               }
             this.timer = setInterval (() => {
-                this.time -= 30;
+                this.time -= 1;
                 if(this.time <= 0){
                     clearInterval(this.timer);  // 清除定时器
                     this.isTimer = false;
