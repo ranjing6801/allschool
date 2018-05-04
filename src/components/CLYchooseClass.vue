@@ -116,12 +116,15 @@ export default {
 
           //    暂时先不认证
                 console.log('this.arr:',this.arr);
+
+                var pullArr = [] || sessionStorage.getItem('need_pull_class');
+                console.log('pullArr:',pullArr);
                 this.axios.post('/h5/index/bindClass',{ 
                   bind_class : JSON.stringify(this.arr),
                   teacher_id : sessionStorage.getItem('teacher_id'),
                   phone : sessionStorage.getItem('phone'),
                   user_token : sessionStorage.getItem('user_token'),
-                  need_pull_class:'' || sessionStorage.getItem('need_pull_class')
+                  need_pull_class:JSON.stringify(pullArr)
                 })
                 .then(res => {
                   console.log('bindClass:',res);
