@@ -2,7 +2,7 @@
    <div id="overCount">
 <!--  请求验证码次数超时  -->
     <div class="head">
-        <div class="left">
+        <div class="left">  
             <img src="../../static/images/err.png">
         </div>
         <div class="right">
@@ -15,7 +15,7 @@
             <li class="userName">
                 <div class="libox1">
                   <p>您的姓名</p>
-                  <input maxlength="20" class="username" type="text" v-model="user"> 
+                    <input maxlength="20" class="username" type="text" v-model="user"> 
                 </div>
             </li>
             <li>
@@ -107,10 +107,11 @@ export default {
             this.reback = sessionStorage.getItem('reback');
         }
 
-        if(this.$route.query.title){   // 验证码输入错误超过10次的情况下跳转到 反馈详情界面
+        if(this.$route.query.reback){   // 验证码输入错误超过10次的情况下跳转到 反馈详情界面
             console.log('query:',this.$route.query);
              this.user = this.$route.query.username;
-             this.reback = this.$route.query.title;
+             this.reback = this.$route.query.reback;
+             sessionStorage.setItem('reback',this.$route.query.reback); 
         }
         else{
             this.user = sessionStorage.getItem('userTitle');
@@ -220,9 +221,14 @@ input{
   outline: none;
   border: none;
 }
-.username{
+.libox1 {
   width: 9.2rem;
   height: 1.1733rem;
+}
+
+.username{
+  width: 100%;
+  height: 100%;
   color: #000000;
   background: #FFFFFF;
   font-size: 0.4533rem;
