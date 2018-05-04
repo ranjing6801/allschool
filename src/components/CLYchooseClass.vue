@@ -120,7 +120,8 @@ export default {
                   bind_class : JSON.stringify(this.arr),
                   teacher_id : sessionStorage.getItem('teacher_id'),
                   phone : sessionStorage.getItem('phone'),
-                  user_token : sessionStorage.getItem('user_token')
+                  user_token : sessionStorage.getItem('user_token'),
+                  need_pull_class:'' || sessionStorage.getItem('need_pull_class')
                 })
                 .then(res => {
                   console.log('bindClass:',res);
