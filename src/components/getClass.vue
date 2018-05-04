@@ -41,7 +41,7 @@
             <div id="ReCertification">
                 <p class="content">{{ accountTile}}</p>
                 <p class=" titleClass">{{ classTitle }}</p>
-                <p class="saveTip"><span>已被</span>  <span class="name">{{ classUser }}</span> <span>老师认证过</span></p>
+                <p class="saveTip"><span>已被</span><span class="name"> {{ classUser }} </span><span>老师认证过</span></p>
                 <p class="replace">{{ accountReplace }}</p>
                 <button class="Btn Btn-left" @click="giveUp">取消</button>
                 <button class="Btn Btn-rigth" @click="Replace">顶替TA</button>
@@ -74,7 +74,7 @@ export default {
             accountTile:'重新验证该班级',
             classTitle:'一年级二班',
             classUser:'张老师' ,
-            accountReplace:'您是否要顶替Ta,成为该班级班主任',
+            accountReplace:'您是否要顶替TA，成为该班级班主任',
             valueId:'',
             xhb_class_token:'',
             num: 3,
