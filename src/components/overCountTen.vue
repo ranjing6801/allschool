@@ -112,17 +112,7 @@ export default {
         document.title = "反馈信息";
         this.title = this.$route.query.title;
         this.helpMessage = this.$route.query.helpMessage;
-
-        if(this.$route.query.title){   // 验证码发送次数达到上限5次 
-            console.log('query:',this.$route.query);
-             this.user = this.$route.query.username;
-             this.reback = this.$route.query.title;
-        }
-        else{
-            this.user = sessionStorage.getItem('userTitle');
-            this.reback = sessionStorage.getItem('reback');
-        }
-
+        
         // if(this.$route.query.username){   // 用户名不存在的情况下跳转到 反馈详情界面
         //     console.log('query:',this.$route.query);
         //      this.user = this.$route.query.username;
@@ -133,7 +123,17 @@ export default {
         //     this.reback = sessionStorage.getItem('reback');
         // }
 
-        
+        if(this.$route.query.reback){   // 验证码输入错误超过10次的情况下跳转到 反馈详情界面
+            console.log('query:',this.$route.query);
+             this.user = this.$route.query.username;
+             this.reback = this.$route.query.reback;
+            //  sessionStorage.setItem('rebackDetail',this.$route.query.reback); 
+            //  return
+        }
+        else{
+            this.user = sessionStorage.getItem('userTitle');
+            this.reback = sessionStorage.getItem('rebackDetail');
+        }
 
     }
 }

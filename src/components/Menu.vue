@@ -21,7 +21,7 @@
       </div>
                
       <span class="telePhone" @click="clearTel" v-if="telNum"></span>
-      <button :class="!btn?'referBtn':''" class="refer"  :disabled="btn" @click="telPromise" >提交 (当前测试版本号：v2.1.1)</button>
+      <button :class="!btn?'referBtn':''" class="refer"  :disabled="btn" @click="telPromise" >提交 (当前测试版本号：v2.1.2)</button>
     </div>
     
     <!--  验证码发送失败 -->
@@ -126,6 +126,7 @@ import imgsrc1 from '../../static/images/logo.jpg'
               })
               .catch(err => {
                 console.log('请求错误');
+                alert('无可用网络!');
                 this.isCodeFailShow = true;
                 // 手机号码验证错误
                 //this.isRightNumber = true;
@@ -154,6 +155,7 @@ import imgsrc1 from '../../static/images/logo.jpg'
           })
           .catch(err => {
             console.log('err:',err);
+            alert('无可用网络!');
           })
     }
   }

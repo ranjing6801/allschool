@@ -133,6 +133,7 @@ export default {
           })
           .catch(err => {
             console.log('err:',err);
+            alert('无可用网络!');
           })
         },
         codeFailHidden(){ // 验证码发送失败弹窗
@@ -186,7 +187,7 @@ export default {
                 this.$router.push({path:'/overCount',query:{title:this.codeOverTime,helpMessage:this.helpMessage}});
               }
             this.timer = setInterval (() => {
-                this.time -= 1;
+                this.time -= 30;
                 if(this.time <= 0){
                     clearInterval(this.timer);  // 清除定时器
                     this.isTimer = false;
@@ -219,6 +220,7 @@ export default {
             })
             .catch(err => {
               console.log('err:',err);
+              alert('无可用网络!');
             })
             
         },
@@ -243,12 +245,13 @@ export default {
                           console.log("验证码输入错误超过10次");
                           sessionStorage.setItem('school_id',res.data.error_response.school_id);
                           sessionStorage.setItem('keyword',res.data.error_response.keyword);
-                          this.$router.push({path:"/overCount",query:{title:this.txt,helpMessage:this.helpMessage,reback:this.rebackDetail}});
+                          this.$router.push({path:"/overCountTen",query:{title:this.txt,helpMessage:this.helpMessage,reback:this.rebackDetail}});
                       } 
                   }
                 })  
                 .catch(err => {
                     console.log('err:',err);
+                    alert('无可用网络!');
                 })
         }
     },

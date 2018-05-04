@@ -164,7 +164,7 @@ export default {
                     if(res.data.error_response.code==218){//姓名不存在
                         this.title = this.errTitle;   // 跳转之前 将title值覆盖
                         sessionStorage.setItem('keyword',res.data.error_response.keyword);
-                        this.$router.push({path:'/overCount',query:{username:this.userName,title:this.title,helpMessage:this.helpMessage}})
+                        this.$router.push({path:'/overCountUser',query:{username:this.userName,title:this.title,helpMessage:this.helpMessage}})
                       }else if(res.data.error_response.code==219){//已经认证过
                         console.log('已经认证过');
                         this.reVolidate = true;
@@ -173,6 +173,7 @@ export default {
                })
                .catch(err => {
                    console.log('err:',err);
+                   alert('无可用网络!');
                })
         }
     },

@@ -4,6 +4,8 @@ import VueRouter from 'vue-router'
 import Menu from '../components/Menu'
 import VolidateCode from '../components/VolidateCode'
 import overCount from '../components/overCount'
+import overCountTen from '../components/overCountTen'
+import overCountUser from '../components/overCountUser'
 import userName from '../components/userName'
 import AuthenticationOk from '../components/AuthenticationOk'
 import NewAuthenticationOk from '../components/NewAuthenticationOk'  
@@ -56,6 +58,22 @@ const router = new VueRouter({
             path:'/overCount',
             name:'overCount',
             component:overCount,
+            meta: {
+                title: '反馈信息'
+              }
+        },
+        {  // 超过10次  
+            path:'/overCountTen',
+            name:'overCountTen',
+            component:overCountTen,
+            meta: {
+                title: '反馈信息'
+              }
+        },
+        {  // 用户名不存在  
+            path:'/overCountUser',
+            name:'overCountUser',
+            component:overCountUser,
             meta: {
                 title: '反馈信息'
               }
