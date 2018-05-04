@@ -101,8 +101,11 @@ export default {
                         sessionStorage.setItem('teacher_id',obj.teacher_id);  // 保存teacher_id
                         sessionStorage.setItem('user_token',obj.user_token);   // 保存user_token
                         sessionStorage.setItem('is_regular',obj.is_regular);   // 记录老用户还是新用户  
-                        sessionStorage.setItem('need_pull_class',obj.need_pull_class); 
 
+                        if(obj.need_pull_class){
+                          sessionStorage.setItem('need_pull_class',obj.need_pull_class); 
+                        }
+                        
                         this.$store.state.res1 = res.data.response.school_class;
                         this.$store.state.res2 = res.data.response.xhb_class;
                         

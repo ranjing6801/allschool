@@ -57,6 +57,7 @@ export default {
               this.mask = true;
             }else{
               this.mask = false;
+              window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
             }
             
             //window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
