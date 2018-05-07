@@ -104,11 +104,15 @@ export default {
         //判断手机类型
         var ua = navigator.userAgent.toLowerCase();
         // alert(ua);
-
-        if(/android/.test(ua)){
-            console.log('android...');
-            window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
+        if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+              return;
+            }else{
+              window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
         }
+        // if(/android/.test(ua)){
+        //     console.log('android...');
+        //     window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
+        // }
     },
     mounted() {
       //判断手机类型

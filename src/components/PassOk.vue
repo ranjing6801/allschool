@@ -148,10 +148,16 @@ export default {
 
         //alert(ua);
 
-        if(/android/.test(ua)){
-            console.log('android...');
-            window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
+        if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+              return;
+            }else{
+              window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
         }
+
+        // if(/android/.test(ua)){
+        //     console.log('android...');
+        //     window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
+        // }
     },
     mounted() {
         //测试的时候注释
