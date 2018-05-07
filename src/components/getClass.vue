@@ -256,8 +256,18 @@ export default {
       }
     },
     created() {
-        this.list = this.$store.state.res1 ||  JSON.parse(localStorage.getItem('res1'));; //获取数据
-        this.list2 = this.$store.state.res2 || JSON.parse(localStorage.getItem('res2'));; //获取数据
+        if(!localStorage.getItem('res1')){
+          this.list = this.$store.state.res1;
+        }else{
+          this.list = JSON.parse(localStorage.getItem('res1'));
+        }
+        if(!localStorage.getItem('res2')){
+          this.list2 = this.$store.state.res2;
+        }else{
+          this.list2 = JSON.parse(localStorage.getItem('res2'));
+        }
+        //this.list = this.$store.state.res1 ||  JSON.parse(localStorage.getItem('res1')); //获取数据
+        //this.list2 = this.$store.state.res2 || JSON.parse(localStorage.getItem('res2')); //获取数据
 
         this.index = this.$route.query.index;
         
