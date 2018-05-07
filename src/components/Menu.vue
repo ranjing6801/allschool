@@ -161,6 +161,7 @@ import imgsrc1 from '../../static/images/logo.jpg'
             this.title.length > 14 ? this.isHeight=false : this.isHeight=true;
             sessionStorage.setItem("imgSrc",this.imgSrc);
             sessionStorage.setItem("title",this.title);
+            sessionStorage.setItem("autoDownload",'true');
           })
           .catch(err => {
             console.log('err:',err);
