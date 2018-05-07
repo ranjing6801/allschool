@@ -295,8 +295,11 @@ export default {
   margin-left: 0.5333rem;
   margin-right: 0.5333rem;
   position: absolute;
-  top: 4.8267rem;
+  top: 0;
   left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
 }
 
 /*  保存二维码弹窗 */
