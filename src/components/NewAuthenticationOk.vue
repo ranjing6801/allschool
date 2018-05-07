@@ -142,6 +142,8 @@ export default {
           };
 
         })(XBack); 
+        XBack.init();
+        XBack.listen(function() {});
 
         //判断手机类型
       
