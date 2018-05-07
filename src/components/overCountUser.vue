@@ -32,7 +32,10 @@
         </ul>
         <div :class="user&&cur&&reback?'active':''"  class="btn"  @click="getContent">提交</div>
     </div>
-
+    <!-- 网络不好 -->
+        <div v-show="offline" class="pop">
+          网络不佳，请检查后重试
+        </div>  
    </div>
 </template>
 <script>
@@ -51,7 +54,9 @@ export default {
             value:'',
             isbtn:false,
             cur:'',
-            isIOS: false
+            isIOS: false,
+            offline:false,
+            timer:null,
         }
     }, 
     methods:{
@@ -86,7 +91,13 @@ export default {
             })
             .catch(err => {
               console.log('err:',err);
-              alert('无可用网络!');
+              this.offline = true;
+                clearTimeout(timer);
+                var _this = this;
+                var timer=null;
+                timer = setTimeout(function(){
+                  _this.offline = false;
+                },2000);
             })
 
           }else{

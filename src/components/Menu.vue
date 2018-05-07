@@ -14,7 +14,6 @@
       <p class="tip" v-show="tip">无晓黑板账号请输入手机号</p >
       <input @keyup="tel" type="tel" placeholder="请输入晓黑板账号 / 手机号"  v-model="phone"
                v-on:input="focus" class="input"  maxlength=13 />
-
       <div class="telError" :class="isRightNumber?'':'hidden'">
         <img src="../../static/images/warn.png" alt="!" />
         <span class="rightPhone">请输入正确的手机号码</span>
@@ -73,7 +72,7 @@ import imgsrc1 from '../../static/images/logo.jpg'
         }
     },
     methods:{
-      clearTel(){
+      clearTel(){    //  点击 x  清除
         this.phone = '';
         this.telNum = false;
         this.btn = true;
@@ -82,7 +81,7 @@ import imgsrc1 from '../../static/images/logo.jpg'
         $('.input').removeClass('hot');
 
       },
-      focus(){
+      focus(){    
           //监听input输入框
           if(this.phone.length > 0){
             this.telNum = true
@@ -345,8 +344,11 @@ button{
   border: 0.0533rem solid #BBAB71;
   border-radius: 0.2667rem;
   position: absolute;
-  top: 5.1733rem;
-  bottom: 7.84rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
 }
 
 .codeFail .fail #codeFailModal .title {

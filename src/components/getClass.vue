@@ -36,10 +36,10 @@
     </div>
 
     <!--  顶替弹窗 -->
-    <div class="modalShow" v-if="isReCertificationShow" @click="ReCertificationShow" >
+    <div class="modalShow" v-if="isReCertificationShow">
         <div class="modal">
             <div id="ReCertification">
-                <p class="content">{{ accountTile}}</p>
+                <p class="content">{{ accountTile }}</p>
                 <p class=" titleClass">{{ classTitle  | classFilter}}</p>
                 <p class="saveTip"><span>已被</span><span class="name"> {{ classUser }} </span><span>老师认证过</span></p>
                 <p class="replace">{{ accountReplace }}</p>
@@ -76,9 +76,9 @@ export default {
             create:'',  // 选中  创建班级
             team:false,    //   
             isReCertificationShow:false,  // 重新认证 班级已经被人认证了  顶替弹窗
-            accountTile:'重新验证该班级',
-            classTitle:'一年级二班',
-            classUser:'张老师' ,
+            accountTile:'重新认证该班级',
+            classTitle:'',
+            classUser:'' ,
             accountReplace:'您是否要顶替TA，成为该班级班主任',
             valueId:'',
             xhb_class_token:'',
@@ -234,7 +234,9 @@ export default {
                     if(res.data.error_response){
                         // alert('该班级已经被其他老师绑定');
                         this.isReCertificationShow = true;
+                        this.classTitle = this.$store.state.res2[this.valueId].name;
                         this.classUser = res.data.error_response.teacher_name;
+                      
                     }
                     
                     
@@ -260,7 +262,7 @@ export default {
         this.index = this.$route.query.index;
         
         this.$route.query.flag ? this.flag=true : this.flag=false;
-
+                    
          if(this.flag){
           var str = this.$route.query.txt;
           var item = this.list2.find( (datum)=>datum.code==str );
@@ -492,11 +494,15 @@ export default {
   height: 6.16rem;
   margin-left: 0.5333rem;
   margin-right:0.5333rem;
-  position: absolute;
-  top: 4.48rem;
   background: #2B2B2B;
   border: 0.0533rem solid #BBAB71;
   border-radius: 0.2667rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
 }
 
 

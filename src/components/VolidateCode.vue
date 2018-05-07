@@ -538,8 +538,11 @@ export default {
   border: 0.0533rem solid #BBAB71;
   border-radius: 0.2667rem;
   position: absolute;
-  top: 5.1733rem;
-  bottom: 7.84rem;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
 }
 
 
@@ -603,8 +606,11 @@ export default {
   border: 0.0533rem solid #BBAB71;
   border-radius: 0.2667rem;
   position: absolute;
-  top: 3.0667rem;
-  bottom: 7.84rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
 }
 .ListenCodeFail .Listenfail #modal .titleListen {
   font-family: PingFangSC-Light;

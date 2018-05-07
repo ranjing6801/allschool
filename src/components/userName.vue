@@ -20,7 +20,7 @@
               <div id="modal">
                   <p class="titleListen">请勿重复认证</p>
                   <p class="contentListen"> 
-                      您已是认证用户,请勿重复认证请勿重复认证
+                      您已是认证用户,请勿重复认证
                   </p>
                   <button class="Btn" @click="knowing">我知道啦</button>
               </div>
@@ -314,8 +314,11 @@ export default {
   border: 0.0533rem solid #BBAB71;
   border-radius: 0.2667rem;
   position: absolute;
-  top: 3.84rem;
-  bottom: 9.1733rem;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
 }
 .reVolidateModal .reVolidate #modal .titleListen {
   font-family: PingFangSC-Light;

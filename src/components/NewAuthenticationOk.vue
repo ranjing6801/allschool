@@ -443,8 +443,12 @@ export default {
   border: 0.0533rem solid #BBAB71;
   border-radius: 0.2667rem;
   position: absolute;
-  top: 3.84rem;
-  bottom: 9.1733rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
 }
 .reVolidateModal .reVolidate #modal .titleListen {
   font-family: PingFangSC-Light;
