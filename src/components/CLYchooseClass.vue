@@ -109,10 +109,10 @@ export default {
         }
     },
     created() {
-        if(!localStorage.getItem('res1')){
-          this.classList = this.$store.state.res1;
-        }else{
+        if(!this.$store.state.res1.length){
           this.classList = JSON.parse(localStorage.getItem('res1'));
+        }else{
+          this.classList = this.$store.state.res1;
         }
         this.num = this.$store.state.res1.length ||JSON.parse(localStorage.getItem('res1')).length;
         var result;

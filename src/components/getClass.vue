@@ -256,15 +256,15 @@ export default {
       }
     },
     created() {
-        if(!localStorage.getItem('res1')){
-          this.list = this.$store.state.res1;
-        }else{
+        if(!this.$store.state.res1.length){
           this.list = JSON.parse(localStorage.getItem('res1'));
-        }
-        if(!localStorage.getItem('res2')){
-          this.list2 = this.$store.state.res2;
         }else{
+          this.list = this.$store.state.res1;
+        }
+        if(!this.$store.state.res2.length){
           this.list2 = JSON.parse(localStorage.getItem('res2'));
+        }else{
+          this.list2 = this.$store.state.res2;
         }
         //this.list = this.$store.state.res1 ||  JSON.parse(localStorage.getItem('res1')); //获取数据
         //this.list2 = this.$store.state.res2 || JSON.parse(localStorage.getItem('res2')); //获取数据
