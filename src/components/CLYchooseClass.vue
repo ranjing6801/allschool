@@ -109,7 +109,11 @@ export default {
         }
     },
     created() {
-        this.classList = this.$store.state.res1 || JSON.parse(localStorage.getItem('res1')); // 从store中获取数据
+        if(!localStorage.getItem('res1')){
+          this.classList = this.$store.state.res1;
+        }else{
+          this.classList = JSON.parse(localStorage.getItem('res1'));
+        }
         this.num = this.$store.state.res1.length ||JSON.parse(localStorage.getItem('res1')).length;
         var result;
         if(this.$store.state.res1.length){
