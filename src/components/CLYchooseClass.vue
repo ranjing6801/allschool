@@ -80,12 +80,16 @@ export default {
 
                 var pullArr = [] || sessionStorage.getItem('need_pull_class');
                 console.log('pullArr:',pullArr);
-                this.axios.post('/h5/index/bindClass',{ 
+                this.axios.post('/h5/index/bindInfo',{ 
                   bind_class : JSON.stringify(this.arr),
                   teacher_id : sessionStorage.getItem('teacher_id'),
                   phone : sessionStorage.getItem('phone'),
                   user_token : sessionStorage.getItem('user_token'),
-                  need_pull_class:JSON.stringify(pullArr)
+                  need_pull_class : JSON.stringify(pullArr),
+                  is_class_director : sessionStorage.getItem('is_class_director'),
+                  is_regular : sessionStorage.getItem('is_regular'),
+                  is_has_school_class : sessionStorage.getItem('is_has_school_class'),
+                  is_has_xhb_class : sessionStorage.getItem('is_has_xhb_class')
                 })
                 .then(res => {
                   console.log('bindClass:',res);
@@ -99,12 +103,12 @@ export default {
                 .catch(err => {
                   console.log('err:',err);
                   this.offline = true;
-                clearTimeout(timer);
-                var _this = this;
-                var timer=null;
-                timer = setTimeout(function(){
-                  _this.offline = false;
-                },2000);
+                  clearTimeout(timer);
+                  var _this = this;
+                  var timer=null;
+                  timer = setTimeout(function(){
+                    _this.offline = false;
+                  },2000);
                 })
         }
     },

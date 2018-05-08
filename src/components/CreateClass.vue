@@ -110,12 +110,12 @@ export default {
                   .catch(err => {
                       console.log('err=',err);
                       this.offline = true;
-                clearTimeout(timer);
-                var _this = this;
-                var timer=null;
-                timer = setTimeout(function(){
-                  _this.offline = false;
-                },2000);
+                      clearTimeout(timer);
+                      var _this = this;
+                      var timer=null;
+                      timer = setTimeout(function(){
+                        _this.offline = false;
+                      },2000);
                   })  
         } 
     },

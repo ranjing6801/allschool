@@ -53,6 +53,19 @@
 
         <button class="referOk"  @click="overRefer" >完成认证</button>
 
+         <!--  完成认证 确认保存二维码 弹窗 -->
+        <div class="modalShow" v-if="isSecondImg">
+            <div class="modal">
+                <div id="saveModal">
+                    <p class="title">确认已保存</p>
+                    <p class="sure">请确保您已保存二维码</p>
+                    <p class="content">将用于发送给家长,邀请他们进班</p>
+                    <button class="Btn Btn-left" @click="know">去保存</button>
+                    <button class="Btn Btn-rigth" @click="saveOk">保存好了</button>
+                </div>
+            </div>
+        </div>
+
         <!--  完成认证 确认保存二维码 弹窗 -->
         <div class="modalShow" v-if="isSave" @click="HiddenSaveModal" >
             <div class="modal">
@@ -79,6 +92,8 @@ export default {
             zhiwenImg:zhiwenImg,
             isSave:false,
             offline:false,
+            isSecondImg:false,
+            arr:[],
             imgSrc:{
                 src:''
             },
@@ -88,8 +103,53 @@ export default {
         }
     },
     methods:{
-        overRefer(){  // 认证完成
-            this.isSave = true;
+        overRefer(){  // 完成认证
+            console.log('创建晓黑板班级认证...');
+                var pullArr = [] || sessionStorage.getItem('need_pull_class');
+                console.log('pullArr:',pullArr);
+
+                this.axios.post('/h5/index/bindInfo',{ 
+                  bind_class : JSON.stringify(this.arr),
+                  teacher_id : sessionStorage.getItem('teacher_id'),
+                  phone : sessionStorage.getItem('phone'),
+                  user_token : sessionStorage.getItem('user_token'),
+                  need_pull_class : JSON.stringify(pullArr),
+                  is_class_director : sessionStorage.getItem('is_class_director'),
+                  is_regular : sessionStorage.getItem('is_regular'),
+                  is_has_school_class : sessionStorage.getItem('is_has_school_class'),
+                  is_has_xhb_class : sessionStorage.getItem('is_has_xhb_class')
+                })
+                .then(res => {
+                  console.log('bindInfo:',res);
+                  if(res.data.response){
+                    this.isSave = true; // 出现二维码弹窗
+                  }
+                  if(res.data.error_response){
+                      console.log(res.data.error_response.msg);
+                  }
+                })
+                .catch(err => {
+                  console.log('err:',err);
+                  this.offline = true;
+                  clearTimeout(timer);
+                  var _this = this;
+                  var timer=null;
+                  timer = setTimeout(function(){
+                    _this.offline = false;
+                  },2000);
+                })
+        },
+        know(){
+            this.isSecondImg = false;
+        },
+        saveOk(){  
+            if(sessionStorage.getItem('is_regular')){  // 1 是老用户 0 是新用户
+                this.$router.push({path:'/passOk'});    
+            }
+            else {
+                this.$router.push({path:'/NewAuthenticationOk'});
+            }
+
         },
         HiddenSaveModal(){
             this.isSave = false;
@@ -106,7 +166,9 @@ export default {
                     obj.src = res.data.response.qrcode_url[i];
                     this.imgArr.push(obj);
                 }
+                this.arr = res.data.response.xhb_with_school;
                  console.log('this.imgArr=',this.imgArr);
+                 console.log('this.arr=',this.arr);
             })
             .catch(err => {
                 console.log('err=',err);
@@ -287,6 +349,65 @@ export default {
   line-height: 0.9867rem;
 }
 
+
+/**/ 
+
+/*  保存二维码弹窗 */
+#saveModal {
+  width: 8.9333rem;
+  height: 5.4667rem;
+  background: #2B2B2B;
+  border: 0.0267rem solid #BBAB71;
+  border-radius: 0.2667rem;
+  box-sizing: border-box;
+}
+#saveModal .title {
+  font-family: PingFangSC-Light;
+  font-size: 0.5333rem;
+  color: #FFFFFF;
+  line-height: 0.5333rem;
+  margin-top: 0.5333rem;
+  text-align: center;
+}
+
+#saveModal .content {
+  width: 6.64rem;
+  height: 1.3867rem;
+  margin-left: 1.1467rem;
+  margin-right: 1.1467rem;
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  color: #FFFFFF;
+}
+#saveModal .sure {
+    margin-top: 0.5333rem;
+    text-align: center;
+    font-family: PingFangSC-Light;
+    font-size: 0.4533rem;
+    color: #FFFFFF;
+    line-height: 0.6933rem;
+}
+
+#saveModal  .Btn {
+    width: 4.0rem;
+    height: 1.28rem;
+    background: #2B2B2B;
+    font-family: PingFangSC-Regular;
+    font-size: 0.4533rem;
+    color: #F8E71C;
+    line-height: 0.4533rem;
+    border-radius: 0.0533rem;
+    border: none;
+}
+
+.Btn-left{
+   margin-left: 0.4rem;
+}
+#saveModal .Btn-rigth{
+  
+  background:#F8E71C;
+  color: #000000;
+}
 </style>
 
 

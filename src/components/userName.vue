@@ -106,6 +106,11 @@ export default {
                         sessionStorage.setItem('teacher_id',obj.teacher_id);  // 保存teacher_id
                         sessionStorage.setItem('user_token',obj.user_token);   // 保存user_token
                         sessionStorage.setItem('is_regular',obj.is_regular);   // 记录老用户还是新用户  
+                        sessionStorage.setItem('is_class_director',obj.is_class_director);  // 记录是否是班主任
+                        sessionStorage.setItem('is_has_school_class',obj.is_has_school_class);  // 记录是否有整校班级
+                        sessionStorage.setItem('is_has_xhb_class',obj.is_has_xhb_class);  // 记录是否有晓黑板班级
+
+
 
                         if(obj.need_pull_class){
                           sessionStorage.setItem('need_pull_class',obj.need_pull_class); 
