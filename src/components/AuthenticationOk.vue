@@ -2,7 +2,7 @@
     <div id="authentication">  
       <div v-if="isIOS" class="ios">
         <div class="content" slot="header">
-            <p class="p-img"><img src="/static/images/smile.png" alt=""></p>
+            <p class="p-img"><img src="../../static/images/smile.png" alt=""></p>
             <p class="title">反馈成功</p>
             <p class="title1">我们将尽快处理，请耐心等候</p>
         </div>
@@ -14,7 +14,7 @@
       </div>
       <div v-if="isAND" class="android">
         <div class="content2">
-            <p class="p-img"><img src="/static/images/smile.png" alt=""></p>
+            <p class="p-img"><img src="../../static/images/smile.png" alt=""></p>
             <p class="title">反馈成功</p>
             <p class="title1">我们将尽快处理，请耐心等候</p>
         </div>
@@ -29,7 +29,7 @@
       <!-- 安卓手机 遮罩层  -->
 
       <div class="overlay" v-if="mask">
-          <img class="arrow" src="/static/images/arrow.png">
+          <img class="arrow" src="../../static/images/arrow.png">
       </div>
       
     </div>
@@ -47,26 +47,73 @@ export default {
     },
     methods:{
         openSmallDesk(){ // ios 下载
-            window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=org.xinkb.blackboard.android&g_f=991653';
+            //window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=org.xinkb.blackboard.android&g_f=991653';
+            window.location.href = 'https://itunes.apple.com/cn/app/%E6%99%93%E9%BB%91%E6%9D%BF-%E5%A5%BD%E8%80%81%E5%B8%88%E7%9A%84%E5%A5%BD%E5%B7%A5%E5%85%B7/id1003713373?mt=8';
         },
         openSmallDesk1() { // android 下载
+            var ua = navigator.userAgent.toLowerCase();
             // 打开晓黑板  http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk
-            this.mask = true;
+            if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+              this.mask = true;
+            }else{
+              this.mask = false;
+              window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
+            }
+            
             //window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
         }
     },
     created() {
         document.title = "反馈成功";
+        //禁止返回
+        var XBack = {};
+
+        (function(XBack) {
+          XBack.STATE = 'x - back';
+          XBack.element;
+
+          XBack.onPopState = function(event) {
+            event.state === XBack.STATE && XBack.fire();
+            XBack.record(XBack.STATE); //初始化事件时，push一下
+          };
+
+          XBack.record = function(state) {
+            history.pushState(state, null, location.href);
+          };
+
+          XBack.fire = function() {
+            var event = document.createEvent('Events');
+            event.initEvent(XBack.STATE, false, false);
+            XBack.element.dispatchEvent(event);
+          };
+
+          XBack.listen = function(listener) {
+            XBack.element.addEventListener(XBack.STATE, listener, false);
+          };
+
+          XBack.init = function() {
+            XBack.element = document.createElement('span');
+            window.addEventListener('popstate', XBack.onPopState);
+            XBack.record(XBack.STATE);
+          };
+
+        })(XBack); 
+
+        XBack.init();
+        XBack.listen(function() {});
         //判断手机类型
-      
         var ua = navigator.userAgent.toLowerCase();
-
-        alert(ua);
-
-        if(/android/.test(ua)){
-            console.log('android...');
-            window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
-        }
+        // alert(ua);
+        if(!sessionStorage.getItem('autoDownload')){
+              console.log('自动下载...');
+              window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
+          }else{
+              console.log('不自动下载...');
+          }
+        // if(/android/.test(ua)){
+        //     console.log('android...');
+        //     window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
+        // }
     },
     mounted() {
       //判断手机类型
@@ -98,7 +145,7 @@ export default {
   height: 100%;
 }
 .arrow{
-  width: 4.5rem;
+  width: 3.5rem;
   position:absolute;
   right: 1rem;
   top: 0.8rem;
@@ -142,6 +189,7 @@ export default {
   font-family: PingFangSC-Regular;
 }
 .tip{
+  font-size: 0.3733rem;
   color: #AAAAAA;
   text-align: center;
   font-family: PingFangSC-Regular;

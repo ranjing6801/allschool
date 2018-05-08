@@ -3,14 +3,14 @@
 	<!--  head 部分 -->
     <div class="head">
         <div class="left">
-            <img :src="imgSrc">
+            <img :src="imgSrc ? imgSrc : imgsrc1">
         </div>
         <div :class="isHeight?'height1':'height2'" class="right">
             <span>{{ title }}</span>
         </div>
     </div>
     <div class="contentUser">
-        <input maxlength="20" placeholder="请输入您的姓名" type="text" v-model="userName" v-on:input="userNameFocus"  class="user" >
+        <input maxlength="20" placeholder="请输入您的真实姓名" type="text" v-model="userName" v-on:input="userNameFocus"  class="user" >
         <button class="refer" id="referName" :disabled="dis" @click="NamePromise" >提交</button>
     </div>
 
@@ -26,6 +26,10 @@
               </div>
           </div>
       </div>
+      <!-- 网络不好 -->
+        <div v-show="offline" class="pop">
+          网络不佳，请检查后重试
+        </div>
 </div>
 </template>
 <script>
@@ -34,6 +38,7 @@ import overCount from './overCount'
 import AuthenticationOk from './AuthenticationOk'
 import NewAuthenticationOk from './NewAuthenticationOk' 
 import CLNewTeacher from './CLNewTeacher' 
+import imgsrc1 from '../../static/images/logo.jpg'
 
 
 export default {  
@@ -43,6 +48,7 @@ export default {
     },
     data(){
         return {
+            imgsrc1:imgsrc1,
             title:sessionStorage.getItem('title'),
             imgSrc:sessionStorage.getItem('imgSrc'),
             userName:'',
@@ -52,6 +58,7 @@ export default {
             num:1,
             reVolidate:false, // 用户重复认证弹窗
             isHeight:false,
+            offline:false,
         }
     },
     methods:{
@@ -81,22 +88,34 @@ export default {
           // 7 有整校班级 — 班主任 — 新用户 — 无晓黑板班级 - 创建班级 - 生成二维码 - 认证成功：打开晓黑板  user6 / 144442241171  加
             console.log('输入的姓名是:',this.userName);
             console.log('您的手机号是:',sessionStorage.getItem('phone'));
+            if(this.userName == ''){
+                this.dis = true;
+                return 
+            }
             this.axios.post('/h5/index/getUserDetail',{
-                    name:'user3',
-                    phone:'14444441122'
-                    // name:this.userName,
-                    // phone:sessionStorage.getItem('phone')
+                    //name:'user12',
+                    //phone:'14444441014'
+                    name:this.userName,
+                    phone:sessionStorage.getItem('phone')
                 })
                .then( res => {
                   console.log('getUserDetail:',res);
                   if(res.data.response){
                     console.log('xhb_class:',res.data.response.xhb_class);
-
                         var obj = res.data.response;
                         sessionStorage.setItem('teacher_id',obj.teacher_id);  // 保存teacher_id
                         sessionStorage.setItem('user_token',obj.user_token);   // 保存user_token
-                        sessionStorage.setItem('is_regular',obj.is_regular);   // 记录老用户还是新用户
+                        sessionStorage.setItem('is_regular',obj.is_regular);   // 记录老用户还是新用户  
+                        sessionStorage.setItem('is_class_director',obj.is_class_director);  // 记录是否是班主任
+                        sessionStorage.setItem('is_has_school_class',obj.is_has_school_class);  // 记录是否有整校班级
+                        sessionStorage.setItem('is_has_xhb_class',obj.is_has_xhb_class);  // 记录是否有晓黑板班级
 
+
+
+                        if(obj.need_pull_class){
+                          sessionStorage.setItem('need_pull_class',obj.need_pull_class); 
+                        }
+                        
                         this.$store.state.res1 = res.data.response.school_class;
                         this.$store.state.res2 = res.data.response.xhb_class;
                         
@@ -117,8 +136,8 @@ export default {
 
                         console.log('res1:',this.$store.state.res1);
                         console.log('res2:',this.$store.state.res2);
-                        localStorage.setItem('this.$store.state.res1',JSON.stringify(this.$store.state.res1));
-                        localStorage.setItem('this.$store.state.res2',JSON.stringify(this.$store.state.res2));
+                        localStorage.setItem('res1',JSON.stringify(this.$store.state.res1));
+                        localStorage.setItem('res2',JSON.stringify(this.$store.state.res2));
 
                       //1
                       if(obj.is_has_school_class==0 && obj.is_regular==1){
@@ -155,61 +174,22 @@ export default {
                     if(res.data.error_response.code==218){//姓名不存在
                         this.title = this.errTitle;   // 跳转之前 将title值覆盖
                         sessionStorage.setItem('keyword',res.data.error_response.keyword);
-                        this.$router.push({path:'/overCount',query:{username:this.userName,title:this.title,helpMessage:this.helpMessage}})
+                        this.$router.push({path:'/overCountUser',query:{username:this.userName,title:this.title,helpMessage:this.helpMessage}})
                       }else if(res.data.error_response.code==219){//已经认证过
                         console.log('已经认证过');
                         this.reVolidate = true;
                     }
                   }
-                  
-            // 姓名不存在的用户
-            //        if(res[0].id == 1){  // 姓名不存在
-            //             //alert("姓名不存在")
-            //             this.title = this.errTitle   // 跳转之前 将title值覆盖
-            //             this.$router.push({path:'/overCount',query:{username:this.userName,title:this.title,helpMessage:this.helpMessage}})
-            //        }
-            // // 无班级的老师        
-            //        if(res[0].id == 2){  // 姓名存在, 无班级的老师  是老用户
-            //            this.$router.push({path:'/PassOk',query:{}})
-            //        }
-            //        if(res[0].id == 3){  // 姓名存在, 无班级的老师  是新用户
-            //            this.$router.push({path:'/NewAuthenticationOk',query:{}})
-            //        }
-             
-            // // 是任课老师
-            //        if(res[0].id == 4){  // 姓名存在, 是任课老师  是老用户
-            //             this.$router.push({path:'/PassOk',query:{}})
-            //        }
-            //        if(res[0].id == 5){  // 姓名存在, 是任课老师  是新用户
-            //             this.$router.push({path:'/NewAuthenticationOk',query:{}})
-            //        }
-
-            // //  是班主任       
-            //        if(res[0].id == 6){  // 姓名存在 是班主任
-            //             if(res[0].username == "Leopoldo_Corker y"){  // 1. 无班级,自动创建班级并认证
-            //                 this.$router.push({path:'/CLNewTeacher',query:{}}) 
-            //             }
-            //             else{  // 有班级 [ 选择班级认证]  或者  [创建班级认证]
-            //                  if(res[0].website == "ola.org"){  //第一种: [ 选择班级认证] 
-            //                     this.$router.push({path:'/CLYchooseClass',query:{}})
-
-            //                  }else {
-            //                     //  班主任 有班级  创建班级认证
-            //                  }
-            //             }
-            //        }
-            //        //是班主任, 是新用户
-            //        if(res[0].id == 7){  // 班主任的验证,是新用户 
-            //             this.$router.push({name:'CLNewTeacher'})
-            //        }
-            //        if(res[0].id == 8){  //已经认证过了,提示请勿重复认证弹窗
-            //           this.reVolidate = true;
-                        
-            //        }
-
                })
                .catch(err => {
                    console.log('err:',err);
+                   this.offline = true;
+                  clearTimeout(timer);
+                  var _this = this;
+                  var timer=null;
+                  timer = setTimeout(function(){
+                    _this.offline = false;
+                  },2000);
                })
         }
     },
@@ -278,14 +258,16 @@ export default {
   line-height: 0.4533rem;
   text-indent:  0.1333rem;
   outline: none;
-  border: none;
   color: #fff;
   background: #2b2b2b;
   border-radius: 0;
-  border-bottom:  0.0267rem solid #555555;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  border-bottom:  2px solid #555555;
 }
 .hot{
-  border-bottom:  0.0267rem solid #aaa;
+  border-bottom:  2px solid #aaa;
 }
 
 .contentUser input::-webkit-input-placeholder {
@@ -337,8 +319,11 @@ export default {
   border: 0.0533rem solid #BBAB71;
   border-radius: 0.2667rem;
   position: absolute;
-  top: 3.84rem;
-  bottom: 9.1733rem;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
 }
 .reVolidateModal .reVolidate #modal .titleListen {
   font-family: PingFangSC-Light;
@@ -371,6 +356,21 @@ export default {
     border-radius: 0.0533rem;
     background: #F8E71C;
     border: none;
+}
+.pop{
+  width: 6.0533rem;
+  height: 0.9867rem;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99;
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  text-align: center;
+  line-height: 0.9867rem;
 }
 </style>
 

@@ -3,7 +3,7 @@
   <!--  head 部分 -->
     <div class="head">
         <div class="left">
-            <img :src="imgSrc">
+            <img :src="imgSrc ? imgSrc : imgsrc1">
         </div>
         <div :class="isHeight?'height1':'height2'" class="right">
             <span>{{ title }}</span>
@@ -14,14 +14,13 @@
       <p class="tip" v-show="tip">无晓黑板账号请输入手机号</p >
       <input @keyup="tel" type="tel" placeholder="请输入晓黑板账号 / 手机号"  v-model="phone"
                v-on:input="focus" class="input"  maxlength=13 />
-
       <div class="telError" :class="isRightNumber?'':'hidden'">
-        <img src="/static/images/warn.png" alt="!" />
+        <img src="../../static/images/warn.png" alt="!" />
         <span class="rightPhone">请输入正确的手机号码</span>
       </div>
                
       <span class="telePhone" @click="clearTel" v-if="telNum"></span>
-      <button :class="!btn?'referBtn':''" class="refer"  :disabled="btn" @click="telPromise" >提交</button>
+      <button :class="!btn?'referBtn':''" class="refer"  :disabled="btn" @click="telPromise" >提交 (当前测试版本号：v2.1.2)</button>
     </div>
     
     <!--  验证码发送失败 -->
@@ -34,12 +33,17 @@
             </div>
         </div>
     </div>
+    <!-- 网络不好 -->
+    <div v-show="offline" class="pop">
+      网络不佳，请检查后重试
+    </div>
 </div>
 </template>
 
 <script>
 import VolidateCode from './VolidateCode'
 import $ from 'jquery'
+import imgsrc1 from '../../static/images/logo.jpg'
 
   export default {
     name:'myMenu',
@@ -48,6 +52,7 @@ import $ from 'jquery'
     },
     data(){
       return {
+        imgsrc1:imgsrc1,
         title:'',
         imgSrc:'',
         tip:true,
@@ -58,6 +63,7 @@ import $ from 'jquery'
         isCodeFailShow:false,
         telNum:false,// 控制手机号码输入框 右边的 x
         isHeight:false,
+        offline:false
       }
     },
     watch:{ // 监听phone
@@ -66,15 +72,16 @@ import $ from 'jquery'
         }
     },
     methods:{
-      clearTel(){
+      clearTel(){    //  点击 x  清除
         this.phone = '';
         this.telNum = false;
         this.btn = true;
         this.isRightNumber = false;
         $('input').removeClass('red');  //  清空之后 输入框颜色改为正常的
+        $('.input').removeClass('hot');
 
       },
-      focus(){
+      focus(){    
           //监听input输入框
           if(this.phone.length > 0){
             this.telNum = true
@@ -96,7 +103,7 @@ import $ from 'jquery'
           console.log('点击提交按钮');
           //请求数据之前 要判断手机号是否合法
           let myphone = this.phone.split(' ').join('');
-          if(!(/^1[3|4|5|7|8][0-9]\d{4,8}$/.test(myphone))) {
+          if(!(/^1[3|4|5|6|7|8|9][0-9]\d{4,8}$/.test(myphone))) {
               this.isRightNumber = true;
               console.log('输入的手机号:',myphone);
               $('.input').addClass('red');
@@ -122,8 +129,14 @@ import $ from 'jquery'
                 }
               })
               .catch(err => {
-                console.log('请求错误');
-                this.isCodeFailShow = true;
+                console.log('网络错误');
+                this.offline = true;
+                clearTimeout(timer);
+                var _this = this;
+                var timer=null;
+                timer = setTimeout(function(){
+                  _this.offline = false;
+                },2000);
                 // 手机号码验证错误
                 //this.isRightNumber = true;
               });
@@ -138,7 +151,9 @@ import $ from 'jquery'
     },
     mounted(){
       document.title = "输入手机号";
-      this.axios.get('/h5/index/index?tcode='+ 16695090)
+      var tcode = this.$route.params.tcode;
+      console.log('tcode:',this.$route.params.tcode);
+      this.axios.get('/h5/index/index?tcode='+ tcode)
           .then(res => {
           //console.log('res:',res.data.response.school_info);
             this.imgSrc = res.data.response.school_info.school_img;
@@ -146,9 +161,17 @@ import $ from 'jquery'
             this.title.length > 14 ? this.isHeight=false : this.isHeight=true;
             sessionStorage.setItem("imgSrc",this.imgSrc);
             sessionStorage.setItem("title",this.title);
+            sessionStorage.setItem("autoDownload",'true');
           })
           .catch(err => {
             console.log('err:',err);
+            this.offline = true;
+            clearTimeout(timer);
+            var _this = this;
+            var timer=null;
+            timer = setTimeout(function(){
+              _this.offline = false;
+            },2000);
           })
     }
   }
@@ -322,8 +345,11 @@ button{
   border: 0.0533rem solid #BBAB71;
   border-radius: 0.2667rem;
   position: absolute;
-  top: 5.1733rem;
-  bottom: 7.84rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
 }
 
 .codeFail .fail #codeFailModal .title {
@@ -358,6 +384,21 @@ button{
   text-align: center;
   margin-top: 0.6667rem;
   margin-left: 0.4rem;
+}
+.pop{
+  width: 6.0533rem;
+  height: 0.9867rem;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99;
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  text-align: center;
+  line-height: 0.9867rem;
 }
 
 </style>

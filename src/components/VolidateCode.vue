@@ -2,24 +2,24 @@
     <div id="volidateCode">
         <div class="head">
           <div class="left">
-              <img :src="imgSrc">
+              <img :src="imgSrc ? imgSrc : imgsrc1">
           </div>
           <div :class="isHeight?'height1':'height2'" class="right">
               <span>{{ title }}</span>
           </div>
         </div>
         <div class="content">
-            <p class="tip" v-if="YZM">短信验证码已发送至 {{ number | value }} </p>
+            <p class="tip" v-if="YZM">验证码已发送至  <span>{{ number | value }} </span></p>
             <p class="tip" v-if="ListenYzm">语音验证码已发送成功</p>
            <input maxlength= "4" class="VolidateCode"  placeholder="请输入验证码"
-                     type="tel" v-model="reCredNum" 
+                     type="text" v-model="reCredNum" 
                     @keyup="codeNumber" v-on:input="reCredNumFocus" />
 
             <span class="volidateNum" @click="regetNum" v-if="reNum">重发短信验证码</span>
             
             <div class="box">
               <div class="telError" :class="isShowCode?'':'hidden'">
-                <img src="/static/images/warn.png" alt="!">
+                <img src="../../static/images/warn.png" alt="!">
                 <span class="rightPhone">验证码错误</span>
               </div>
               <div v-show="listenCode" class="listencode">收不到验证码?
@@ -39,7 +39,7 @@
               <div id="modal">
                   <p class="titleListen">语音验证码</p>
                   <p class="contentListen"> 
-                      我们将以电话的形式告知您验证码,你可能会接收到010、0051、024、029等开头的来电，请放心接听
+                      我们将以电话形式告知您验证码, 你可能会接收到010、0551、024、029等开头的来电，请放心接听
                   </p>
                   <button class="Btn Btn-left" @click="clear">取消</button>
                   <button class="Btn Btn-rigth" @click="know">好的</button>
@@ -57,6 +57,10 @@
             </div>
         </div>
     </div>
+    <!-- 网络不好 -->
+        <div v-show="offline" class="pop">
+          网络不佳，请检查后重试
+        </div>
     </div>
 </template>
 
@@ -65,6 +69,7 @@
 import $ from 'jquery'
 import overCount from './overCount'
 import userName from './userName'
+import imgsrc1 from '../../static/images/logo.jpg'
 
 export default {
     name:'volidateCode',
@@ -73,6 +78,7 @@ export default {
     },
     data(){
         return {
+                imgsrc1:imgsrc1,
                 imgSrc:sessionStorage.getItem('imgSrc'),
                 title:'',
                 reCredNum:'',
@@ -88,12 +94,14 @@ export default {
                 isShowCode:false,
                 isCodeFail:false,   // 验证码发送失败
                 codeOverTime:'验证码发送次数已达上限',
-                helpMessage:'您填写的信息可以帮助我们及时更正哦',
-                txt:'验证码累计错误已达上线',
+                helpMessage:'请填写反馈信息帮助我们及时解决哦',
+                txt:'验证码累计错误已达上限',
+                rebackDetail:'验证码累计错误达到10次上限',
                 dis:true,
                 getCodeNum:0,   // 记录获取验证码次数, 到达10次 就进入反馈界面
                 isCodeFailShow:false,  // 语音验证码
                 isHeight:false,
+                offline:false
         }
     },
     filters:{ // 过滤
@@ -108,12 +116,13 @@ export default {
                 phone:sessionStorage.getItem('phone')
           })
           .then(res => {
+            // alert('sendMessageCode');
             console.log('sendMessageCode:',res);
             //***** 本地打开测试 *****//
-            this.ShowNumber();  
+            //this.ShowNumber();  
             //***** 本地打开测试 *****//
             if(res.data.response){
-                //this.ShowNumber();
+                this.ShowNumber();
             }
             if(res.data.error_response){
               sessionStorage.setItem('school_id',res.data.error_response.school_id);
@@ -129,6 +138,13 @@ export default {
           })
           .catch(err => {
             console.log('err:',err);
+            this.offline = true;
+                clearTimeout(timer);
+                var _this = this;
+                var timer=null;
+                timer = setTimeout(function(){
+                  _this.offline = false;
+                },2000);
           })
         },
         codeFailHidden(){ // 验证码发送失败弹窗
@@ -182,7 +198,7 @@ export default {
                 this.$router.push({path:'/overCount',query:{title:this.codeOverTime,helpMessage:this.helpMessage}});
               }
             this.timer = setInterval (() => {
-                this.time -= 10;
+                this.time -= 1;
                 if(this.time <= 0){
                     clearInterval(this.timer);  // 清除定时器
                     this.isTimer = false;
@@ -215,6 +231,13 @@ export default {
             })
             .catch(err => {
               console.log('err:',err);
+              this.offline = true;
+                clearTimeout(timer);
+                var _this = this;
+                var timer=null;
+                timer = setTimeout(function(){
+                  _this.offline = false;
+                },2000);
             })
             
         },
@@ -230,20 +253,28 @@ export default {
                     this.$router.push({path:'/userName'})
                   }
                   if(res.data.error_response){
-                      sessionStorage.setItem('school_id',res.data.error_response.school_id);
                       $('.VolidateCode').addClass('red');
                       this.isShowCode = true;
-                      this.getCodeNum ++ ;
+                      //this.getCodeNum ++ ;
                       $(".rightPhone").html('验证码错误');
-                      console.log('验证码输入错误次数:',this.getCodeNum)
-                      if(this.getCodeNum > 9){   // 记录验证码输入错误的次数, 到达10次 就进入反馈界面
+                      // console.log('验证码输入错误次数:',this.getCodeNum)
+                      if(res.data.error_response.code == 222){   // 记录验证码输入错误的次数, 到达10次 就进入反馈界面
                           console.log("验证码输入错误超过10次");
-                          this.$router.push({path:"/overCount",query:{title:this.txt,helpMessage:this.helpMessage}});
+                          sessionStorage.setItem('school_id',res.data.error_response.school_id);
+                          sessionStorage.setItem('keyword',res.data.error_response.keyword);
+                          this.$router.push({path:"/overCountTen",query:{title:this.txt,helpMessage:this.helpMessage,reback:this.rebackDetail}});
                       } 
                   }
                 })  
                 .catch(err => {
                     console.log('err:',err);
+                    this.offline = true;
+                    clearTimeout(timer);
+                    var _this = this;
+                    var timer=null;
+                    timer = setTimeout(function(){
+                      _this.offline = false;
+                    },2000);
                 })
         }
     },
@@ -257,8 +288,11 @@ export default {
         this.title.length > 14 ? this.isHeight=false : this.isHeight=true;
         this.number = this.$route.query.phone;
 
+        // alert('mounted');
+
         if(sessionStorage.getItem('myphone')){
             //this.ShowNumber();
+            // console.log('sessionStorage.getItem(myphone)')
             this.getVolidateCode();
         }else{
           this.reNum = true   // 进入验证码界面就获取验证码.并且显示重新获取验证码提示
@@ -325,6 +359,9 @@ export default {
   margin-top: 0.8rem;
 }
 
+.content .code {
+  color: #000;
+}
 
 .content input::-webkit-input-placeholder {
   font-family: PingFangSC-Light;
@@ -358,7 +395,7 @@ export default {
     border-radius: 0;
     color: #fff;
     background: #2b2b2b;
-    border-bottom:  1px solid #555555;
+    border-bottom:  2px solid #555555;
 }
 
 .content .referCode {
@@ -381,13 +418,13 @@ export default {
 
 /* 输入框动态样式*/
 .content .hot{  
-  border-bottom: 1px solid #AAAAAA;
+  border-bottom: 2px solid #AAAAAA;
 }
 .content .red{
-  border-bottom: 1px solid #FF6688;
+  border-bottom: 2px solid #FF6688;
 }
 .content .active{
-  border: 1px solid #333;
+  border: 2px solid #333;
   background: #000;
   color: #fff;
 }
@@ -501,8 +538,11 @@ export default {
   border: 0.0533rem solid #BBAB71;
   border-radius: 0.2667rem;
   position: absolute;
-  top: 5.1733rem;
-  bottom: 7.84rem;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
 }
 
 
@@ -566,8 +606,11 @@ export default {
   border: 0.0533rem solid #BBAB71;
   border-radius: 0.2667rem;
   position: absolute;
-  top: 3.0667rem;
-  bottom: 7.84rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
 }
 .ListenCodeFail .Listenfail #modal .titleListen {
   font-family: PingFangSC-Light;
@@ -616,4 +659,19 @@ export default {
   opacity: 0.01;
 }
 
+.pop{
+  width: 6.0533rem;
+  height: 0.9867rem;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99;
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  text-align: center;
+  line-height: 0.9867rem;
+}
 </style>

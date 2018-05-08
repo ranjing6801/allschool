@@ -4,13 +4,17 @@
         <ul>
             <li v-for="(item,index) in classList" :key="index" class="classList" @click="getMore(item,index)">
                <span class="className"> {{ item.class_name }}</span> 
-               <img v-show="item.isOver" class="vip"  src="/static/images/vip.png" />
+               <img v-show="item.isOver" class="vip"  src="../../static/images/vip.png" />
                <span class="classTeam"> {{ item.className | teacherName }}</span>   
-               <img v-show="item.isOver" class="over"  src='/static/images/over.png'>
-               <img src="/static/images/more.png" class="more" />
+               <img v-show="item.isOver" class="over"  src='../../static/images/over.png'>
+               <img src="../../static/images/more.png" class="more" />
             </li>
         </ul>
       <button :class="!dis?'referBtn':''" @click="referBtn"  class="referName" :disabled="dis">认证班级</button>
+      <!-- 网络不好 -->
+      <div v-show="offline" class="pop">
+        网络不佳，请检查后重试
+      </div>
   </div>
 </template>
 
@@ -35,69 +39,26 @@ export default {
             index:'',
             detail:'',
             cur: null,
+            offline:false,
         }
     },
     filters:{
       teacherName(value){
-        if(value.length > 5){
+        if(value.split(' ').join('').length > 5){
             return value.split(' ').join('').slice(0,2) + '...'+value.split(' ').join('').slice(-3,value.length);
          }return value
       }
     },
-    computed:{
-      // classList(){
-      //     if(this.$store.state.res1.length){
-      //         return  this.$store.state.res1;
-      //     }else {
-      //         return JSON.parse(localStorage.getItem('this.$store.state.res1'));
-      //     }
-      // }
-    },
     methods:{
-        // getMore(id){             
-        //     console.log("userID=",id);
-        //     this.$router.push({ path:'/getClass',query:{userId:id}});
-        // },
-        // getDetail(passId){             
-        //     this.$router.push({path:'/getClass',query:{userId:passId}});
-        // },
         getMore(o,i) { //跳转到对应班级绑定页面
           if(this.classList[i].isOver==true){ //判断是否点击了已经绑定过的班级
-            var txt = sessionStorage.getItem(i);
-            var word = o.className;
+            var txt = sessionStorage.getItem(i); //晓黑板的班级号
+            var word = o.className; //晓黑板的name
             this.$router.push({ path:'/getClass',query:{index:i,txt:txt,flag:'yes',word:word}});
           }
           else{
             this.$router.push({ path:'/getClass',query:{index:i}}); //点击的时候带上对应的下标
           }
-        },
-        classRefer() {  // 班级确认
-            // for(var i = 0; i<this.$store.state.res1.length; i++){
-            //     var item = sessionStorage.getItem(i);
-            //     console.log('item。。。:',item);
-            //     this.bindClass.class_id = this.$store.state.res1[i].class_id;
-            //     //this.bindClass.xhb_class_token = this.$store.state.res2[i].id;
-            //     this.arr.push(this.bindClass);
-            //     console.log('this.arr:',this.arr);
-            // }
-            // this.axios.post('/h5/index/bindClass',{ 
-            //       bind_class : JSON.stringify(this.arr),
-            //       teacher_id : sessionStorage.getItem('teacher_id'),
-            //       phone : sessionStorage.getItem('phone'),
-            //       user_token : sessionStorage.getItem('user_token')
-            //     })
-            //     .then(res => {
-            //       console.log('bindClass:',res);
-            //       if(res.data.response){
-            //           this.$router.push({path:'/PassOk'});
-            //       }
-            //       if(res.data.error_response){
-            //           console.log(res.data.error_response.msg);
-            //       }
-            //     })
-            //     .catch(err => {
-            //       console.log('err:',err);
-            //     })
         },
         referBtn() {
           console.log('认证...');
@@ -116,11 +77,19 @@ export default {
 
           //    暂时先不认证
                 console.log('this.arr:',this.arr);
-                this.axios.post('/h5/index/bindClass',{ 
+
+                var pullArr = [] || sessionStorage.getItem('need_pull_class');
+                console.log('pullArr:',pullArr);
+                this.axios.post('/h5/index/bindInfo',{ 
                   bind_class : JSON.stringify(this.arr),
                   teacher_id : sessionStorage.getItem('teacher_id'),
                   phone : sessionStorage.getItem('phone'),
-                  user_token : sessionStorage.getItem('user_token')
+                  user_token : sessionStorage.getItem('user_token'),
+                  need_pull_class : JSON.stringify(pullArr),
+                  is_class_director : sessionStorage.getItem('is_class_director'),
+                  is_regular : sessionStorage.getItem('is_regular'),
+                  is_has_school_class : sessionStorage.getItem('is_has_school_class'),
+                  is_has_xhb_class : sessionStorage.getItem('is_has_xhb_class')
                 })
                 .then(res => {
                   console.log('bindClass:',res);
@@ -133,12 +102,23 @@ export default {
                 })
                 .catch(err => {
                   console.log('err:',err);
+                  this.offline = true;
+                  clearTimeout(timer);
+                  var _this = this;
+                  var timer=null;
+                  timer = setTimeout(function(){
+                    _this.offline = false;
+                  },2000);
                 })
         }
     },
     created() {
-        this.classList = this.$store.state.res1; // 从store中获取数据
-        this.num = this.$store.state.res1.length;
+        if(!this.$store.state.res1.length){
+          this.classList = JSON.parse(localStorage.getItem('res1'));
+        }else{
+          this.classList = this.$store.state.res1;
+        }
+        this.num = this.$store.state.res1.length ||JSON.parse(localStorage.getItem('res1')).length;
         var result;
         if(this.$store.state.res1.length){
           result = this.$store.state.res1.every(function(el){
@@ -146,51 +126,15 @@ export default {
                 return true;
               }  
           });
+        }else{
+          this.dis = true;
         }
         if(result){
           this.dis = false;
         }
-
-        // for(var i=0;i<this.classList.length;i++){
-        //   if(this.classList[i].isOver==false){
-        //     this.dis = false;
-        //     console.log(this.dis);
-        //   }else{
-        //     this.dis=true;
-        //     console.log(this.dis);
-        //   }
-        // }
-
     },
     mounted(){
         document.title = "认证班级";
-        // 判断num 
-        // if(this.$store.state.res1.length){
-        //     this.num = this.$store.state.res1.length;
-        // }
-        // else{
-        //   this.num = JSON.parse(localStorage.getItem('this.$store.state.res1')).length;
-        // }
-
-        // 认证班级按钮的显示隐藏
-        // var result;
-        // if(this.$store.state.res1.length){
-        //     result = this.$store.state.res1.every(function(el){
-        //         if(el.symbol){
-        //           return true;
-        //         }  
-        //     });
-        // }else {
-        //   var resultObj = JSON.parse(localStorage.getItem('this.$store.state.res1'));
-        //     result = resultObj.every(function(el){
-        //         if(el.symbol){
-        //           return true;
-        //         }  
-        //     });
-        // }
-        // if(result){
-        //   this.dis = false;
-        // }
     }
 }
 </script>
@@ -217,6 +161,7 @@ export default {
 .over {
   width: 1.3067rem;
   right: 0.8107rem;
+  top:0.4rem;
   position: absolute;
 }
 
@@ -291,6 +236,21 @@ export default {
   background: #F8E71C;
 }
 
+.pop{
+  width: 6.0533rem;
+  height: 0.9867rem;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99;
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  text-align: center;
+  line-height: 0.9867rem;
+}
 </style>
 
 

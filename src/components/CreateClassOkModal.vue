@@ -38,7 +38,7 @@ export default {
             this.$emit("changeIsSaveModal")
         },
         goToClassLeaderList(){
-            alert("goToClassLeaderList")
+            // alert("goToClassLeaderList")
             // this.$router.push({path:'/CLYchooseClass'})
         }
     }

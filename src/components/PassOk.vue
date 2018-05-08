@@ -2,7 +2,7 @@
     <div id="passOk">
         <div v-if="isIOS" class="ios">
         <div class="content" slot="header">
-            <p class="p-img"><img src="/static/images/v.png" alt=""></p>
+            <p class="p-img"><img src="../../static/images/v.png" alt=""></p>
             <p class="title">恭喜您成为校园认证用户</p>
             <p class="title1">现在起您可以免费享受【晓黑板】提供的增值服务</p>
         </div>
@@ -13,7 +13,7 @@
       </div>
       <div v-if="isAND" class="android">
         <div class="content2">
-            <p class="p-img"><img src="/static/images/v.png" alt=""></p>
+            <p class="p-img"><img src="../../static/images/v.png" alt=""></p>
             <p class="title">恭喜您成为校园认证用户</p>
             <p class="title1">现在起您可以免费享受【晓黑板】提供的增值服务</p>
         </div>
@@ -23,7 +23,7 @@
         </div>
         <!-- <div class="img">
             <p><span class="line1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>找对方法，下载更快捷<span class="line2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
-            <img src="/static/images/android.png" alt="">
+            <img src="../../static/images/android.png" alt="">
         </div> -->
       </div>
 
@@ -42,9 +42,12 @@
 
        <!-- 安卓手机 遮罩层  -->
       <div class="overlay" v-if="mask">
-          <img class="arrow" src="/static/images/arrow.png">
+          <img class="arrow" src="../../static/images/arrow.png">
       </div>
-
+      <!-- 网络不好 -->
+        <div v-show="offline" class="pop">
+          网络不佳，请检查后重试
+        </div>
   </div>
 </template>
 <script>
@@ -55,17 +58,25 @@ export default {
           isIOS: true,
           isAND: false,
           reVolidate:false,
-          mask:false    // 遮罩层
+          mask:false,
+          offline: false,
         }
     },
     methods:{
         openSmallDesk() { // ios 下载
             // 打开晓黑板  http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk
-            window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=org.xinkb.blackboard.android&g_f=991653';
+            //window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=org.xinkb.blackboard.android&g_f=991653';
+            window.location.href = 'https://itunes.apple.com/cn/app/%E6%99%93%E9%BB%91%E6%9D%BF-%E5%A5%BD%E8%80%81%E5%B8%88%E7%9A%84%E5%A5%BD%E5%B7%A5%E5%85%B7/id1003713373?mt=8';
         },
         openSmallDesk1() { // android 下载
+            var ua = navigator.userAgent.toLowerCase();
             // 打开晓黑板  http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk
-            this.mask = true;
+            if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+              this.mask = true;
+            }else{
+              this.mask = false;
+              window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
+            }
             //window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
         },
         knowing(){
@@ -84,25 +95,74 @@ export default {
               })
               .catch(err => {
                   console.log('err=',err);
+                this.offline = true;
+                clearTimeout(timer);
+                var _this = this;
+                var timer=null;
+                timer = setTimeout(function(){
+                  _this.offline = false;
+                },2000);
               })
         }
     },
     created() {
         document.title = "认证成功";
+        //禁止返回
+        var XBack = {};
+
+        (function(XBack) {
+          XBack.STATE = 'x - back';
+          XBack.element;
+
+          XBack.onPopState = function(event) {
+            event.state === XBack.STATE && XBack.fire();
+            XBack.record(XBack.STATE); //初始化事件时，push一下
+          };
+
+          XBack.record = function(state) {
+            history.pushState(state, null, location.href);
+          };
+
+          XBack.fire = function() {
+            var event = document.createEvent('Events');
+            event.initEvent(XBack.STATE, false, false);
+            XBack.element.dispatchEvent(event);
+          };
+
+          XBack.listen = function(listener) {
+            XBack.element.addEventListener(XBack.STATE, listener, false);
+          };
+
+          XBack.init = function() {
+            XBack.element = document.createElement('span');
+            window.addEventListener('popstate', XBack.onPopState);
+            XBack.record(XBack.STATE);
+          };
+
+        })(XBack); 
+        XBack.init();
+        XBack.listen(function() {});
         //判断手机类型
       
         var ua = navigator.userAgent.toLowerCase();
 
         //alert(ua);
 
-        if(/android/.test(ua)){
-            console.log('android...');
-            window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
-        }
+        if(!sessionStorage.getItem('autoDownload')){
+              console.log('自动下载...');
+              window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
+          }else{
+              console.log('不自动下载...');
+          }
+
+        // if(/android/.test(ua)){
+        //     console.log('android...');
+        //     window.location.href = 'http://apk-1252817547.file.myqcloud.com/blackboard_xiaoheiban_4026.apk';
+        // }
     },
     mounted() {
         //测试的时候注释
-        this.createClass();
+        //this.createClass();
 
         //判断手机类型
         var ua = navigator.userAgent.toLowerCase();
@@ -149,7 +209,7 @@ export default {
   height: 100%;
 }
 .arrow{
-  width: 4.5rem;
+  width: 3.5rem;
   position:absolute;
   right: 1rem;
   top: 0.8rem;
@@ -189,6 +249,7 @@ export default {
   font-family: PingFangSC-Regular;
 }
 .tip{
+  font-size: 0.3733rem;
   color: #AAAAAA;
   text-align: center;
   font-family: PingFangSC-Regular;
@@ -285,8 +346,11 @@ export default {
   border: 0.0533rem solid #BBAB71;
   border-radius: 0.2667rem;
   position: absolute;
-  top: 3.84rem;
-  bottom: 9.1733rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
 }
 .reVolidateModal .reVolidate #modal .titleListen {
   font-family: PingFangSC-Light;
@@ -321,6 +385,21 @@ export default {
     border: none;
 }
 
+.pop{
+  width: 6.0533rem;
+  height: 0.9867rem;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99;
+  font-family: PingFangSC-Light;
+  font-size: 0.4533rem;
+  text-align: center;
+  line-height: 0.9867rem;
+}
 </style>
 
 

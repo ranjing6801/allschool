@@ -25,7 +25,7 @@ export default {
         },
         Replace(){  // 顶替Ta
             // 请求接口
-            alert("顶替Ta");
+            // alert("顶替Ta");
             console.log('res1=',this.$store.state.res1);
         }
     }

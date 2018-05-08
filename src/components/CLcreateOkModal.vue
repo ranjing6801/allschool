@@ -1,6 +1,6 @@
 <template>
     <!--   创建班级完成  确认保存二维码弹窗 -->
-    <div id="CLcreateOkModal"  @click="know">
+    <div id="CLcreateOkModal">
         <h5 class="title">确认已保存</h5>
         <p class="content">请确保您已保存二维码</p>
         <p class="saveTip">将用于发送给家长,邀请他们进班</p>
@@ -38,7 +38,7 @@ export default {
             this.$emit("changeIsSaveModal")
         },
         NewClcreated(obj){
-            alert("班主任新用户创建班级成功")
+            // alert("班主任新用户创建班级成功")
            this.$router.push({path:'/NewAuthenticationOk'})
         }
     }
