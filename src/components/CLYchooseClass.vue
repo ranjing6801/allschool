@@ -73,9 +73,9 @@ export default {
                 //this.bindClass.xhb_class_token = item.id;
                 console.log('obj:',obj);
                 this.arr.push(obj);
-          }
+              }
 
-          //    暂时先不认证
+                //暂时先不认证
                 console.log('this.arr:',this.arr);
 
                 var pullArr = [] || sessionStorage.getItem('need_pull_class');
@@ -121,8 +121,8 @@ export default {
         // }
         this.num = this.$store.state.res1.length ||JSON.parse(localStorage.getItem('res1')).length;
         var result;
-        if(this.$store.state.res1.length){
-          result = this.$store.state.res1.every(function(el){
+        if(this.classList.length){
+          result = this.classList.every(function(el){
               if(el.isOver){
                 return true;
               }  
