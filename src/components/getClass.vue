@@ -273,12 +273,12 @@ export default {
         
         this.$route.query.flag ? this.flag=true : this.flag=false;
                     
-         if(this.flag){
+        if(this.flag){
           var str = this.$route.query.txt;
           var item = this.list2.find( (datum)=>datum.code==str );
           var obj = {index1: this.index,index2: item.index};
           this.$store.commit('resetClass',obj);//先解绑
-      }
+        }
     },
     mounted() {
         document.title = '选择班级';
