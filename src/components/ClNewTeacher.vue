@@ -187,6 +187,11 @@ export default {
         document.title = "创建班级并认证";
         //本地测试的时候 注释掉
         this.createClass();
+        // if(sessionStorage.getItem('create')=='yes'){
+        //   this.createClass();
+        // }else{
+        //   console.log('不重复创建...');
+        // }
     }
 }
 </script>

@@ -69,21 +69,27 @@ export default {
             this.isSave = false;
         },
         saveOk(){
-            var obj = this.myclass;
-            this.$store.state.res2.push(obj);
+            if(sessionStorage.getItem('create')=='yes'){
+              var obj = this.myclass;
+              this.$store.state.res2.push(obj);
 
-            var oIndex = this.indexValue;  //整校的索引
-            var detail = obj.name;  //晓黑板的班级名字
-            var num1 = obj.code;  //晓黑板的班级号
+              var oIndex = this.indexValue;  //整校的索引
+              var detail = obj.name;  //晓黑板的班级名字
+              var num1 = obj.code;  //晓黑板的班级号
 
-            sessionStorage.setItem(oIndex,num1); 
+              sessionStorage.setItem(oIndex,num1); 
+              
+              var myobj = {index:oIndex,name:detail,sta:true,num1:num1};
+              console.log('myobj:',myobj);
+              
+              this.$store.commit('setClass1',myobj);
+              //  创建完班级之后 跳转到班主任 班级的列表页
+              this.$router.push({path:'CLYchooseClass'});
+            }else{
+              this.$router.push({path:'CLYchooseClass'});
+            }
+
             
-            var myobj = {index:oIndex,name:detail,sta:true,num1:num1};
-            console.log('myobj:',myobj);
-            
-            this.$store.commit('setClass1',myobj);
-            //  创建完班级之后 跳转到班主任 班级的列表页
-           	this.$router.push({path:'CLYchooseClass'});
         },
         overRefer(){  // 认证完成
             this.isSave = true;
@@ -101,6 +107,9 @@ export default {
                         console.log('createSingleXhbClass=',res);
                         this.imgSrc = res.data.response.qrcode_url;
                         this.myclass = res.data.response.xhb_class;
+
+                        sessionStorage.setItem('classimg',res.data.response.qrcode_url);
+                        sessionStorage.setItem('myclass',JSON.stringify(res.data.response.xhb_class));
                         // for(var i = 0;i<res.data.response.qrcode_url.length;i++){
                         //     var obj = {};
                         //     obj.src = res.data.response.qrcode_url[i];
@@ -126,7 +135,16 @@ export default {
         //测试的时候注释
         this.myLength = this.$store.state.res2.length;
         console.log('this.myLength=',this.myLength);
-        this.createClassData();
+
+        if(sessionStorage.getItem('create')=='yes'){
+          this.createClassData();
+        }else{
+          console.log('不重复创建...');
+          this.imgSrc = sessionStorage.getItem('classimg');
+          this.myclass = JSON.parse(sessionStorage.getItem('myclass'));
+        }
+
+        
     }
 }
 

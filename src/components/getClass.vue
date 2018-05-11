@@ -208,6 +208,7 @@ export default {
         var detail = this.txt;
         var num1 = this.num1;
         if(this.team){  // 创建晓黑板班级去认证
+            sessionStorage.setItem('create','yes');
             this.$router.push({path:'/createClass',query:{index:oIndex}});
         }
         else{ //  选择班级去认证

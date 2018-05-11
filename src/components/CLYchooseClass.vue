@@ -136,6 +136,7 @@ export default {
     },
     mounted(){
         document.title = "认证班级";
+        sessionStorage.removeItem('create');
     }
 }
 </script>
