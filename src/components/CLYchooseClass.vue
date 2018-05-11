@@ -1,7 +1,7 @@
 <template>
   <div id="clychooseClass">
         <p class="leadTitle">您是{{ num }}个班级班主任, 请选择:</p>
-        <ul>
+        <ul class="wrap">
             <li v-for="(item,index) in classList" :key="index" class="classList" @click="getMore(item,index)">
                <span class="className"> {{ item.class_name }}</span> 
                <img v-show="item.isOver" class="vip"  src="../../static/images/vip.png" />
@@ -152,6 +152,13 @@ export default {
   margin-left: 0.4rem;
   position: relative;
 }
+
+/* 处理 横屏 班级显示不全 */
+.wrap {  
+  min-height: 12.5333rem;
+  overflow: scroll;
+}
+/* 处理 横屏 班级显示不全 */
 
 .vip {
   display: inline-block;
