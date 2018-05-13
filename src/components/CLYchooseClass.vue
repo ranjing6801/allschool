@@ -1,7 +1,7 @@
 <template>
   <div id="clychooseClass">
         <p class="leadTitle">您是{{ num }}个班级班主任, 请选择:</p>
-        <ul>
+        <ul class="wrap">
             <li v-for="(item,index) in classList" :key="index" class="classList" @click="getMore(item,index)">
                <span class="className"> {{ item.class_name }}</span> 
                <img v-show="item.isOver" class="vip"  src="../../static/images/vip.png" />
@@ -73,9 +73,9 @@ export default {
                 //this.bindClass.xhb_class_token = item.id;
                 console.log('obj:',obj);
                 this.arr.push(obj);
-          }
+              }
 
-          //    暂时先不认证
+                //暂时先不认证
                 console.log('this.arr:',this.arr);
 
                 var pullArr = [] || sessionStorage.getItem('need_pull_class');
@@ -113,15 +113,16 @@ export default {
         }
     },
     created() {
-        if(!this.$store.state.res1.length){
-          this.classList = JSON.parse(localStorage.getItem('res1'));
-        }else{
-          this.classList = this.$store.state.res1;
-        }
+      this.classList = JSON.parse(localStorage.getItem('res1'));
+        // if(!this.$store.state.res1.length){
+        //   this.classList = JSON.parse(localStorage.getItem('res1'));
+        // }else{
+        //   this.classList = this.$store.state.res1;
+        // }
         this.num = this.$store.state.res1.length ||JSON.parse(localStorage.getItem('res1')).length;
         var result;
-        if(this.$store.state.res1.length){
-          result = this.$store.state.res1.every(function(el){
+        if(this.classList.length){
+          result = this.classList.every(function(el){
               if(el.isOver){
                 return true;
               }  
@@ -135,6 +136,7 @@ export default {
     },
     mounted(){
         document.title = "认证班级";
+        sessionStorage.removeItem('create');
     }
 }
 </script>
@@ -151,6 +153,13 @@ export default {
   margin-left: 0.4rem;
   position: relative;
 }
+
+/* 处理 横屏 班级显示不全 */
+.wrap {  
+  min-height: 12.5333rem;
+  overflow: scroll;
+}
+/* 处理 横屏 班级显示不全 */
 
 .vip {
   display: inline-block;

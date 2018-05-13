@@ -138,6 +138,7 @@ export default {
           })
           .catch(err => {
             console.log('err:',err);
+            this.reNum = true;  // 验证码请求错误的时候 显示 [点击重新发送验证码]
             this.offline = true;
                 clearTimeout(timer);
                 var _this = this;

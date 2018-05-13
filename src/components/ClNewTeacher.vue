@@ -67,11 +67,12 @@
         </div>
 
         <!--  完成认证 确认保存二维码 弹窗 -->
-        <div class="modalShow" v-if="isSave" @click="HiddenSaveModal" >
+        <!-- <div class="modalShow" v-if="isSave" @click="HiddenSaveModal" >
             <div class="modal">
                 <saveModal  @changeIsSaveModal="HiddenSaveModal"></saveModal>
             </div>
-        </div>
+        </div> -->
+
         <!-- 网络不好 -->
         <div v-show="offline" class="pop">
           网络不佳，请检查后重试
@@ -104,6 +105,12 @@ export default {
     },
     methods:{
         overRefer(){  // 完成认证
+            this.isSecondImg = true; // 出现二维码弹窗
+        },
+        know(){
+            this.isSecondImg = false;
+        },
+        saveOk(){   // 点击 保存好了 
             console.log('创建晓黑板班级认证...');
                 var pullArr = [] || sessionStorage.getItem('need_pull_class');
                 console.log('pullArr:',pullArr);
@@ -122,7 +129,12 @@ export default {
                 .then(res => {
                   console.log('bindInfo:',res);
                   if(res.data.response){
-                    this.isSave = true; // 出现二维码弹窗
+                    if(sessionStorage.getItem('is_regular')){  // 1 是老用户 0 是新用户
+                        this.$router.push({path:'/passOk'});    
+                    }
+                    else {
+                        this.$router.push({path:'/NewAuthenticationOk'});
+                    }
                   }
                   if(res.data.error_response){
                       console.log(res.data.error_response.msg);
@@ -138,21 +150,7 @@ export default {
                     _this.offline = false;
                   },2000);
                 })
-        },
-        know(){
-            this.isSecondImg = false;
-        },
-        saveOk(){  
-            if(sessionStorage.getItem('is_regular')){  // 1 是老用户 0 是新用户
-                this.$router.push({path:'/passOk'});    
-            }
-            else {
-                this.$router.push({path:'/NewAuthenticationOk'});
-            }
 
-        },
-        HiddenSaveModal(){
-            this.isSave = false;
         },
         createClass(){
             this.axios.post('/h5/index/createXhbClass',{
@@ -189,6 +187,11 @@ export default {
         document.title = "创建班级并认证";
         //本地测试的时候 注释掉
         this.createClass();
+        // if(sessionStorage.getItem('create')=='yes'){
+        //   this.createClass();
+        // }else{
+        //   console.log('不重复创建...');
+        // }
     }
 }
 </script>
