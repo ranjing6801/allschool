@@ -164,8 +164,8 @@ export default {
 <style scoped>
 
 #createClass .classContent {
-  width: 100%;
-  height: 100%;
+  width: 9.2rem;
+  margin: 0 auto;
   box-sizing: border-box;
 }
 
@@ -175,7 +175,7 @@ export default {
   color: #AAAAAA;
   line-height: 0.3733rem;
   margin-top: 0.5333rem;
-  margin-left: 0.5333rem;
+  /* margin-left: 0.5333rem; */
 }
 
 #createClass .classContent .classList {
@@ -184,7 +184,7 @@ export default {
   background: #FFFFFF;
   border-radius: 0.0533rem;
   margin-top: 0.5333rem;
-  margin-left: 0.4rem;
+  /* margin-left: 0.4rem; */
   margin-bottom: 7.7333rem;
   display: flex;
   justify-content: center;

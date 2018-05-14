@@ -184,8 +184,9 @@ button{
 .head {
   width:9.2rem;
   height: 2.6667rem;
-  margin-top:0.5333rem;
-  margin-left:0.4rem;
+  /* margin-top:0.5333rem;
+  margin-left:0.4rem; */
+  margin: 0.5333rem auto;
   display: flex;
   justify-content: center;
   background: #363636;
@@ -224,8 +225,9 @@ button{
 
 .content {
   width: 9.2rem;
-  margin-top:0.5333rem;
-  margin-left:0.4rem;
+  /* margin-top:0.5333rem;
+  margin-left:0.4rem; */
+  margin: 0.5333rem auto;
   box-sizing: border-box;
   position: relative;
 }

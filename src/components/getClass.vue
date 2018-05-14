@@ -315,13 +315,17 @@ export default {
   min-height: 12.5333rem;
   overflow: scroll;
 }
+.bind {
+    width: 9.2rem;
+    margin: 0.5333rem auto;
+}
 
 .bind li {
   width: 9.2rem;
   height: 1.8667rem;
   background: #363636;
   border-radius: 0.0533rem;
-  margin-left: 0.4rem;
+  /* margin-left: 0.4rem; */
   margin-top: 0.5333rem;
   position: relative;
 }
@@ -379,11 +383,16 @@ export default {
   font-family: PingFangSC-Regular;
 }
 
+.unbind {
+  width: 9.2rem;
+  margin: 0.5333rem auto;
+}
+
 .unbind li {
   width: 9.2rem;
   height: 1.8667rem;
   background: #363636;
-  margin-left: 0.4rem;
+  /* margin-left: 0.4rem; */
   margin-top: 0.5333rem;
   border-radius: 0.0533rem;
   position: relative;
@@ -447,10 +456,12 @@ export default {
   display: flex;
   align-items: center;
   background: #363636;
-  margin-left: 0.4rem;
-  margin-top: 0.5333rem;
+  /* margin-left: 0.4rem; */
+  /* margin-top: 0.5333rem; */
   border-radius: 0.0533rem;
   margin-bottom: 1rem;
+  margin: 0 auto;
+
 }
 
 .txt {
@@ -463,14 +474,16 @@ export default {
 .referClass {
   width: 9.2rem;
   height: 1.28rem;
-  margin-left: 0.4rem;
+  /* margin-left: 0.4rem;
   margin-bottom: 0.8rem;
-  margin-top: 2rem;
+  margin-top: 2rem; */
   border-radius: 0.0533rem;
   background: #AAAAAA;
   font-size: 0.4533rem;
   color: #000000;
   border: none;
+  display: block;
+  margin: 2rem auto 0.4rem;
   font-family: PingFangSC-Regular;
 }
 

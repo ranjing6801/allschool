@@ -199,8 +199,9 @@ export default {
 <style scoped>
 
 #CLNewTeacher .classContent {
-  width: 100%;
+  width: 9.2rem;
   height: 100%;
+  margin: 0 auto;
   box-sizing: border-box;
 }
 
@@ -210,7 +211,7 @@ export default {
   color: #AAAAAA;
   line-height: 0.3733rem;
   margin-top: 0.5333rem;
-  margin-left: 0.5333rem;
+  /* margin-left: 0.5333rem; */
 }
 
 #CLNewTeacher  .classList {
@@ -219,7 +220,7 @@ export default {
   background: #FFFFFF;
   border-radius: 0.0533rem;
   margin-top: 0.5333rem;
-  margin-left: 0.4rem;
+  /* margin-left: 0.4rem; */
   margin-bottom: 0.5333rem;
   display: flex;
   justify-content: center;
@@ -318,14 +319,17 @@ export default {
   z-index: 100;
 }
 
-#CLNewTeacher .modalShow .modal {
+#CLNewTeacher  .modal {
   width: 8.9333rem;
   height: 5.4667rem;
   margin-left: 0.5333rem;
   margin-right: 0.5333rem;
   position: absolute;
-  top: 4rem;
+  top: 0;
   left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
 }
 .myimg{
     height: 4.7467rem;

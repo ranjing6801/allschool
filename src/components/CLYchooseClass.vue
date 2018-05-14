@@ -143,7 +143,7 @@ export default {
 
 <style scoped>
 
-.havenList {
+/* .havenList {
   width: 9.2rem;
   height: 1.8667rem;
   background: #363636;
@@ -152,6 +152,11 @@ export default {
   margin-top: 0.5333rem;
   margin-left: 0.4rem;
   position: relative;
+} */
+
+#clychooseClass{
+    width: 9.2rem;
+    margin: 0 auto;
 }
 
 /* 处理 横屏 班级显示不全 */
@@ -181,7 +186,7 @@ export default {
   color: #888888;
   line-height: 0.3733rem;
   margin-top: 0.5333rem;
-  margin-left: 0.5333rem;
+  /* margin-left: 0.5333rem; */
 }
 
 .classList {
@@ -191,7 +196,7 @@ export default {
   border-radius: 0.0533rem;
   line-height: 1.8667rem;
   margin-top: 0.5333rem;
-  margin-left: 0.4rem;
+  /* margin-left: 0.4rem; */
   position: relative;
   display:flex;
   align-items: center;
@@ -230,7 +235,7 @@ export default {
 .referName {
   width: 9.2rem;
   height: 1.28rem;
-  margin-left: 0.4rem;
+  /* margin-left: 0.4rem; */
   /* position: fixed;
   bottom: 0.8rem; */
   border-radius: 0.0533rem;

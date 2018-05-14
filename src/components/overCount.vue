@@ -152,14 +152,12 @@ export default {
 .head {
   width:9.2rem;
   height: 2.6667rem;
-  margin-top:0.5333rem;
+  /* margin-top:0.5333rem;
   margin-left:0.4rem;
-  margin-bottom: 0.5333rem;
+  margin-bottom: 0.5333rem; */
+  margin: 0.5333rem auto;
   display: flex;
   background: #363636;
-  /*justify-content: center;
-  align-items: center;*/
-  
 }
 .head .left{
   width: 1.6rem;
@@ -195,8 +193,10 @@ export default {
 }
 
 #contentList {
-  margin-left: 0.4rem;
+  /* margin-left: 0.4rem; */
   box-sizing: border-box;
+  margin: 0 auto;
+  width: 9.4rem;
 }
 
 .list li{
@@ -287,6 +287,9 @@ input{
   background: #F8E71C;
   border-radius: 0.0533rem;
   color: #000;
+}
+.libox {
+  width: 9.41rem;
 }
 
 .rebackContent{
