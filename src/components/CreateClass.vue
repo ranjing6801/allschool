@@ -53,6 +53,7 @@ export default {
 	},
     data(){
         return {
+            localImgSrc:'',
             createSecImg:'',
             zhiwenImg:zhiwenImg,
             isSave:false,
@@ -61,7 +62,8 @@ export default {
             imgArr:[],
             myclass:{},
             myLength:null,
-            offline:false
+            offline:false,
+            class_name:''
         }
     },
     methods:{
@@ -97,10 +99,19 @@ export default {
         HiddenSaveModal(){
             this.isSave = false;
         },
-        createClassData(){  // 班主任 有小黑板班级 老用户 创建班级认证
+        createClassData(){  // 班主任 有小黑板班级 老用户 创建班级认证             
+              console.log('res1=',this.$store.state.res1);
+              if(!this.$store.state.res1.length){
+                console.log('localRes',JSON.parse(localStorage.getItem('res1')));
+                this.class_name = JSON.parse(localStorage.getItem('res1'))[this.indexValue].class_name;
+              }
+              else {
+                this.class_name = this.$store.state.res1[this.indexValue].class_name;
+              }
+              
               this.axios.post('/h5/index/createSingleXhbClass',{
                       user_token:sessionStorage.getItem('user_token'),
-                      class_name:this.$store.state.res1[this.indexValue].class_name,
+                      class_name:this.class_name, 
                       xhb_class_num:this.myLength
                   })
                   .then(res => {
@@ -131,10 +142,10 @@ export default {
     mounted(){
         document.title = "创建班级";
         this.indexValue = this.$route.query.index;
-        console.log('this.indexValue=',this.indexValue);
+        //console.log('this.indexValue=',this.indexValue);
         //测试的时候注释
-        this.myLength = this.$store.state.res2.length;
-        console.log('this.myLength=',this.myLength);
+        this.myLength = this.$store.state.res2.length || JSON.parse(localStorage.getItem('res2')).length;
+        //console.log('this.myLength=',this.myLength);
 
         if(sessionStorage.getItem('create')=='yes'){
           this.createClassData();

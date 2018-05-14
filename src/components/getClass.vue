@@ -312,7 +312,8 @@ export default {
 /* new css 2018 4-20 */
 
 .box {
-  /* min-height: 14.0rem; */
+  min-height: 12.5333rem;
+  overflow: scroll;
 }
 
 .bind li {

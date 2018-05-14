@@ -156,7 +156,8 @@ export default {
 
 /* 处理 横屏 班级显示不全 */
 .wrap {  
-  min-height: 12.5333rem;
+  max-height: 12.5333rem;
+  min-height: 4.2667rem;
   overflow: scroll;
 }
 /* 处理 横屏 班级显示不全 */
@@ -230,8 +231,8 @@ export default {
   width: 9.2rem;
   height: 1.28rem;
   margin-left: 0.4rem;
-  position: fixed;
-  bottom: 0.8rem;
+  /* position: fixed;
+  bottom: 0.8rem; */
   border-radius: 0.0533rem;
   border: none;
   background: #AAAAAA;
@@ -239,6 +240,7 @@ export default {
   font-size: 0.4533rem;
   color: #000000;
   line-height: 0.4533rem;
+  margin-top: 8.7333rem;
 }
 
 .referBtn{

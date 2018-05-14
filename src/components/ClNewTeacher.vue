@@ -129,7 +129,8 @@ export default {
                 .then(res => {
                   console.log('bindInfo:',res);
                   if(res.data.response){
-                    if(sessionStorage.getItem('is_regular')){  // 1 是老用户 0 是新用户
+                    if(sessionStorage.getItem('is_regular') == 1){  // 1 是老用户 0 是新用户
+                        console.log('is_regular:',sessionStorage.getItem('is_regular'))
                         this.$router.push({path:'/passOk'});    
                     }
                     else {
