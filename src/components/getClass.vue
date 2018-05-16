@@ -312,8 +312,9 @@ export default {
 /* new css 2018 4-20 */
 
 .box {
-  min-height: 12.5333rem;
-  overflow: scroll;
+  height: 12.5333rem;
+  margin-bottom: 1rem;
+  overflow-y: scroll;
 }
 .bind {
     width: 9.2rem;
