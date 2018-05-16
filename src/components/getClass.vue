@@ -317,7 +317,7 @@ export default {
 }
 .bind {
     width: 9.2rem;
-    margin: 0.5333rem auto;
+    margin: 0 auto 0.5333rem;
 }
 
 .bind li {
@@ -392,8 +392,7 @@ export default {
   width: 9.2rem;
   height: 1.8667rem;
   background: #363636;
-  /* margin-left: 0.4rem; */
-  margin-top: 0.5333rem;
+  margin-bottom: 0.5333rem;
   border-radius: 0.0533rem;
   position: relative;
 }
@@ -459,8 +458,7 @@ export default {
   /* margin-left: 0.4rem; */
   /* margin-top: 0.5333rem; */
   border-radius: 0.0533rem;
-  margin-bottom: 1rem;
-  margin: 0 auto;
+  margin: 0 auto 1rem;
 
 }
 
@@ -483,7 +481,7 @@ export default {
   color: #000000;
   border: none;
   display: block;
-  margin: 2rem auto 0.4rem;
+  margin: 0 auto 0.4rem;
   font-family: PingFangSC-Regular;
 }
 
