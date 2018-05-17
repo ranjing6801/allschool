@@ -186,6 +186,7 @@ export default {
             this.reNum = false;
             this.YZM = true;
             this.ListenYzm = false;
+            this.listenCode = false;  // 点击获取短信验证码  语音验证码提示隐藏
             this.getVolidateCode();  
         },
         ShowNumber(){  // 显示倒计时
