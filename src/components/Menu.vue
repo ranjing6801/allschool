@@ -13,7 +13,7 @@
     <div class="content">
       <p class="tip" v-show="tip">无晓黑板账号请输入手机号</p >
       <input @keyup="tel" type="tel" placeholder="请输入晓黑板账号 / 手机号"  v-model="phone"
-               v-on:input="focus" class="input"  maxlength=13 />
+               v-on:input="focus" class="input"  maxlength="13" />
       <div class="telError" :class="isRightNumber?'':'hidden'">
         <img src="../../static/images/warn.png" alt="!" />
         <span class="rightPhone">请输入正确的手机号码</span>
