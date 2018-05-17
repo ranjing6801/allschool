@@ -11,8 +11,8 @@ Vue.use(VueWechatTitle)
 
 
 // 配置默认的根路径
-
 axios.defaults.baseURL = 'https://school-test.xiaoheiban.cn'
+// axios.defaults.baseURL = 'https://school.xiaoheiban.cn'
 Vue.prototype.axios = axios
 axios.defaults.withCredentials = true
 

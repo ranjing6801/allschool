@@ -12,7 +12,7 @@
     <!--  content  -->
     <div class="content">
       <p class="tip" v-show="tip">无晓黑板账号请输入手机号</p >
-      <input @keyup="tel" type="tel" placeholder="请输入晓黑板账号 / 手机号"  v-model="phone"
+      <input type="tel" placeholder="请输入晓黑板账号 / 手机号"  v-model="phone"
                v-on:input="focus" class="input"  maxlength="13" />
       <div class="telError" :class="isRightNumber?'':'hidden'">
         <img src="../../static/images/warn.png" alt="!" />
@@ -68,7 +68,8 @@ import imgsrc1 from '../../static/images/logo.jpg'
     },
     watch:{ // 监听phone
         phone(newValue,oldValue){
-               this.phone = newValue > oldValue ? newValue.replace(/\s/g,'').replace(/(\d{3})(\d{0,4})(\d{0,4})/,'$1 $2 $3'):this.phone.trim()
+               this.phone = newValue.length > oldValue.length ? newValue.replace(/\s/g,'').replace(/(\d{3})(\d{0,4})(\d{0,4})/,'$1 $2 $3') : 
+               this.phone.trim()
         }
     },
     methods:{
@@ -82,9 +83,11 @@ import imgsrc1 from '../../static/images/logo.jpg'
 
       },
       focus(){    
-          //监听input输入框
+        //监听input输入框
           if(this.phone.length > 0){
-            this.telNum = true
+            this.phone = this.phone.replace(/[^\d]/g,'');
+            this.phone = this.phone.replace(/\s/g,'').replace(/(\d{3})(\d{0,4})(\d{0,4})/,'$1 $2 $3');
+            this.telNum = true;
             $('.input').addClass('hot');
           }else{
             this.telNum = false
