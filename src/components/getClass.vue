@@ -1,6 +1,6 @@
 <template>
   <div id="getClass">
-    <div class="box">
+    <div :class="isPad?'box':'box1'">
       <ul class="bind">
         <li v-for="(item,index) in list"  :key="item.index" v-show="item.isOver">
           <div class="bind-div">
@@ -93,7 +93,8 @@ export default {
             list2:[],
             flag: null,
             cur: null,
-            offline:false
+            offline:false,
+            isPad:false,
         }
     },
     computed:{
@@ -280,6 +281,14 @@ export default {
           var obj = {index1: this.index,index2: item.index};
           this.$store.commit('resetClass',obj);//先解绑
         }
+
+        //判断ipad
+        console.log('screen:',screen.width);
+        if(screen.width>640){
+          this.isPad = true;
+        }else{
+          this.isPad = false;
+        }
     },
     mounted() {
         document.title = '选择班级';
@@ -313,6 +322,11 @@ export default {
 
 .box {
   height: 9.5333rem;
+  margin-bottom: 1rem;
+  overflow-y: scroll;
+}
+.box1 {
+  height: 13.5333rem;
   margin-bottom: 1rem;
   overflow-y: scroll;
 }
