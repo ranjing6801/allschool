@@ -312,7 +312,7 @@ export default {
 /* new css 2018 4-20 */
 
 .box {
-  height: 12.5333rem;
+  height: 9.5333rem;
   margin-bottom: 1rem;
   overflow-y: scroll;
 }
